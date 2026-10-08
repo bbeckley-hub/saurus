@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAURUS — Staphylococcus aureus Unified Resource for Universal Surveillance</title>
+<meta name="description" content="A comprehensive genomic resource for Staphylococcus aureus — MLST, spa, SCCmec, capsule, agr typing and gene-based genome retrieval across 19,997 genomes.">
+<style>
+
+:root {
+    --gold: #d4af37;
+    --gold-dark: #b8941f;
+    --navy: #0a1628;
+    --navy-2: #1e293b;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Nav ---------- */
+.saurus-nav {
+    background: var(--navy);
+    color: white;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.saurus-nav .brand {
+    display: flex; align-items: center; gap: 20px;
+    text-decoration: none; flex-shrink: 0;
+}
+.saurus-nav .brand-emoji { font-size: 5.6em; line-height: 1; flex-shrink: 0; }
+.saurus-nav .brand-text { display: flex; flex-direction: column; gap: 3px; }
+.saurus-nav .brand-name {
+    font-weight: 800; font-size: 3.45em; letter-spacing: 1px;
+    color: var(--gold); line-height: 1;
+}
+.saurus-nav .brand-tagline {
+    font-size: 1.0em; font-weight: 400;
+    color: #94a3b8; line-height: 1.15; max-width: 520px;
+}
+.saurus-nav .links {
+    display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+}
+.saurus-nav .links a {
+    color: #cbd5e1; text-decoration: none;
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 0.9em; font-weight: 500;
+    transition: all 0.15s; white-space: nowrap;
+}
+.saurus-nav .links a:hover { background: rgba(255,255,255,0.08); color: white; }
+.saurus-nav .links a.active { background: var(--gold); color: var(--navy); font-weight: 600; }
+
+/* ---------- Hero ---------- */
+.hero {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(220, 38, 38, 0.06) 0%, transparent 50%),
+        linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: white;
+    padding: 80px 32px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(212,175,55,0.15) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.35;
+    pointer-events: none;
+}
+.hero-inner { position: relative; max-width: 1000px; margin: 0 auto; z-index: 1; }
+.hero h1 {
+    font-size: 3.4em; font-weight: 900;
+    color: var(--gold); letter-spacing: 2px;
+    margin-bottom: 10px; line-height: 1.05;
+    text-shadow: 0 4px 24px rgba(212,175,55,0.25);
+}
+.hero .hero-sub {
+    font-size: 1.15em; color: #cbd5e1;
+    margin-bottom: 20px; font-weight: 400;
+    max-width: 720px; margin-left: auto; margin-right: auto;
+}
+.hero .hero-desc {
+    font-size: 1.0em; color: #94a3b8;
+    max-width: 720px; margin: 0 auto 32px;
+    line-height: 1.65;
+}
+.hero-cta {
+    display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+}
+.btn-primary, .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 10px;
+    font-size: 1em; font-weight: 700;
+    text-decoration: none; transition: all 0.15s;
+    font-family: inherit; border: none; cursor: pointer;
+}
+.btn-primary {
+    background: var(--gold); color: var(--navy);
+    box-shadow: 0 8px 24px rgba(212,175,55,0.35);
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(212,175,55,0.5);
+    background: #e0bc47;
+}
+.btn-secondary {
+    background: rgba(255,255,255,0.08);
+    color: white; border: 2px solid rgba(255,255,255,0.2);
+}
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.35);
+}
+
+/* ---------- Rotating quote banner ---------- */
+.quote-banner {
+    background:
+        radial-gradient(circle at 30% 40%, rgba(212,175,55,0.10) 0%, transparent 55%),
+        radial-gradient(circle at 70% 60%, rgba(59,130,246,0.06) 0%, transparent 50%),
+        linear-gradient(135deg, #0a1628 0%, #1e293b 100%);
+    color: white;
+    padding: 56px 32px 44px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(212,175,55,0.15);
+    border-bottom: 1px solid rgba(212,175,55,0.15);
+}
+.quote-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(212,175,55,0.15) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.25;
+    pointer-events: none;
+}
+.quote-banner .quote-inner {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    z-index: 1;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.quote-banner .quote-mark {
+    font-size: 3.2em;
+    line-height: 1;
+    color: rgba(212,175,55,0.35);
+    font-family: Georgia, serif;
+    display: block;
+    margin-bottom: -10px;
+}
+.quote-banner .quote-text {
+    font-size: 1.35em;
+    font-style: italic;
+    color: #f8fafc;
+    line-height: 1.55;
+    font-weight: 300;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    max-width: 780px;
+    margin-bottom: 18px;
+}
+.quote-banner .quote-author {
+    font-size: 0.92em;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.quote-banner .quote-dots {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+    max-width: 600px;
+}
+.quote-banner .quote-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s ease;
+}
+.quote-banner .quote-dot.active {
+    background: var(--gold);
+    width: 20px;
+    border-radius: 3px;
+}
+.quote-banner.fading .quote-text,
+.quote-banner.fading .quote-author {
+    opacity: 0;
+    transform: translateY(-6px);
+}
+
+/* ---------- Live stats strip ---------- */
+.stats-strip {
+    background: var(--navy-2);
+    padding: 40px 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.stat {
+    text-align: center;
+    padding: 16px 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: all 0.2s;
+}
+.stat:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(212,175,55,0.3);
+    transform: translateY(-3px);
+}
+.stat .num {
+    font-size: 2.1em; font-weight: 800;
+    color: var(--gold); line-height: 1;
+    display: block; margin-bottom: 6px;
+}
+.stat .lbl {
+    font-size: 0.82em; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    font-weight: 600;
+}
+
+/* ---------- Sections ---------- */
+.section {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 60px 32px;
+}
+.section-title {
+    font-size: 1.9em;
+    color: var(--navy);
+    font-weight: 800;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 12px;
+}
+.section-sub {
+    color: var(--muted); font-size: 1.02em;
+    margin-bottom: 36px;
+    max-width: 780px;
+}
+
+/* ---------- Module cards ---------- */
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+.module-card {
+    display: flex; flex-direction: column;
+    background: var(--card);
+    border-radius: 14px;
+    padding: 24px 22px 22px;
+    text-decoration: none; color: inherit;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: all 0.22s;
+    position: relative; overflow: hidden;
+}
+.module-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 5px; background: var(--accent);
+    transition: width 0.22s;
+}
+.module-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+    border-color: var(--accent);
+}
+.module-card:hover::before { width: 8px; }
+.module-card .mc-top {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 14px;
+}
+.module-card .mc-icon {
+    font-size: 2.2em; line-height: 1;
+    flex-shrink: 0;
+}
+.module-card .mc-title {
+    font-size: 1.25em;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.2;
+}
+.module-card .mc-sub {
+    font-size: 0.82em; color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.4px;
+    margin-top: 2px;
+}
+.module-card .mc-desc {
+    font-size: 0.94em;
+    color: #475569;
+    line-height: 1.55;
+    margin-bottom: 16px;
+    flex-grow: 1;
+}
+.module-card .mc-stat {
+    display: flex; align-items: baseline; gap: 8px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+}
+.module-card .mc-stat-num {
+    font-size: 1.6em; font-weight: 800;
+    color: var(--accent); line-height: 1;
+}
+.module-card .mc-stat-lbl {
+    font-size: 0.85em; color: var(--muted);
+    font-weight: 600;
+}
+.module-card .mc-arrow {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 1.2em;
+    transition: transform 0.2s, color 0.2s;
+}
+.module-card:hover .mc-arrow {
+    color: var(--accent);
+    transform: translateX(4px);
+}
+
+/* ---------- How-to section ---------- */
+.howto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-top: 12px;
+}
+.howto-card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 24px 22px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.howto-card .step {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 900;
+    width: 32px; height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 0.95em;
+    margin-bottom: 12px;
+}
+.howto-card h4 {
+    color: var(--navy);
+    margin-bottom: 6px;
+    font-size: 1.05em;
+}
+.howto-card p {
+    font-size: 0.92em;
+    color: var(--muted);
+    line-height: 1.6;
+}
+.howto-card code {
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 0.85em;
+    color: #334155;
+}
+
+/* ---------- Cite section ---------- */
+.cite-block {
+    background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+    border-left: 6px solid var(--gold);
+    border-radius: 12px;
+    padding: 26px 30px;
+    max-width: 900px;
+}
+.cite-block h3 {
+    color: #92400e;
+    font-size: 1.15em;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+}
+.cite-block p {
+    color: #78350f;
+    font-size: 0.95em;
+    line-height: 1.7;
+    margin-bottom: 10px;
+}
+.cite-block code {
+    background: rgba(255,255,255,0.6);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 0.85em;
+}
+
+/* ---------- Footer ---------- */
+.saurus-footer {
+    background: var(--navy);
+    color: #94a3b8;
+    padding: 40px 32px;
+    text-align: center;
+    font-size: 0.88em;
+    margin-top: 40px;
+}
+.saurus-footer .footer-line { margin: 8px 0; }
+.saurus-footer a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+}
+.saurus-footer a:hover { text-decoration: underline; }
+.saurus-footer .full-name {
+    color: #cbd5e1;
+    font-size: 1em;
+    letter-spacing: 0.2px;
+    margin-bottom: 14px;
+}
+
+@media (max-width: 900px) {
+    .saurus-nav { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .saurus-nav .brand-tagline { max-width: 100%; }
+    .saurus-nav .brand-emoji { font-size: 3.6em; }
+    .saurus-nav .brand-name { font-size: 2.2em; }
+    .hero { padding: 60px 20px 40px; }
+    .hero h1 { font-size: 2.4em; }
+    .hero .hero-sub { font-size: 1.0em; }
+    .section { padding: 40px 20px; }
+}
+@media (max-width: 700px) {
+    .saurus-nav { padding: 14px 16px; }
+    .section-title { font-size: 1.5em; }
+    .quote-banner { padding: 40px 20px 32px; }
+    .quote-banner .quote-text { font-size: 1.05em; }
+    .quote-banner .quote-inner { min-height: 130px; }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="saurus-nav">
+    <a class="brand" href="index.html">
+        <span class="brand-emoji">🦖</span>
+        <span class="brand-text">
+            <span class="brand-name">SAURUS</span>
+            <span class="brand-tagline">Staphylococcus aureus Unified Resource for Universal Surveillance</span>
+        </span>
+    </a>
+    <div class="links">
+        <a href="index.html" class='active'>Home</a><a href="pages/mlst.html">MLST</a><a href="pages/spa.html">spa</a><a href="pages/sccmec.html">SCCmec</a><a href="pages/capsule.html">Capsule</a><a href="pages/agr.html">agr</a><a href="pages/mrsa.html">MRSA</a><a href="pages/amr.html">AMR</a><a href="pages/vfdb.html">Virulence</a><a href="pages/plasmid.html">Plasmid</a><a href="lineages.html">Lineages</a><a href="downloads.html">Downloads</a><a href="about.html">About</a>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="hero-inner">
+        <h1>SAURUS</h1>
+        <p class="hero-sub">Staphylococcus aureus Unified Resource for Universal Surveillance</p>
+        <p class="hero-desc">
+            A comprehensive, integrated genomic resource combining MLST, spa, SCCmec,
+            capsule, agr, virulence, AMR, and plasmid annotations for
+            <strong style="color:var(--gold);">19,997 publicly available S. aureus genomes</strong>.
+            Search, filter, and retrieve accessions — for free.
+        </p>
+        <div class="hero-cta">
+            <a class="btn-primary" href="#modules">🧬 Explore Modules</a>
+            <a class="btn-secondary" href="https://github.com/bbeckley-hub/saurus" target="_blank">⭐ GitHub</a>
+        </div>
+    </div>
+</header>
+
+<!-- ============ ROTATING SCIENCE QUOTE ============ -->
+<section class="quote-banner" id="quote-banner">
+    <div class="quote-inner">
+        <span class="quote-mark">"</span>
+        <p class="quote-text" id="quote-text">Loading inspiration…</p>
+        <p class="quote-author" id="quote-author"></p>
+    </div>
+    <div class="quote-dots" id="quote-dots"></div>
+</section>
+
+<section class="stats-strip">
+    <div class="stats-grid">
+        <div class="stat"><span class="num">19,997</span><span class="lbl">Genomes</span></div><div class="stat"><span class="num">802</span><span class="lbl">MLST STs</span></div><div class="stat"><span class="num">2,465</span><span class="lbl">spa Types</span></div><div class="stat"><span class="num">57.5%</span><span class="lbl">MRSA</span></div><div class="stat"><span class="num">54</span><span class="lbl">SCCmec Types</span></div><div class="stat"><span class="num">223</span><span class="lbl">AMR Genes</span></div><div class="stat"><span class="num">142</span><span class="lbl">Virulence Genes</span></div><div class="stat"><span class="num">214</span><span class="lbl">Plasmid Replicons</span></div>
+    </div>
+</section>
+
+<!-- ============ TYPING MODULES ============ -->
+<section class="section" id="modules">
+    <h2 class="section-title">🧫 Typing Modules</h2>
+    <p class="section-sub">
+        Six integrated typing schemes covering the full molecular characterisation pipeline —
+        each page supports live search, multi-column filtering, row selection, and accession export.
+    </p>
+    <div class="module-grid">
+        
+        <a class="module-card" href="pages/mlst.html" style="--accent: #3b82f6;">
+            <div class="mc-top">
+                <span class="mc-icon">🧬</span>
+                <div>
+                    <div class="mc-title">MLST</div>
+                    <div class="mc-sub">Multi-Locus Sequence Typing</div>
+                </div>
+            </div>
+            <div class="mc-desc">Sequence types (STs) and clonal complexes — the gold-standard for global S. aureus epidemiology.</div>
+            <div class="mc-stat">
+                <span class="mc-stat-num">802</span>
+                <span class="mc-stat-lbl">unique STs</span>
+                <span class="mc-arrow">→</span>
+            </div>
+        </a>
+        <a class="module-card" href="pages/spa.html" style="--accent: #10b981;">
+            <div class="mc-top">
+                <span class="mc-icon">🧬</span>
+                <div>
+                    <div class="mc-title">spa Typing</div>
+                    <div class="mc-sub">Protein A gene typing</div>
+                </div>
+            </div>
+            <div class="mc-desc">High-resolution outbreak tracking via the hypervariable spa repeat region.</div>
+            <div class="mc-stat">
+                <span class="mc-stat-num">2,465</span>
+                <span class="mc-stat-lbl">spa types</span>
+                <span class="mc-arrow">→</span>
+            </div>
+        </a>
+        <a class="module-card" href="pages/sccmec.html" style="--accent: #f59e0b;">
+            <div class="mc-top">
+                <span class="mc-icon">🛡️</span>
+                <div>
+                    <div class="mc-title">SCCmec</div>
+                    <div class="mc-sub">Cassette chromosome mec typing</div>
+                </div>
+            </div>
+            <div class="mc-desc">CGE + RPet callers, subtypes, and MRSA consensus. Disagreements highlighted.</div>
+            <div class="mc-stat">
+                <span class="mc-stat-num">54</span>
+                <span class="mc-stat-lbl">SCCmec types</span>
+                <span class="mc-arrow">→</span>
+            </div>
+        </a>
+        <a class="module-card" href="pages/capsule.html" style="--accent: #14b8a6;">
+            <div class="mc-top">
+                <span class="mc-icon">💊</span>
+                <div>
+                    <div class="mc-title">Capsule Typing</div>
+                    <div class="mc-sub">Capsular polysaccharide serotype</div>
+                </div>
+            </div>
+            <div class="mc-desc">Type 5 and Type 8 serotypes — major vaccine targets and immune-evasion markers.</div>
+            <div class="mc-stat">
+                <span class="mc-stat-num">2</span>
+                <span class="mc-stat-lbl">capsule types</span>
+                <span class="mc-arrow">→</span>
+            </div>
+        </a>
+        <a class="module-card" href="pages/agr.html" style="--accent: #8b5cf6;">
+            <div class="mc-top">
+                <span class="mc-icon">🧬</span>
+                <div>
+                    <div class="mc-title">agr Typing</div>
+                    <div class="mc-sub">Accessory gene regulator</div>
+                </div>
+            </div>
+            <div class="mc-desc">Quorum-sensing types I–IV — linkage between genotype and virulence phenotype.</div>
+            <div class="mc-stat">
+                <span class="mc-stat-num">4</span>
+                <span class="mc-stat-lbl">agr types</span>
+                <span class="mc-arrow">→</span>
+            </div>
+        </a>
+        <a class="module-card" href="pages/mrsa.html" style="--accent: #dc2626;">
+            <div class="mc-top">
+                <span class="mc-icon">🦠</span>
+                <div>
+                    <div class="mc-title">MRSA Analysis</div>
+                    <div class="mc-sub">Comprehensive MRSA view</div>
+                </div>
+            </div>
+            <div class="mc-desc">Consensus MRSA/MSSA call with cross-tabs against CC, ST, spa, SCCmec, agr, capsule.</div>
+            <div class="mc-stat">
+                <span class="mc-stat-num">11,490</span>
+                <span class="mc-stat-lbl">MRSA isolates</span>
+                <span class="mc-arrow">→</span>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- ============ GENE MODULES ============ -->
+<section class="section" style="background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);">
+    <h2 class="section-title">💊 Gene-Based Genome Retrieval</h2>
+    <p class="section-sub">
+        Search and retrieve genomes by antimicrobial resistance, virulence, and plasmid replicon content.
+        Pick up to 5 genes per query, switch between match-ANY and match-ALL, and export the accession list
+        directly for re-downloading genomes.
+    </p>
+    <div class="module-grid">
+        
+        <a class="module-card" href="pages/amr.html" style="--accent: #dc2626;">
+            <div class="mc-top">
+                <span class="mc-icon">💊</span>
+                <div>
+                    <div class="mc-title">AMR Genes</div>
+                    <div class="mc-sub">Antimicrobial resistance</div>
+                </div>
+            </div>
+            <div class="mc-desc">Search and retrieve genomes by resistance determinants. Pick up to 5 genes, export accessions.</div>
+            <div class="mc-stat">
+                <span class="mc-stat-num">223</span>
+                <span class="mc-stat-lbl">AMR genes</span>
+                <span class="mc-arrow">→</span>
+            </div>
+        </a>
+        <a class="module-card" href="pages/vfdb.html" style="--accent: #e11d48;">
+            <div class="mc-top">
+                <span class="mc-icon">🦠</span>
+                <div>
+                    <div class="mc-title">Virulence Factors</div>
+                    <div class="mc-sub">VFDB gene catalogue</div>
+                </div>
+            </div>
+            <div class="mc-desc">Retrieve genomes by PVL, TSST-1, enterotoxins, adhesins, and immune-evasion factors.</div>
+            <div class="mc-stat">
+                <span class="mc-stat-num">142</span>
+                <span class="mc-stat-lbl">virulence genes</span>
+                <span class="mc-arrow">→</span>
+            </div>
+        </a>
+        <a class="module-card" href="pages/plasmid.html" style="--accent: #673ab7;">
+            <div class="mc-top">
+                <span class="mc-icon">🔌</span>
+                <div>
+                    <div class="mc-title">Plasmid Replicons</div>
+                    <div class="mc-sub">PlasmidFinder catalogue</div>
+                </div>
+            </div>
+            <div class="mc-desc">Filter genomes by plasmid replicon content — the vehicles of horizontal gene transfer.</div>
+            <div class="mc-stat">
+                <span class="mc-stat-num">214</span>
+                <span class="mc-stat-lbl">replicon types</span>
+                <span class="mc-arrow">→</span>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- ============ HOW TO USE ============ -->
+<section class="section" style="background: #ffffff;">
+    <h2 class="section-title">🚀 How to Use SAURUS</h2>
+    <p class="section-sub">
+        Four steps from query to genome download — no installation, no account, no limits.
+    </p>
+    <div class="howto-grid">
+        <div class="howto-card">
+            <span class="step">1</span>
+            <h4>Browse a module</h4>
+            <p>Pick a typing scheme (MLST, spa, SCCmec…) or a gene category (AMR, virulence, plasmid) from the navigation.</p>
+        </div>
+        <div class="howto-card">
+            <span class="step">2</span>
+            <h4>Filter or search</h4>
+            <p>Use search boxes, dropdown filters, and column sorting to narrow to the isolates you care about — e.g. <code>ST5</code> + <code>CC5</code> + <code>MRSA</code>.</p>
+        </div>
+        <div class="howto-card">
+            <span class="step">3</span>
+            <h4>Export accessions</h4>
+            <p>Click <strong>🧬 Accessions</strong> to download a plain-text list of matching genome accession IDs — one per line.</p>
+        </div>
+        <div class="howto-card">
+            <span class="step">4</span>
+            <h4>Download genomes</h4>
+            <p>Feed the list to NCBI:
+            <code>datasets download genome accession --inputfile list.txt</code> — that's it.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============ CITE ============ -->
+<section class="section" style="padding-top: 0;">
+    <div class="cite-block">
+        <h3>📚 Please cite SAURUS</h3>
+        <p>
+            If you use SAURUS in your research, please cite the underlying pipeline and the
+            source dataset:
+        </p>
+        <p>
+            <strong>Pipeline:</strong> Beckley B, Amarh V. StaphScope: a species-optimized
+            computational pipeline for rapid and accessible <em>Staphylococcus aureus</em>
+            genotyping and surveillance. <em>BMC Genomics</em>. 2026;27:261.
+            <a href="https://doi.org/10.1186/s12864-026-12609-x" target="_blank" style="color:#92400e;">doi:10.1186/s12864-026-12609-x</a>
+        </p>
+        <p>
+            <strong>Gene data:</strong> Shelenkov A, Slavokhotova A, Yunusova M, et al.
+            Genomic typing, antimicrobial resistance gene, virulence factor and plasmid
+            replicon database for the important pathogenic bacteria <em>Staphylococcus aureus</em>.
+            <em>BMC Genom Data</em>. 2025;26:65.
+            <a href="https://doi.org/10.1186/s12863-025-01363-w" target="_blank" style="color:#92400e;">doi:10.1186/s12863-025-01363-w</a>
+        </p>
+    </div>
+</section>
+
+<footer class="saurus-footer">
+    <div class="footer-line full-name">
+        <strong style="color:#d4af37;">SAURUS</strong> — Staphylococcus aureus Unified Resource for Universal Surveillance
+    </div>
+    <div class="footer-line">
+        University of Ghana Medical School · Department of Medical Biochemistry · MIT License
+    </div>
+    <div class="footer-line">
+        <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
+        <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
+        Data updated 2026-10-08 16:52:59
+    </div>
+</footer>
+
+<script>
+(function() {
+    const QUOTES = [{"text": "Imagination is more important than knowledge.", "author": "Albert Einstein"}, {"text": "The important thing is not to stop questioning. Curiosity has its own reason for existing.", "author": "Albert Einstein"}, {"text": "Nothing in life is to be feared, it is only to be understood.", "author": "Marie Curie"}, {"text": "Somewhere, something incredible is waiting to be known.", "author": "Carl Sagan"}, {"text": "We are made of star-stuff.", "author": "Carl Sagan"}, {"text": "Extraordinary claims require extraordinary evidence.", "author": "Carl Sagan"}, {"text": "The good thing about science is that it's true whether or not you believe in it.", "author": "Neil deGrasse Tyson"}, {"text": "The first principle is that you must not fool yourself — and you are the easiest person to fool.", "author": "Richard Feynman"}, {"text": "I would rather have questions that can't be answered than answers that can't be questioned.", "author": "Richard Feynman"}, {"text": "In science, there are no shortcuts to truth.", "author": "Karl Popper"}, {"text": "Science cannot solve the ultimate mystery of nature because we ourselves are a part of the mystery we are trying to solve.", "author": "Max Planck"}, {"text": "If I have seen further, it is by standing on the shoulders of giants.", "author": "Isaac Newton"}, {"text": "Science is not only a disciple of reason but also one of romance and passion.", "author": "Stephen Hawking"}, {"text": "Look up at the stars and not down at your feet.", "author": "Stephen Hawking"}, {"text": "Science and everyday life cannot and should not be separated.", "author": "Rosalind Franklin"}, {"text": "If you know you're on the right track, if you have this inner knowledge, then nobody can turn you off.", "author": "Barbara McClintock"}, {"text": "The reward for work well done is the opportunity to do more.", "author": "Jonas Salk"}, {"text": "The more clearly we can focus our attention on the wonders of the universe about us, the less taste we shall have for destruction.", "author": "Rachel Carson"}, {"text": "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.", "author": "Marie Curie"}, {"text": "The universe is not required to be in perfect harmony with human ambition.", "author": "Carl Sagan"}, {"text": "Equipped with his five senses, man explores the universe around him and calls the adventure Science.", "author": "Edwin Hubble"}, {"text": "The saddest aspect of life right now is that science gathers knowledge faster than society gathers wisdom.", "author": "Isaac Asimov"}, {"text": "Chance favors the prepared mind.", "author": "Louis Pasteur"}, {"text": "Science knows no country, because knowledge belongs to humanity.", "author": "Louis Pasteur"}, {"text": "The microbe is nothing; the terrain is everything.", "author": "Louis Pasteur"}, {"text": "Gentlemen, it is the microbes who will have the last word.", "author": "Louis Pasteur"}, {"text": "The pure culture is the foundation for all research on infectious disease.", "author": "Robert Koch"}, {"text": "One sometimes finds what one is not looking for.", "author": "Alexander Fleming"}, {"text": "The single biggest threat to man's continued dominance on the planet is the virus.", "author": "Joshua Lederberg"}, {"text": "We shall have to learn to aim our therapeutic missiles chemically.", "author": "Paul Ehrlich"}, {"text": "Medicine is a science of uncertainty and an art of probability.", "author": "William Osler"}, {"text": "The very first requirement in a hospital is that it should do the sick no harm.", "author": "Florence Nightingale"}, {"text": "It is not the strongest of the species that survives, but the one most responsive to change.", "author": "Charles Darwin"}, {"text": "It is not enough to have a good mind; the main thing is to use it well.", "author": "René Descartes"}, {"text": "Somewhere in the world there is a gene that will change how we see disease.", "author": "Siddhartha Mukherjee"}, {"text": "Better is possible. It does not take genius. It takes diligence, moral clarity, and ingenuity.", "author": "Atul Gawande"}, {"text": "Every genome is a story. SAURUS helps you read the chapters on resistance, virulence, and lineage.", "author": "Brown Beckley"}, {"text": "StaphScope turns raw sequence into structured, decision-ready typing information.", "author": "Brown Beckley"}, {"text": "Open data saves lives. Surveillance belongs to everyone.", "author": "Brown Beckley"}, {"text": "Behind every ST, every spa type, every SCCmec cassette, there is an epidemiological story worth telling.", "author": "Brown Beckley"}];
+    const ROTATE_MS = 10000;
+
+    const banner   = document.getElementById('quote-banner');
+    const textEl   = document.getElementById('quote-text');
+    const authorEl = document.getElementById('quote-author');
+    const dotsEl   = document.getElementById('quote-dots');
+
+    let idx = Math.floor(Math.random() * QUOTES.length);
+
+    dotsEl.innerHTML = QUOTES.map(() => '<span class="quote-dot"></span>').join('');
+    const dots = dotsEl.querySelectorAll('.quote-dot');
+
+    function show(i) {
+        const q = QUOTES[i];
+        textEl.textContent = q.text;
+        authorEl.textContent = '— ' + q.author;
+        dots.forEach((d, k) => d.classList.toggle('active', k === i));
+    }
+
+    function rotate() {
+        banner.classList.add('fading');
+        setTimeout(() => {
+            idx = (idx + 1) % QUOTES.length;
+            show(idx);
+            banner.classList.remove('fading');
+        }, 600);
+    }
+
+    show(idx);
+    setInterval(rotate, ROTATE_MS);
+})();
+</script>
+
+</body>
+</html>

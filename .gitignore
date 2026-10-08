@@ -1,0 +1,25 @@
+# === Local working directories — NEVER pushed ===
+merged/
+batches/
+scripts/
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+env/
+venv/
+
+# === System ===
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.bak
+*.tmp
+
+# === Data safety ===
+*.fna
+*.fasta
+*.fa

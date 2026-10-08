@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virulence Factors — SAURUS</title>
+<style>
+
+:root {
+    --gold: #d4af37;
+    --navy: #0a1628;
+    --accent: #e11d48;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5;
+}
+
+/* Nav */
+.saurus-nav {
+    background: var(--navy); color: white;
+    padding: 20px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    position: sticky; top: 0; z-index: 100;
+}
+.saurus-nav .brand { display: flex; align-items: center; gap: 20px; text-decoration: none; flex-shrink: 0; }
+.saurus-nav .brand-emoji { font-size: 5.6em; line-height: 1; flex-shrink: 0; }
+.saurus-nav .brand-text { display: flex; flex-direction: column; gap: 3px; }
+.saurus-nav .brand-name { font-weight: 800; font-size: 3.45em; letter-spacing: 1px; color: var(--gold); line-height: 1; }
+.saurus-nav .brand-tagline { font-size: 1.0em; font-weight: 400; color: #94a3b8; line-height: 1.15; max-width: 520px; }
+.saurus-nav .links { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.saurus-nav .links a {
+    color: #cbd5e1; text-decoration: none; padding: 8px 14px;
+    border-radius: 6px; font-size: 0.9em; font-weight: 500;
+    transition: all 0.15s; white-space: nowrap;
+}
+.saurus-nav .links a:hover { background: rgba(255,255,255,0.08); color: white; }
+.saurus-nav .links a.active { background: var(--gold); color: var(--navy); font-weight: 600; }
+
+/* Header */
+.page-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #1e293b 100%);
+    color: white; padding: 40px 32px 32px;
+}
+.page-header h1 { font-size: 2.2em; margin-bottom: 6px; font-weight: 700; }
+.page-header .subtitle { color: #94a3b8; font-size: 1.05em; margin-bottom: 24px; }
+
+main { max-width: 1400px; margin: 0 auto; padding: 28px 32px 60px; }
+
+/* Tabs */
+.tab-strip {
+    display: flex; gap: 6px; margin-bottom: 20px;
+    background: var(--card); padding: 8px;
+    border-radius: 12px; border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    width: fit-content;
+}
+.tab-btn {
+    padding: 10px 22px; border: none; border-radius: 8px;
+    background: transparent; color: var(--muted);
+    font-size: 0.92em; font-weight: 700;
+    cursor: pointer; transition: all 0.15s;
+    font-family: inherit;
+}
+.tab-btn:hover { background: #f1f5f9; color: var(--text); }
+.tab-btn.active { background: var(--accent); color: white; box-shadow: 0 3px 10px #e11d4855; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Gene picker */
+.gene-picker {
+    background: var(--card); border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin-bottom: 18px;
+}
+.picker-label {
+    font-size: 0.82em; color: var(--muted);
+    font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 10px;
+    display: block;
+}
+.chip-row {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;
+}
+.gene-chip {
+    padding: 6px 14px; border-radius: 16px;
+    border: 2px solid var(--border); background: white;
+    color: var(--text); font-size: 0.85em;
+    font-weight: 700; cursor: pointer;
+    transition: all 0.15s; font-family: 'SF Mono', Monaco, monospace;
+}
+.gene-chip:hover { border-color: var(--accent); color: var(--accent); }
+.gene-chip.selected {
+    background: var(--accent); border-color: var(--accent);
+    color: white; box-shadow: 0 3px 8px #e11d4855;
+}
+.gene-chip.disabled {
+    opacity: 0.4; cursor: not-allowed;
+    background: #f1f5f9;
+}
+
+/* Selected row */
+.selected-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; border-radius: 10px;
+    background: #f8fafc; border: 1px solid var(--border);
+    margin-bottom: 14px;
+    min-height: 54px; flex-wrap: wrap;
+}
+.selected-bar .label {
+    font-size: 0.82em; color: var(--muted);
+    font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.selected-gene {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 16px;
+    background: var(--accent); color: white;
+    font-size: 0.85em; font-weight: 700;
+    font-family: 'SF Mono', Monaco, monospace;
+}
+.selected-gene .remove {
+    cursor: pointer; font-weight: 900;
+    padding: 0 4px; opacity: 0.8;
+}
+.selected-gene .remove:hover { opacity: 1; }
+.selected-empty {
+    color: var(--muted); font-style: italic; font-size: 0.9em;
+}
+.mode-toggle {
+    display: flex; gap: 4px; background: #f1f5f9;
+    padding: 4px; border-radius: 8px; margin-left: auto;
+}
+.mode-btn {
+    padding: 6px 16px; border: none; border-radius: 6px;
+    background: transparent; cursor: pointer;
+    font-size: 0.85em; font-weight: 700;
+    color: var(--muted); font-family: inherit;
+    transition: all 0.15s;
+}
+.mode-btn.active { background: white; color: var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+/* Result bar */
+.result-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.result-count {
+    font-size: 1.05em; font-weight: 700; color: var(--text);
+}
+.result-count strong { color: var(--accent); font-size: 1.15em; }
+.result-hint { color: var(--muted); font-size: 0.92em; }
+.export-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.export-btn {
+    padding: 9px 16px; border: none; border-radius: 8px;
+    font-size: 0.88em; font-weight: 600; cursor: pointer;
+    transition: all 0.15s; color: white; background: var(--accent); font-family: inherit;
+}
+.export-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px #e11d4855; }
+.export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.export-btn.secondary { background: #64748b; }
+
+/* Table */
+.table-wrap {
+    background: var(--card); border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.table-scroll { max-height: 68vh; overflow: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+thead th {
+    background: #f1f5f9; padding: 12px 14px; text-align: left;
+    font-weight: 700; color: #334155; font-size: 0.85em;
+    text-transform: uppercase; letter-spacing: 0.3px;
+    position: sticky; top: 0; z-index: 5;
+    cursor: pointer; user-select: none;
+    border-bottom: 2px solid var(--border); white-space: nowrap;
+}
+thead th:hover { background: #e2e8f0; }
+thead th.sortable::after { content: ' ⇅'; opacity: 0.35; font-size: 0.85em; }
+thead th.sorted-asc::after { content: ' ▲'; opacity: 1; color: var(--accent); }
+thead th.sorted-desc::after { content: ' ▼'; opacity: 1; color: var(--accent); }
+tbody td { padding: 11px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+tbody tr:hover td { background: #f8fafc; }
+.accession-cell {
+    font-family: 'SF Mono', Monaco, monospace;
+    font-weight: 700; color: var(--text); font-size: 0.88em;
+}
+.match-yes { color: #059669; font-weight: 800; font-size: 1.1em; text-align: center; }
+.match-no  { color: #cbd5e1; text-align: center; }
+.copy-btn {
+    padding: 4px 10px; font-size: 0.78em; font-weight: 700;
+    border-radius: 6px; border: 1px solid var(--border);
+    background: white; cursor: pointer; font-family: inherit;
+    color: var(--muted); transition: all 0.15s;
+}
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Frequency table */
+.freq-controls {
+    display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+    background: var(--card); padding: 14px 18px;
+    border-radius: 12px; border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.freq-controls input, .freq-controls select {
+    padding: 9px 12px; border: 2px solid var(--border);
+    border-radius: 8px; font-size: 0.9em; font-family: inherit;
+    color: var(--text); outline: none;
+}
+.freq-controls input { flex: 1; min-width: 200px; }
+.freq-controls input:focus, .freq-controls select:focus { border-color: var(--accent); }
+.prev-bar-track { flex: 1; height: 10px; background: #f1f5f9; border-radius: 5px; overflow: hidden; }
+.prev-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent) 0%, #7f1d1d 100%); border-radius: 5px; }
+.prev-cell { display: flex; align-items: center; gap: 10px; min-width: 180px; }
+.prev-value { font-weight: 700; font-size: 0.88em; min-width: 52px; text-align: right; }
+.num-cell { font-family: 'SF Mono', Monaco, monospace; font-weight: 700; color: #334155; text-align: right; }
+.gene-name { font-family: 'SF Mono', Monaco, monospace; font-weight: 700; color: var(--text); }
+.family-pill {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    background: #f1f5f9; color: #475569;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-weight: 700; font-size: 0.78em;
+}
+
+/* Pagination */
+.pagination {
+    display: flex; gap: 12px; align-items: center; justify-content: center;
+    padding: 14px 18px; background: #f8fafc;
+    border-top: 1px solid var(--border); font-size: 0.88em; flex-wrap: wrap;
+}
+.pagination button {
+    padding: 7px 14px; border: 1px solid var(--border); background: white;
+    border-radius: 6px; cursor: pointer; font-weight: 600;
+    color: var(--text); font-family: inherit;
+}
+.pagination button:hover:not(:disabled) { background: var(--accent); color: white; border-color: var(--accent); }
+.pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+.pagination .page-info { color: var(--muted); font-weight: 600; }
+.page-size-label { display: flex; align-items: center; gap: 6px; font-size: 0.85em; color: var(--muted); font-weight: 600; margin-left: auto; white-space: nowrap; }
+.page-size-label select { padding: 5px 8px; border: 1px solid var(--border); border-radius: 6px; background: white; font-family: inherit; font-size: 1em; cursor: pointer; font-weight: 700; color: var(--text); }
+
+.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty-state .icon { font-size: 3em; opacity: 0.4; margin-bottom: 12px; }
+
+/* About tab */
+.about-content {
+    background: var(--card); border-radius: 12px;
+    padding: 30px 36px; border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    max-width: 900px;
+}
+.about-content h2 { color: var(--navy); margin-bottom: 14px; font-size: 1.5em; border-bottom: 3px solid var(--accent); padding-bottom: 10px; display: inline-block; }
+.about-content h3 { color: #334155; margin: 24px 0 10px; font-size: 1.1em; }
+.about-content p { margin-bottom: 12px; color: #475569; }
+.about-content ul { padding-left: 24px; margin-bottom: 14px; }
+.about-content li { margin-bottom: 6px; color: #475569; }
+.about-content code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; font-family: 'SF Mono', Monaco, monospace; }
+.about-content a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+/* Footer */
+.saurus-footer {
+    background: var(--navy); color: #94a3b8; padding: 32px;
+    text-align: center; font-size: 0.88em; margin-top: 60px;
+}
+.saurus-footer a { color: var(--gold); text-decoration: none; }
+.saurus-footer .footer-line { margin: 6px 0; }
+.saurus-footer .full-name { color: #cbd5e1; font-size: 0.95em; letter-spacing: 0.2px; }
+
+@media (max-width: 900px) {
+    .saurus-nav { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .saurus-nav .brand-tagline { max-width: 100%; }
+    .saurus-nav .brand-emoji { font-size: 3.6em; }
+    .saurus-nav .brand-name { font-size: 2.2em; }
+}
+@media (max-width: 700px) {
+    .page-header { padding: 28px 20px 24px; }
+    main { padding: 20px 16px 40px; }
+    .saurus-nav { padding: 14px 16px; }
+    .tab-strip { width: 100%; }
+    .mode-toggle { margin-left: 0; }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="saurus-nav">
+    <a class="brand" href="../index.html">
+        <span class="brand-emoji">🦖</span>
+        <span class="brand-text">
+            <span class="brand-name">SAURUS</span>
+            <span class="brand-tagline">Staphylococcus aureus Unified Resource for Universal Surveillance</span>
+        </span>
+    </a>
+    <div class="links">
+
+        <a href="../index.html">Home</a>
+        <a href="../pages/mlst.html">MLST</a>
+        <a href="../pages/spa.html">spa</a>
+        <a href="../pages/sccmec.html">SCCmec</a>
+        <a href="../pages/capsule.html">Capsule</a>
+        <a href="../pages/agr.html">agr</a>
+        <a href="../pages/mrsa.html">MRSA</a>
+        <a href="../pages/amr.html">AMR</a>
+        <a href="../pages/vfdb.html" class="active">Virulence</a>
+        <a href="../pages/plasmid.html">Plasmid</a>
+        <a href="../lineages.html">Lineages</a>
+        <a href="../downloads.html">Downloads</a>
+        <a href="../about.html">About</a>
+    </div>
+    </div>
+</nav>
+
+<header class="page-header">
+    <h1>🦠 Virulence Factors</h1>
+    <div class="subtitle">Search & retrieve genomes by virulence determinants</div>
+</header>
+
+<main>
+    <div class="tab-strip">
+        <button class="tab-btn active" data-tab="search">🔎 Gene Search</button>
+        <button class="tab-btn" data-tab="freq">📊 All Genes</button>
+        <button class="tab-btn" data-tab="about">ℹ️ About</button>
+    </div>
+
+    <!-- ============ TAB 1: GENE SEARCH ============ -->
+    <div class="tab-panel active" id="tab-search">
+        <div class="gene-picker">
+            <span class="picker-label">Quick pick — click genes to filter samples</span>
+            <div class="chip-row" id="chip-row"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:0.82em;color:#94a3b8;">
+                    Tip: pick up to 5 genes. Match ALL = samples must carry every selected gene.
+                </span>
+                <span id="load-status" style="display:none;font-size:0.82em;color:#059669;font-weight:600;"></span>
+            </div>
+        </div>
+
+        <div class="selected-bar" id="selected-bar"></div>
+
+        <div class="result-bar">
+            <div class="result-count" id="result-count"><span class="result-hint">No genes selected</span></div>
+            <div class="export-bar">
+                <button class="export-btn" data-fmt="tsv" disabled>⬇ TSV</button>
+                <button class="export-btn" data-fmt="csv" disabled>⬇ CSV</button>
+                <button class="export-btn" data-fmt="json" disabled>⬇ JSON</button>
+                <button class="export-btn secondary" data-fmt="accessions" disabled>🧬 Accessions</button>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <div class="table-scroll">
+                <table>
+                    <thead id="table-head"></thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+
+    <!-- ============ TAB 2: ALL GENES ============ -->
+    <div class="tab-panel" id="tab-freq">
+        <div class="freq-controls">
+            <input type="text" id="freq-search" placeholder="🔍 Search gene name or family...">
+            <select id="freq-family">
+                <option value="">All families</option>
+                <option value="BPE005">BPE005</option><option value="EF0149">EF0149</option><option value="PA3142">PA3142</option><option value="STM0266">STM0266</option><option value="STM0267">STM0267</option><option value="STM0268">STM0268</option><option value="STM0269">STM0269</option><option value="STM0270">STM0270</option><option value="STM0271">STM0271</option><option value="STM0278">STM0278</option><option value="STM0284">STM0284</option><option value="STM0287">STM0287</option><option value="acpXL">acpXL</option><option value="adsA">adsA</option><option value="aur">aur</option><option value="avrA">avrA</option><option value="bvrR">bvrR</option><option value="cap8B">cap8B</option><option value="cap8C">cap8C</option><option value="cap8D">cap8D</option><option value="cap8E">cap8E</option><option value="cap8F">cap8F</option><option value="cap8G">cap8G</option><option value="cap8H">cap8H</option><option value="cap8I">cap8I</option><option value="cap8J">cap8J</option><option value="cap8K">cap8K</option><option value="cap8L">cap8L</option><option value="cap8M">cap8M</option><option value="cap8O">cap8O</option><option value="cap8P">cap8P</option><option value="capA">capA</option><option value="capN">capN</option><option value="cgs">cgs</option><option value="chp">chp</option><option value="clf">clf</option><option value="cna">cna</option><option value="coa">coa</option><option value="cps4A">cps4A</option><option value="cps4B">cps4B</option><option value="cpsA/uppS">cpsA/uppS</option><option value="cylA">cylA</option><option value="cylI">cylI</option><option value="cylL">cylL</option><option value="cylM">cylM</option><option value="cylR1">cylR1</option><option value="cylR2">cylR2</option><option value="eap/map">eap/map</option><option value="east1">east1</option><option value="ebp">ebp</option><option value="ebpC">ebpC</option><option value="esaA">esaA</option><option value="esaB">esaB</option><option value="esaD">esaD</option><option value="esaE">esaE</option><option value="esaG">esaG</option><option value="essA">essA</option><option value="essB">essB</option><option value="essC">essC</option><option value="esxA">esxA</option><option value="esxB">esxB</option><option value="esxC">esxC</option><option value="esxD">esxD</option><option value="eta">eta</option><option value="etb">etb</option><option value="fnb">fnb</option><option value="geh">geh</option><option value="gndA">gndA</option><option value="harA">harA</option><option value="hcpA">hcpA</option><option value="hlb">hlb</option><option value="hld">hld</option><option value="hlgA">hlgA</option><option value="hlgB">hlgB</option><option value="hlgC">hlgC</option><option value="hly/hla">hly/hla</option><option value="hysA">hysA</option><option value="ica">ica</option><option value="iroB">iroB</option><option value="isd">isd</option><option value="kdsB">kdsB</option><option value="lip">lip</option><option value="lukF-PV">lukF-PV</option><option value="lukS-PV">lukS-PV</option><option value="ompA">ompA</option><option value="pefB">pefB</option><option value="pgm">pgm</option><option value="prgB/asc10">prgB/asc10</option><option value="prgI">prgI</option><option value="psaA">psaA</option><option value="rcsB">rcsB</option><option value="sak">sak</option><option value="sbi">sbi</option><option value="scn">scn</option><option value="sdr">sdr</option><option value="sea">sea</option><option value="seb">seb</option><option value="sec">sec</option><option value="seh">seh</option><option value="selk">selk</option><option value="sell">sell</option><option value="selq">selq</option><option value="set16">set16</option><option value="set17">set17</option><option value="set18">set18</option><option value="set19">set19</option><option value="set20">set20</option><option value="set21">set21</option><option value="set22">set22</option><option value="set23">set23</option><option value="set24">set24</option><option value="set25">set25</option><option value="set26">set26</option><option value="spa">spa</option><option value="sprE">sprE</option><option value="srtB">srtB</option><option value="ssaE">ssaE</option><option value="ssp">ssp</option><option value="stx2A">stx2A</option><option value="stx2B">stx2B</option><option value="tlde1">tlde1</option><option value="tsst-1">tsst-1</option><option value="vWbp">vWbp</option><option value="yagZ/ecpA">yagZ/ecpA</option><option value="ystA">ystA</option>
+            </select>
+            <input type="number" id="freq-min-prev" value="0" min="0" max="100" step="1"
+                   style="width:130px;" placeholder="Min prevalence %">
+        </div>
+        <div class="table-wrap">
+            <div class="table-scroll">
+                <table>
+                    <thead id="freq-head"></thead>
+                    <tbody id="freq-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ TAB 3: ABOUT ============ -->
+    <div class="tab-panel" id="tab-about">
+        <div class="about-content">
+            <h2>About this dataset</h2>
+            <p>
+                This page lets you retrieve genomes by <strong>Virulence</strong> gene content.
+                Pick up to 5 genes, choose whether samples must match
+                <strong>any</strong> or <strong>all</strong> of them, and download the
+                accession list — perfect for re-downloading genomes for downstream analysis.
+            </p>
+
+            <h3>Source</h3>
+            <p>
+                Gene presence/absence is derived from the
+                <strong>Shelenkov et al. (2025)</strong> dataset:
+            </p>
+            <p style="font-size:0.92em;padding:12px;background:#f8fafc;border-left:4px solid #e11d48;border-radius:4px;font-family:'SF Mono',Monaco,monospace;">
+                Shelenkov A, Mikhailova Y. <em>Genomic Typing, Antimicrobial Resistance Gene,
+                Virulence Factor and Plasmid Replicon Dataset for the Important Pathogenic
+                Bacteria Staphylococcus aureus.</em> BMC Genomic Data (2025).
+            </p>
+
+            <h3>How to use it</h3>
+            <ol style="padding-left:24px;margin-bottom:14px;color:#475569;">
+                <li>Click a quick-pick gene chip (or use the search filter in Tab 2)</li>
+                <li>Optionally add up to 4 more genes — the table updates instantly</li>
+                <li>Switch between <strong>Match ANY</strong> (union) and <strong>Match ALL</strong> (intersection)</li>
+                <li>Click <strong>🧬 Accessions</strong> to download the accession list as plain text</li>
+                <li>Use the TSV/CSV/JSON exports to get per-gene presence flags for each accession</li>
+            </ol>
+
+            <h3>Why accession retrieval matters</h3>
+            <p>
+                Genome retrieval is the most common use case for a surveillance resource:
+                you want all genomes that carry <code>mecA</code>, or all PVL-positive isolates,
+                or all samples with both <code>tet(M)</code> and <code>erm(B)</code>.
+                SAURUS gives you the accession list directly — paste it into
+                <code>datasets download genome accession --inputfile list.txt</code>
+                and you have the genomes.
+            </p>
+
+            <h3>Full data download</h3>
+            <p>
+                For the complete per-genome presence matrix in long format
+                (<code>accession | gene | num_hits | identities</code>):
+                <a href="data/vfdb_all.tsv" download>vfdb_all.tsv</a>
+            </p>
+
+            <h3>Cite</h3>
+            <ul>
+                <li>Beckley B, Amarh V. <em>StaphScope</em>. BMC Genomics. 2026;27:261.
+                    <a href="https://doi.org/10.1186/s12864-026-12609-x" target="_blank">DOI</a></li>
+                <li>Shelenkov A, Mikhailova Y. <em>S. aureus genomic typing dataset</em>.
+                    BMC Genomic Data (2025).</li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<footer class="saurus-footer">
+    <div class="footer-line full-name">
+        <strong style="color:#d4af37;">SAURUS</strong> — Staphylococcus aureus Unified Resource for Universal Surveillance
+    </div>
+    <div class="footer-line">
+        University of Ghana Medical School · MIT License
+    </div>
+    <div class="footer-line">
+        <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
+        <a href="../about.html">About</a> ·
+        <a href="mailto:brownbeckley94@gmail.com">Contact</a>
+    </div>
+</footer>
+
+<script>
+
+const GENE_META = [{"id": "pvl", "label": "PVL", "patterns": ["lukS-PV", "lukF-PV"], "desc": "Panton-Valentine leukocidin", "num_genomes": 89303, "prev_pct": 90.25}, {"id": "tsst", "label": "TSST-1", "patterns": ["tsst"], "desc": "Toxic shock syndrome toxin 1", "num_genomes": 0, "prev_pct": 0.0}, {"id": "ent", "label": "Enterotoxin", "patterns": ["sea", "seb", "sec", "sed", "see", "seg", "seh", "sei", "sej", "sek", "sel", "sem", "sen", "seo", "sep", "seq", "ser", "seu"], "desc": "Any staphylococcal enterotoxin", "num_genomes": 47504, "prev_pct": 48.01}, {"id": "eta", "label": "eta", "patterns": ["eta"], "desc": "Exfoliative toxin A", "num_genomes": 1332, "prev_pct": 1.35}, {"id": "etb", "label": "etb", "patterns": ["etb"], "desc": "Exfoliative toxin B", "num_genomes": 339, "prev_pct": 0.34}, {"id": "hla", "label": "hla", "patterns": ["hla", "hly/hla"], "desc": "Alpha-hemolysin", "num_genomes": 98220, "prev_pct": 99.26}, {"id": "hlb", "label": "hlb", "patterns": ["hlb"], "desc": "Beta-hemolysin", "num_genomes": 98579, "prev_pct": 99.63}, {"id": "hld", "label": "hld", "patterns": ["hld"], "desc": "Delta-hemolysin", "num_genomes": 98342, "prev_pct": 99.39}, {"id": "hlg", "label": "hlg (A/B/C)", "patterns": ["hlgA", "hlgB", "hlgC"], "desc": "Gamma-hemolysin", "num_genomes": 296268, "prev_pct": 299.41}, {"id": "icaa", "label": "icaA", "patterns": ["icaA"], "desc": "", "num_genomes": 98717, "prev_pct": 99.76}, {"id": "icab", "label": "icaB", "patterns": ["icaB"], "desc": "", "num_genomes": 98122, "prev_pct": 99.16}, {"id": "icac", "label": "icaC", "patterns": ["icaC"], "desc": "", "num_genomes": 98108, "prev_pct": 99.15}, {"id": "icad", "label": "icaD", "patterns": ["icaD"], "desc": "", "num_genomes": 98769, "prev_pct": 99.82}, {"id": "cap8", "label": "cap8", "patterns": ["cap8B", "cap8C", "cap8D", "cap8E", "cap8F", "cap8G", "cap8H", "cap8I", "cap8J", "cap8K", "cap8L", "cap8M", "cap8O", "cap8P"], "desc": "", "num_genomes": 1133268, "prev_pct": 1145.29}, {"id": "scn", "label": "scn", "patterns": ["scn"], "desc": "Staphylokinase complement inhibitor", "num_genomes": 81577, "prev_pct": 82.44}, {"id": "sak", "label": "sak", "patterns": ["sak"], "desc": "Staphylokinase", "num_genomes": 75594, "prev_pct": 76.4}, {"id": "clfa", "label": "clfA", "patterns": ["clfA"], "desc": "", "num_genomes": 81404, "prev_pct": 82.27}, {"id": "clfb", "label": "clfB", "patterns": ["clfB"], "desc": "", "num_genomes": 72473, "prev_pct": 73.24}, {"id": "fnba", "label": "fnbA", "patterns": ["fnbA"], "desc": "", "num_genomes": 83184, "prev_pct": 84.07}, {"id": "fnbb", "label": "fnbB", "patterns": ["fnbB"], "desc": "", "num_genomes": 67764, "prev_pct": 68.48}, {"id": "sdrc", "label": "sdrC", "patterns": ["sdrC"], "desc": "", "num_genomes": 80432, "prev_pct": 81.29}, {"id": "sdrd", "label": "sdrD", "patterns": ["sdrD"], "desc": "", "num_genomes": 69421, "prev_pct": 70.16}, {"id": "sdre", "label": "sdrE", "patterns": ["sdrE"], "desc": "", "num_genomes": 85721, "prev_pct": 86.63}, {"id": "cna", "label": "cna", "patterns": ["cna"], "desc": "", "num_genomes": 4294, "prev_pct": 4.34}, {"id": "adsa", "label": "adsA", "patterns": ["adsA"], "desc": "", "num_genomes": 98829, "prev_pct": 99.88}, {"id": "aur", "label": "aur", "patterns": ["aur"], "desc": "", "num_genomes": 98841, "prev_pct": 99.89}, {"id": "sbi", "label": "sbi", "patterns": ["sbi"], "desc": "", "num_genomes": 98510, "prev_pct": 99.56}, {"id": "isd", "label": "isd (iron uptake)", "patterns": ["isdA", "isdB", "isdC", "isdD", "isdE", "isdF", "isdG", "isdI"], "desc": "", "num_genomes": 790307, "prev_pct": 798.69}];
+const SAMPLE_INDEX_URL = "data/vfdb_samples.json";
+const ACCENT = "#e11d48";
+const DB_KEY = "vfdb";
+const MAX_GENES = 5;
+
+// ---------- state ----------
+let sampleIndex = null;    // { genes: [...], samples: {...} }
+let indexLoaded = false;
+let indexLoading = false;
+let selected = [];          // array of gene ids
+let matchMode = 'ANY';
+let results = [];           // array of {accession, presentSet}
+let currentPage = 1;
+let pageSize = 100;
+
+// ---------- DOM ----------
+const tbody = document.getElementById('table-body');
+const thead = document.getElementById('table-head');
+const resultCount = document.getElementById('result-count');
+const paginationEl = document.getElementById('pagination');
+const selectedBar = document.getElementById('selected-bar');
+const geneSearch = document.getElementById('gene-search');
+const suggestions = document.getElementById('suggestions');
+const chipRow = document.getElementById('chip-row');
+const loadStatus = document.getElementById('load-status');
+
+// ---------- helpers ----------
+function esc(s) {
+    return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function download(filename, content, mime) {
+    const blob = new Blob([content], { type: mime + ';charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+}
+
+// ---------- load index lazily ----------
+async function ensureIndex() {
+    if (indexLoaded || indexLoading) return;
+    indexLoading = true;
+    loadStatus.textContent = 'Loading sample index…';
+    loadStatus.style.display = 'inline-block';
+    try {
+        const resp = await fetch(SAMPLE_INDEX_URL);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        sampleIndex = await resp.json();
+        indexLoaded = true;
+        loadStatus.textContent = '✓ Index loaded (' +
+            Object.keys(sampleIndex.samples).length.toLocaleString() + ' samples)';
+        setTimeout(() => { loadStatus.style.display = 'none'; }, 2000);
+    } catch (e) {
+        loadStatus.textContent = '⚠️ Could not load index: ' + e.message;
+        loadStatus.style.color = '#dc2626';
+    } finally {
+        indexLoading = false;
+    }
+}
+
+// ---------- render gene chips ----------
+function renderChips() {
+    chipRow.innerHTML = GENE_META.map(g => {
+        const isSel = selected.includes(g.id);
+        const isDisabled = !isSel && selected.length >= MAX_GENES;
+        const cls = 'gene-chip' + (isSel ? ' selected' : '') + (isDisabled ? ' disabled' : '');
+        const desc = g.desc ? ' — ' + g.desc : '';
+        return '<button class="' + cls + '" data-gene="' + g.id + '" ' +
+            'title="' + esc(g.label + desc + ' (' + g.prev_pct + '%)') + '">' +
+            esc(g.label) + '</button>';
+    }).join('');
+    chipRow.querySelectorAll('.gene-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.gene;
+            if (selected.includes(id)) {
+                selected = selected.filter(x => x !== id);
+                renderSelectedBar();
+                renderChips();
+                runSearch();
+            } else if (selected.length < MAX_GENES) {
+                selected.push(id);
+                ensureIndex().then(() => {
+                    renderSelectedBar();
+                    renderChips();
+                    runSearch();
+                });
+            }
+        });
+    });
+}
+
+// ---------- render selected bar ----------
+function renderSelectedBar() {
+    if (selected.length === 0) {
+        selectedBar.innerHTML =
+            '<span class="label">Selected genes</span>' +
+            '<span class="selected-empty">Pick up to ' + MAX_GENES + ' genes from the chips above</span>';
+        return;
+    }
+    const chips = selected.map(id => {
+        const g = GENE_META.find(x => x.id === id);
+        return '<span class="selected-gene">' + esc(g.label) +
+            '<span class="remove" data-id="' + id + '">×</span></span>';
+    }).join('');
+    selectedBar.innerHTML =
+        '<span class="label">Selected genes</span>' +
+        chips +
+        '<div class="mode-toggle">' +
+            '<button class="mode-btn ' + (matchMode === 'ANY' ? 'active' : '') + '" data-mode="ANY">Match ANY</button>' +
+            '<button class="mode-btn ' + (matchMode === 'ALL' ? 'active' : '') + '" data-mode="ALL">Match ALL</button>' +
+        '</div>';
+    selectedBar.querySelectorAll('.remove').forEach(el => {
+        el.addEventListener('click', () => {
+            selected = selected.filter(x => x !== el.dataset.id);
+            renderSelectedBar();
+            renderChips();
+            runSearch();
+        });
+    });
+    selectedBar.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            matchMode = btn.dataset.mode;
+            renderSelectedBar();
+            runSearch();
+        });
+    });
+}
+
+// ---------- run search ----------
+function runSearch() {
+    if (selected.length === 0) {
+        results = [];
+        renderResults();
+        return;
+    }
+    if (!indexLoaded) {
+        // not yet loaded; nothing to filter
+        results = [];
+        renderResults();
+        return;
+    }
+    const selIdxs = selected.map(id => sampleIndex.genes.findIndex(g => g.id === id));
+    const matches = [];
+    for (const [acc, present] of Object.entries(sampleIndex.samples)) {
+        const presentSet = new Set(present);
+        const okFlags = selIdxs.map(i => presentSet.has(i));
+        const ok = matchMode === 'ANY' ? okFlags.some(x => x) : okFlags.every(x => x);
+        if (ok) {
+            matches.push({ accession: acc, okFlags });
+        }
+    }
+    results = matches;
+    currentPage = 1;
+    renderResults();
+}
+
+// ---------- render results ----------
+function renderHead() {
+    const cols = ['Accession'];
+    for (const id of selected) {
+        const g = GENE_META.find(x => x.id === id);
+        cols.push(g.label);
+    }
+    cols.push('Copy');
+    let html = '<tr>';
+    for (const c of cols) html += '<th>' + esc(c) + '</th>';
+    html += '</tr>';
+    thead.innerHTML = html;
+}
+
+function renderResults() {
+    renderHead();
+
+    if (selected.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="99"><div class="empty-state">' +
+            '<div class="icon">🧬</div>' +
+            '<div>Pick one or more genes above to retrieve matching genomes</div>' +
+            '</div></td></tr>';
+        resultCount.innerHTML = '<span class="result-hint">No genes selected</span>';
+        paginationEl.innerHTML = '';
+        updateExportButtons();
+        return;
+    }
+
+    if (!indexLoaded) {
+        tbody.innerHTML = '<tr><td colspan="99"><div class="empty-state">' +
+            '<div class="icon">⏳</div>' +
+            '<div>Loading sample index…</div>' +
+            '</div></td></tr>';
+        resultCount.innerHTML = '<span class="result-hint">Waiting for index…</span>';
+        paginationEl.innerHTML = '';
+        updateExportButtons();
+        return;
+    }
+
+    resultCount.innerHTML = '<strong>' + results.length.toLocaleString() + '</strong> sample' +
+        (results.length === 1 ? '' : 's') + ' match';
+
+    if (results.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="99"><div class="empty-state">' +
+            '<div class="icon">🔍</div>' +
+            '<div>No samples match your criteria</div>' +
+            '</div></td></tr>';
+        paginationEl.innerHTML = '';
+        updateExportButtons();
+        return;
+    }
+
+    const totalPages = Math.max(1, Math.ceil(results.length / pageSize));
+    if (currentPage > totalPages) currentPage = totalPages;
+    const start = (currentPage - 1) * pageSize;
+    const slice = results.slice(start, start + pageSize);
+
+    const rowsHtml = slice.map(r => {
+        let cells = '<td class="accession-cell">' + esc(r.accession) + '</td>';
+        for (const ok of r.okFlags) {
+            cells += '<td class="' + (ok ? 'match-yes' : 'match-no') + '">' +
+                (ok ? '✓' : '·') + '</td>';
+        }
+        cells += '<td><button class="copy-btn" data-acc="' + esc(r.accession) + '">📋</button></td>';
+        return '<tr>' + cells + '</tr>';
+    }).join('');
+    tbody.innerHTML = rowsHtml;
+
+    tbody.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            navigator.clipboard.writeText(btn.dataset.acc);
+            const old = btn.textContent;
+            btn.textContent = '✓';
+            setTimeout(() => { btn.textContent = old; }, 1200);
+        });
+    });
+
+    paginationEl.innerHTML =
+        '<button id="prev-page"' + (currentPage === 1 ? ' disabled' : '') + '>← Prev</button>' +
+        '<span class="page-info">Page ' + currentPage + ' / ' + totalPages + ' · ' +
+        results.length.toLocaleString() + ' matches</span>' +
+        '<button id="next-page"' + (currentPage === totalPages ? ' disabled' : '') + '>Next →</button>' +
+        '<label class="page-size-label">Show <select id="page-size">' +
+        '<option value="50"' + (pageSize === 50 ? ' selected' : '') + '>50</option>' +
+        '<option value="100"' + (pageSize === 100 ? ' selected' : '') + '>100</option>' +
+        '<option value="500"' + (pageSize === 500 ? ' selected' : '') + '>500</option>' +
+        '</select> per page</label>';
+
+    document.getElementById('prev-page').addEventListener('click', () => {
+        if (currentPage > 1) { currentPage--; renderResults(); }
+    });
+    document.getElementById('next-page').addEventListener('click', () => {
+        if (currentPage < totalPages) { currentPage++; renderResults(); }
+    });
+    document.getElementById('page-size').addEventListener('change', e => {
+        pageSize = parseInt(e.target.value);
+        currentPage = 1;
+        renderResults();
+    });
+
+    updateExportButtons();
+}
+
+function updateExportButtons() {
+    document.querySelectorAll('.export-btn').forEach(b => {
+        b.disabled = selected.length === 0 || results.length === 0;
+    });
+}
+
+// ---------- export ----------
+document.querySelectorAll('.export-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (selected.length === 0 || results.length === 0) return;
+        const fmt = btn.dataset.fmt;
+        const stamp = new Date().toISOString().slice(0, 10);
+        const base = 'saurus_' + DB_KEY + '_' + selected.join('_') + '_' + stamp;
+
+        if (fmt === 'accessions') {
+            const txt = results.map(r => r.accession).join('\n');
+            download(base + '_accessions.txt', txt, 'text/plain');
+            return;
+        }
+
+        const geneLabels = selected.map(id => GENE_META.find(x => x.id === id).label);
+        const header = ['Accession', ...geneLabels];
+
+        if (fmt === 'tsv' || fmt === 'csv') {
+            const sep = fmt === 'tsv' ? '\t' : ',';
+            const quote = fmt === 'csv';
+            const hdrLine = header.map(h => quote ? '"' + h + '"' : h).join(sep);
+            const lines = [hdrLine];
+            for (const r of results) {
+                const vals = [r.accession, ...r.okFlags.map(ok => ok ? '1' : '0')];
+                lines.push(vals.map(v => {
+                    const s = String(v);
+                    if (quote) return '"' + s.replace(/"/g, '""') + '"';
+                    return s;
+                }).join(sep));
+            }
+            download(base + '.' + fmt, lines.join('\n'),
+                fmt === 'tsv' ? 'text/tab-separated-values' : 'text/csv');
+        } else if (fmt === 'json') {
+            const out = results.map(r => {
+                const o = { accession: r.accession };
+                selected.forEach((id, i) => {
+                    o[GENE_META.find(x => x.id === id).label] = r.okFlags[i];
+                });
+                return o;
+            });
+            download(base + '.json', JSON.stringify(out, null, 2), 'application/json');
+        }
+    });
+});
+
+// ---------- frequency table (tab 2) ----------
+let freqSortKey = 'prevalence';
+let freqSortAsc = false;
+
+function freqApplySort() {
+    FREQ_DATA.sort((a, b) => {
+        const av = a[freqSortKey], bv = b[freqSortKey];
+        if (typeof av === 'number' && typeof bv === 'number') {
+            return freqSortAsc ? av - bv : bv - av;
+        }
+        return freqSortAsc
+            ? String(av).localeCompare(String(bv))
+            : String(bv).localeCompare(String(av));
+    });
+}
+
+function freqRender() {
+    const term = (document.getElementById('freq-search').value || '').toLowerCase();
+    const family = document.getElementById('freq-family').value;
+    const minPrev = parseFloat(document.getElementById('freq-min-prev').value) || 0;
+
+    const rows = FREQ_DATA.filter(r => {
+        if (term && !(r.gene.toLowerCase().includes(term) || r.family.toLowerCase().includes(term))) return false;
+        if (family && r.family !== family) return false;
+        if (r.prevalence < minPrev) return false;
+        return true;
+    });
+
+    freqSortKey = freqSortKey || 'prevalence';
+    freqApplySort();
+
+    const tbody2 = document.getElementById('freq-body');
+    const thead2 = document.getElementById('freq-head');
+
+    const cols = [
+        { key: 'gene', label: 'Gene' },
+        { key: 'family', label: 'Family' },
+        { key: 'num_genomes', label: 'Genomes' },
+        { key: 'prevalence', label: 'Prevalence' },
+        { key: 'occurrences', label: 'Occurrences' },
+    ];
+    thead2.innerHTML = '<tr>' + cols.map(c => {
+        const cls = freqSortKey === c.key ? (freqSortAsc ? 'sorted-asc' : 'sorted-desc') : '';
+        return '<th class="sortable ' + cls + '" data-fkey="' + c.key + '">' + c.label + '</th>';
+    }).join('') + '</tr>';
+    thead2.querySelectorAll('th.sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            const k = th.dataset.fkey;
+            if (freqSortKey === k) freqSortAsc = !freqSortAsc;
+            else { freqSortKey = k; freqSortAsc = false; }
+            freqRender();
+        });
+    });
+
+    if (rows.length === 0) {
+        tbody2.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="icon">🔍</div><div>No genes match</div></div></td></tr>';
+        return;
+    }
+
+    tbody2.innerHTML = rows.slice(0, 1000).map(r => {
+        const barWidth = Math.max(1, Math.min(100, r.prevalence));
+        const cls = r.prevalence >= 50 ? 'prev-high' : (r.prevalence >= 10 ? 'prev-med' : 'prev-low');
+        const color = cls === 'prev-high' ? '#991b1b' : (cls === 'prev-med' ? '#b45309' : '#64748b');
+        return '<tr>' +
+            '<td><span class="gene-name">' + esc(r.gene) + '</span></td>' +
+            '<td><span class="family-pill">' + esc(r.family) + '</span></td>' +
+            '<td class="num-cell">' + r.num_genomes.toLocaleString() + '</td>' +
+            '<td><div class="prev-cell">' +
+                '<div class="prev-bar-track"><div class="prev-bar-fill" style="width:' + barWidth + '%;"></div></div>' +
+                '<span class="prev-value" style="color:' + color + '">' + r.prevalence.toFixed(1) + '%</span>' +
+            '</div></td>' +
+            '<td class="num-cell">' + r.occurrences.toLocaleString() + '</td>' +
+            '</tr>';
+    }).join('');
+}
+
+// ---------- tabs ----------
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        if (btn.dataset.tab === 'freq') freqRender();
+    });
+});
+
+// ---------- frequency table wiring ----------
+['freq-search', 'freq-family', 'freq-min-prev'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', () => {
+        clearTimeout(window._ft);
+        window._ft = setTimeout(freqRender, 200);
+    });
+    el.addEventListener('change', freqRender);
+});
+
+// ---------- init ----------
+const FREQ_DATA = [{"gene": "isdI", "family": "isd", "num_genomes": 98915, "prevalence": 99.96, "occurrences": 98915}, {"gene": "cap8P", "family": "cap8P", "num_genomes": 98888, "prevalence": 99.94, "occurrences": 98888}, {"gene": "sspC", "family": "ssp", "num_genomes": 98887, "prevalence": 99.94, "occurrences": 98887}, {"gene": "isdG", "family": "isd", "num_genomes": 98885, "prevalence": 99.93, "occurrences": 98885}, {"gene": "isdC", "family": "isd", "num_genomes": 98881, "prevalence": 99.93, "occurrences": 98881}, {"gene": "cap8O", "family": "cap8O", "num_genomes": 98872, "prevalence": 99.92, "occurrences": 98872}, {"gene": "hlgB", "family": "hlgB", "num_genomes": 98860, "prevalence": 99.91, "occurrences": 98860}, {"gene": "capN", "family": "capN", "num_genomes": 98859, "prevalence": 99.91, "occurrences": 98859}, {"gene": "isdF", "family": "isd", "num_genomes": 98845, "prevalence": 99.89, "occurrences": 98845}, {"gene": "aur", "family": "aur", "num_genomes": 98841, "prevalence": 99.89, "occurrences": 98841}, {"gene": "adsA", "family": "adsA", "num_genomes": 98829, "prevalence": 99.88, "occurrences": 98829}, {"gene": "sspA", "family": "ssp", "num_genomes": 98829, "prevalence": 99.88, "occurrences": 98829}, {"gene": "cap8L", "family": "cap8L", "num_genomes": 98822, "prevalence": 99.87, "occurrences": 98822}, {"gene": "cap8M", "family": "cap8M", "num_genomes": 98801, "prevalence": 99.85, "occurrences": 98801}, {"gene": "cap8C", "family": "cap8C", "num_genomes": 98797, "prevalence": 99.85, "occurrences": 98797}, {"gene": "isdE", "family": "isd", "num_genomes": 98771, "prevalence": 99.82, "occurrences": 98771}, {"gene": "cap8B", "family": "cap8B", "num_genomes": 98769, "prevalence": 99.82, "occurrences": 98769}, {"gene": "icaD", "family": "ica", "num_genomes": 98769, "prevalence": 99.82, "occurrences": 98769}, {"gene": "hlgC", "family": "hlgC", "num_genomes": 98764, "prevalence": 99.81, "occurrences": 98764}, {"gene": "geh", "family": "geh", "num_genomes": 98761, "prevalence": 99.81, "occurrences": 98761}, {"gene": "lip", "family": "lip", "num_genomes": 98748, "prevalence": 99.8, "occurrences": 98748}, {"gene": "icaA", "family": "ica", "num_genomes": 98717, "prevalence": 99.76, "occurrences": 98717}, {"gene": "isdA", "family": "isd", "num_genomes": 98714, "prevalence": 99.76, "occurrences": 98714}, {"gene": "capA", "family": "capA", "num_genomes": 98702, "prevalence": 99.75, "occurrences": 98702}, {"gene": "esaG", "family": "esaG", "num_genomes": 98678, "prevalence": 99.73, "occurrences": 98678}, {"gene": "esaB", "family": "esaB", "num_genomes": 98670, "prevalence": 99.72, "occurrences": 98670}, {"gene": "isdB", "family": "isd", "num_genomes": 98659, "prevalence": 99.71, "occurrences": 98659}, {"gene": "hlgA", "family": "hlgA", "num_genomes": 98644, "prevalence": 99.69, "occurrences": 98644}, {"gene": "isdD", "family": "isd", "num_genomes": 98637, "prevalence": 99.68, "occurrences": 98637}, {"gene": "essA", "family": "essA", "num_genomes": 98611, "prevalence": 99.66, "occurrences": 98611}, {"gene": "essB", "family": "essB", "num_genomes": 98583, "prevalence": 99.63, "occurrences": 98583}, {"gene": "hlb", "family": "hlb", "num_genomes": 98579, "prevalence": 99.63, "occurrences": 98579}, {"gene": "sspB", "family": "ssp", "num_genomes": 98561, "prevalence": 99.61, "occurrences": 98561}, {"gene": "srtB", "family": "srtB", "num_genomes": 98551, "prevalence": 99.6, "occurrences": 98551}, {"gene": "esxA", "family": "esxA", "num_genomes": 98536, "prevalence": 99.58, "occurrences": 98536}, {"gene": "sbi", "family": "sbi", "num_genomes": 98510, "prevalence": 99.56, "occurrences": 98510}, {"gene": "esaA", "family": "esaA", "num_genomes": 98475, "prevalence": 99.52, "occurrences": 98475}, {"gene": "cap8G", "family": "cap8G", "num_genomes": 98382, "prevalence": 99.43, "occurrences": 98382}, {"gene": "cap8F", "family": "cap8F", "num_genomes": 98366, "prevalence": 99.41, "occurrences": 98366}, {"gene": "hld", "family": "hld", "num_genomes": 98342, "prevalence": 99.39, "occurrences": 98342}, {"gene": "cap8E", "family": "cap8E", "num_genomes": 98308, "prevalence": 99.35, "occurrences": 98308}, {"gene": "set20", "family": "set20", "num_genomes": 98286, "prevalence": 99.33, "occurrences": 98286}, {"gene": "icaR", "family": "ica", "num_genomes": 98269, "prevalence": 99.31, "occurrences": 98269}, {"gene": "set25", "family": "set25", "num_genomes": 98258, "prevalence": 99.3, "occurrences": 98258}, {"gene": "cap8D", "family": "cap8D", "num_genomes": 98235, "prevalence": 99.28, "occurrences": 98235}, {"gene": "hly/hla", "family": "hly/hla", "num_genomes": 98220, "prevalence": 99.26, "occurrences": 98220}, {"gene": "icaB", "family": "ica", "num_genomes": 98122, "prevalence": 99.16, "occurrences": 98122}, {"gene": "icaC", "family": "ica", "num_genomes": 98108, "prevalence": 99.15, "occurrences": 98108}, {"gene": "set17", "family": "set17", "num_genomes": 98038, "prevalence": 99.08, "occurrences": 98038}, {"gene": "hysA", "family": "hysA", "num_genomes": 97870, "prevalence": 98.91, "occurrences": 97870}, {"gene": "harA", "family": "harA", "num_genomes": 97756, "prevalence": 98.79, "occurrences": 97756}, {"gene": "set24", "family": "set24", "num_genomes": 96703, "prevalence": 97.73, "occurrences": 96703}, {"gene": "set22", "family": "set22", "num_genomes": 96490, "prevalence": 97.51, "occurrences": 96490}, {"gene": "ebp", "family": "ebp", "num_genomes": 95736, "prevalence": 96.75, "occurrences": 95736}, {"gene": "set16", "family": "set16", "num_genomes": 90955, "prevalence": 91.92, "occurrences": 90955}, {"gene": "eap/map", "family": "eap/map", "num_genomes": 86532, "prevalence": 87.45, "occurrences": 86532}, {"gene": "sdrE", "family": "sdr", "num_genomes": 85721, "prevalence": 86.63, "occurrences": 85721}, {"gene": "fnbA", "family": "fnb", "num_genomes": 83184, "prevalence": 84.07, "occurrences": 83184}, {"gene": "scn", "family": "scn", "num_genomes": 81577, "prevalence": 82.44, "occurrences": 81577}, {"gene": "clfA", "family": "clf", "num_genomes": 81404, "prevalence": 82.27, "occurrences": 81404}, {"gene": "sdrC", "family": "sdr", "num_genomes": 80432, "prevalence": 81.29, "occurrences": 80432}, {"gene": "sak", "family": "sak", "num_genomes": 75594, "prevalence": 76.4, "occurrences": 75594}, {"gene": "clfB", "family": "clf", "num_genomes": 72473, "prevalence": 73.24, "occurrences": 72473}, {"gene": "spa", "family": "spa", "num_genomes": 70774, "prevalence": 71.53, "occurrences": 70774}, {"gene": "lukF-PV", "family": "lukF-PV", "num_genomes": 70301, "prevalence": 71.05, "occurrences": 70301}, {"gene": "set23", "family": "set23", "num_genomes": 69876, "prevalence": 70.62, "occurrences": 69876}, {"gene": "sdrD", "family": "sdr", "num_genomes": 69421, "prevalence": 70.16, "occurrences": 69421}, {"gene": "set18", "family": "set18", "num_genomes": 68558, "prevalence": 69.29, "occurrences": 68558}, {"gene": "essC", "family": "essC", "num_genomes": 68158, "prevalence": 68.88, "occurrences": 68158}, {"gene": "fnbB", "family": "fnb", "num_genomes": 67764, "prevalence": 68.48, "occurrences": 67764}, {"gene": "esxB", "family": "esxB", "num_genomes": 63465, "prevalence": 64.14, "occurrences": 63465}, {"gene": "esxD", "family": "esxD", "num_genomes": 63464, "prevalence": 64.14, "occurrences": 63464}, {"gene": "esxC", "family": "esxC", "num_genomes": 63441, "prevalence": 64.11, "occurrences": 63441}, {"gene": "esaE", "family": "esaE", "num_genomes": 63436, "prevalence": 64.11, "occurrences": 63436}, {"gene": "esaD", "family": "esaD", "num_genomes": 63344, "prevalence": 64.02, "occurrences": 63344}, {"gene": "set19", "family": "set19", "num_genomes": 60067, "prevalence": 60.7, "occurrences": 60067}, {"gene": "chp", "family": "chp", "num_genomes": 57414, "prevalence": 58.02, "occurrences": 57414}, {"gene": "coa", "family": "coa", "num_genomes": 48187, "prevalence": 48.7, "occurrences": 48187}, {"gene": "vWbp", "family": "vWbp", "num_genomes": 46752, "prevalence": 47.25, "occurrences": 46752}, {"gene": "set26", "family": "set26", "num_genomes": 40211, "prevalence": 40.64, "occurrences": 40211}, {"gene": "cap8J", "family": "cap8J", "num_genomes": 37187, "prevalence": 37.58, "occurrences": 37187}, {"gene": "cap8I", "family": "cap8I", "num_genomes": 37099, "prevalence": 37.49, "occurrences": 37099}, {"gene": "cap8K", "family": "cap8K", "num_genomes": 37031, "prevalence": 37.42, "occurrences": 37031}, {"gene": "set21", "family": "set21", "num_genomes": 36509, "prevalence": 36.9, "occurrences": 36509}, {"gene": "cap8H", "family": "cap8H", "num_genomes": 35711, "prevalence": 36.09, "occurrences": 35711}, {"gene": "sea", "family": "sea", "num_genomes": 23555, "prevalence": 23.8, "occurrences": 23555}, {"gene": "lukS-PV", "family": "lukS-PV", "num_genomes": 19002, "prevalence": 19.2, "occurrences": 19002}, {"gene": "selq", "family": "selq", "num_genomes": 18875, "prevalence": 19.08, "occurrences": 18875}, {"gene": "selk", "family": "selk", "num_genomes": 18716, "prevalence": 18.91, "occurrences": 18716}, {"gene": "sell", "family": "sell", "num_genomes": 10696, "prevalence": 10.81, "occurrences": 10696}, {"gene": "sec", "family": "sec", "num_genomes": 10600, "prevalence": 10.71, "occurrences": 10600}, {"gene": "tsst-1", "family": "tsst-1", "num_genomes": 9036, "prevalence": 9.13, "occurrences": 9036}, {"gene": "seb", "family": "seb", "num_genomes": 7572, "prevalence": 7.65, "occurrences": 7572}, {"gene": "seh", "family": "seh", "num_genomes": 5777, "prevalence": 5.84, "occurrences": 5777}, {"gene": "cna", "family": "cna", "num_genomes": 4294, "prevalence": 4.34, "occurrences": 4294}, {"gene": "eta", "family": "eta", "num_genomes": 1332, "prevalence": 1.35, "occurrences": 1332}, {"gene": "etb", "family": "etb", "num_genomes": 339, "prevalence": 0.34, "occurrences": 339}, {"gene": "acpXL", "family": "acpXL", "num_genomes": 11, "prevalence": 0.01, "occurrences": 11}, {"gene": "cps4B", "family": "cps4B", "num_genomes": 7, "prevalence": 0.01, "occurrences": 7}, {"gene": "bvrR", "family": "bvrR", "num_genomes": 6, "prevalence": 0.01, "occurrences": 6}, {"gene": "cps4A", "family": "cps4A", "num_genomes": 5, "prevalence": 0.01, "occurrences": 5}, {"gene": "kdsB", "family": "kdsB", "num_genomes": 4, "prevalence": 0.0, "occurrences": 4}, {"gene": "STM0266", "family": "STM0266", "num_genomes": 4, "prevalence": 0.0, "occurrences": 4}, {"gene": "BPE005", "family": "BPE005", "num_genomes": 3, "prevalence": 0.0, "occurrences": 3}, {"gene": "ompA", "family": "ompA", "num_genomes": 2, "prevalence": 0.0, "occurrences": 2}, {"gene": "prgB/asc10", "family": "prgB/asc10", "num_genomes": 2, "prevalence": 0.0, "occurrences": 2}, {"gene": "STM0267", "family": "STM0267", "num_genomes": 2, "prevalence": 0.0, "occurrences": 2}, {"gene": "STM0268", "family": "STM0268", "num_genomes": 2, "prevalence": 0.0, "occurrences": 2}, {"gene": "STM0269", "family": "STM0269", "num_genomes": 2, "prevalence": 0.0, "occurrences": 2}, {"gene": "STM0270", "family": "STM0270", "num_genomes": 2, "prevalence": 0.0, "occurrences": 2}, {"gene": "stx2A", "family": "stx2A", "num_genomes": 2, "prevalence": 0.0, "occurrences": 2}, {"gene": "cgs", "family": "cgs", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "pgm", "family": "pgm", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "hcpA", "family": "hcpA", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "psaA", "family": "psaA", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "cylL", "family": "cylL", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "cylR1", "family": "cylR1", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "cylR2", "family": "cylR2", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "gndA", "family": "gndA", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "STM0271", "family": "STM0271", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "rcsB", "family": "rcsB", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "EF0149", "family": "EF0149", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "PA3142", "family": "PA3142", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "STM0284", "family": "STM0284", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "STM0287", "family": "STM0287", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "prgI", "family": "prgI", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "tlde1", "family": "tlde1", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "STM0278", "family": "STM0278", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "avrA", "family": "avrA", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "pefB", "family": "pefB", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "ssaE", "family": "ssaE", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "ystA", "family": "ystA", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "ebpC", "family": "ebpC", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "sprE", "family": "sprE", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "stx2B", "family": "stx2B", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "iroB", "family": "iroB", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "cylA", "family": "cylA", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "cylI", "family": "cylI", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "cylM", "family": "cylM", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "east1", "family": "east1", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "yagZ/ecpA", "family": "yagZ/ecpA", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}, {"gene": "cpsA/uppS", "family": "cpsA/uppS", "num_genomes": 1, "prevalence": 0.0, "occurrences": 1}];
+renderChips();
+renderSelectedBar();
+renderResults();
+freqRender();
+
+// Pre-load index on first interaction with any chip
+document.getElementById('chip-row').addEventListener('click', ensureIndex, { once: true });
+
+</script>
+</body>
+</html>

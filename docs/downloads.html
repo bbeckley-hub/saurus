@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Downloads — SAURUS</title>
+<style>
+:root {
+    --gold: #d4af37; --navy: #0a1628; --accent: #0ea5e9;
+    --bg: #f8fafc; --card: #fff; --text: #1e293b;
+    --muted: #64748b; --border: #e2e8f0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; }
+
+.saurus-nav {
+    background: var(--navy); color: #fff; padding: 20px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    position: sticky; top: 0; z-index: 100;
+}
+.saurus-nav .brand { display: flex; align-items: center; gap: 20px; text-decoration: none; flex-shrink: 0; }
+.saurus-nav .brand-emoji { font-size: 5.6em; line-height: 1; }
+.saurus-nav .brand-text { display: flex; flex-direction: column; gap: 3px; }
+.saurus-nav .brand-name { font-weight: 800; font-size: 3.45em; letter-spacing: 1px; color: var(--gold); line-height: 1; }
+.saurus-nav .brand-tagline { font-size: 1.0em; font-weight: 400; color: #94a3b8; line-height: 1.15; max-width: 520px; }
+.saurus-nav .links { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+.saurus-nav .links a { color: #cbd5e1; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 0.9em; font-weight: 500; transition: all 0.15s; }
+.saurus-nav .links a:hover { background: rgba(255,255,255,0.08); color: white; }
+.saurus-nav .links a.active { background: var(--gold); color: var(--navy); font-weight: 600; }
+
+.page-header { background: linear-gradient(135deg, #0369a1 0%, var(--navy) 100%); color: white; padding: 40px 32px 32px; }
+.page-header h1 { font-size: 2.2em; margin-bottom: 6px; font-weight: 700; }
+.page-header .subtitle { color: #bae6fd; font-size: 1.05em; margin-bottom: 20px; }
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; max-width: 1400px; }
+.stat-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 14px 16px; }
+.stat-card .value { font-size: 1.7em; font-weight: 800; color: var(--gold); line-height: 1.1; }
+.stat-card .label { font-size: 0.78em; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+main { max-width: 1400px; margin: 0 auto; padding: 28px 32px 60px; }
+
+.bulk-bar {
+    background: linear-gradient(135deg, #0a1628 0%, #1e293b 100%);
+    color: white;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    border: 1px solid rgba(212,175,55,0.2);
+    box-shadow: 0 6px 24px rgba(10,22,40,0.15);
+}
+.bulk-bar .bulk-info h3 { color: var(--gold); font-size: 1.2em; margin-bottom: 4px; font-weight: 800; }
+.bulk-bar .bulk-info p { color: #cbd5e1; font-size: 0.92em; margin: 0; }
+.bulk-bar .bulk-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.bulk-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: 10px;
+    font-size: 0.95em; font-weight: 700; text-decoration: none;
+    border: none; cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+}
+.bulk-btn.primary {
+    background: var(--gold); color: var(--navy);
+    box-shadow: 0 6px 18px rgba(212,175,55,0.35);
+}
+.bulk-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(212,175,55,0.5);
+    background: #e0bc47;
+}
+.bulk-btn.secondary {
+    background: rgba(255,255,255,0.08);
+    color: white; border: 2px solid rgba(255,255,255,0.2);
+}
+.bulk-btn.secondary:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.35);
+}
+.bulk-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.section-title { font-size: 1.3em; color: var(--navy); margin: 22px 0 14px; font-weight: 800; padding-bottom: 8px; border-bottom: 3px solid var(--accent); display: inline-block; }
+
+.dl-table { width: 100%; background: var(--card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-collapse: collapse; font-size: 0.9em; }
+.dl-table thead th { background: #f1f5f9; padding: 12px 14px; text-align: left; font-weight: 700; color: #334155; font-size: 0.82em; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 2px solid var(--border); }
+.dl-table tbody td { padding: 12px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+.dl-table tbody tr:hover td { background: #f8fafc; }
+.dl-table tbody tr:last-child td { border-bottom: none; }
+.dl-fname { font-family: 'SF Mono', Monaco, monospace; font-weight: 700; color: var(--navy); font-size: 0.88em; }
+.dl-module { display: inline-block; padding: 2px 8px; border-radius: 8px; background: #ede9fe; color: #5b21b6; font-weight: 700; font-size: 0.75em; }
+.dl-size, .dl-rows { font-family: 'SF Mono', Monaco, monospace; font-size: 0.85em; color: #475569; text-align: right; white-space: nowrap; }
+.dl-desc { color: #475569; font-size: 0.88em; }
+.dl-btn {
+    display: inline-block; padding: 7px 16px; border-radius: 8px;
+    background: var(--accent); color: white; text-decoration: none;
+    font-size: 0.82em; font-weight: 700; transition: all 0.15s;
+    white-space: nowrap;
+    border: none; cursor: pointer; font-family: inherit;
+}
+.dl-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px #0ea5e955; }
+.dl-btn.disabled { background: #94a3b8; pointer-events: none; opacity: 0.6; }
+
+.note-block {
+    background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+    border-left: 6px solid var(--gold);
+    border-radius: 12px; padding: 20px 24px; margin: 24px 0;
+    color: #78350f; font-size: 0.92em; line-height: 1.65;
+}
+.note-block h3 { color: #92400e; margin-bottom: 10px; font-size: 1.05em; }
+.note-block code { background: rgba(255,255,255,0.6); padding: 2px 7px; border-radius: 4px; font-family: 'SF Mono', Monaco, monospace; font-size: 0.88em; }
+.note-block ul { margin: 8px 0 4px 22px; }
+.note-block li { margin-bottom: 5px; }
+.note-block pre { background: #1e293b; color: #e2e8f0; padding: 12px 16px; border-radius: 8px; overflow-x: auto; margin: 10px 0; font-size: 0.85em; font-family: 'SF Mono', Monaco, monospace; }
+
+.saurus-footer { background: var(--navy); color: #94a3b8; padding: 32px; text-align: center; font-size: 0.88em; margin-top: 60px; }
+.saurus-footer a { color: var(--gold); text-decoration: none; }
+.saurus-footer .footer-line { margin: 6px 0; }
+.saurus-footer .full-name { color: #cbd5e1; font-size: 0.95em; letter-spacing: 0.2px; }
+
+@media (max-width: 900px) {
+    .saurus-nav { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .saurus-nav .brand-tagline { max-width: 100%; }
+    .saurus-nav .brand-emoji { font-size: 3.6em; }
+    .saurus-nav .brand-name { font-size: 2.2em; }
+    .dl-table { display: block; overflow-x: auto; }
+    .bulk-bar { flex-direction: column; align-items: stretch; }
+    .bulk-actions { justify-content: stretch; }
+    .bulk-btn { flex: 1; justify-content: center; }
+}
+@media (max-width: 700px) {
+    .page-header { padding: 28px 20px 24px; }
+    main { padding: 20px 16px 40px; }
+    .saurus-nav { padding: 14px 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="saurus-nav">
+    <a class="brand" href="index.html">
+        <span class="brand-emoji">🦖</span>
+        <span class="brand-text">
+            <span class="brand-name">SAURUS</span>
+            <span class="brand-tagline">Staphylococcus aureus Unified Resource for Universal Surveillance</span>
+        </span>
+    </a>
+    <div class="links"><a href="index.html">Home</a><a href="pages/mlst.html">MLST</a><a href="pages/spa.html">spa</a><a href="pages/sccmec.html">SCCmec</a><a href="pages/capsule.html">Capsule</a><a href="pages/agr.html">agr</a><a href="pages/mrsa.html">MRSA</a><a href="pages/amr.html">AMR</a><a href="pages/vfdb.html">Virulence</a><a href="pages/plasmid.html">Plasmid</a><a href="lineages.html">Lineages</a><a href="downloads.html" class='active'>Downloads</a><a href="about.html">About</a></div>
+</nav>
+
+<header class="page-header">
+    <h1>📥 Downloads</h1>
+    <div class="subtitle">Bulk data — every typing module and gene database, as plain TSV</div>
+    <div class="stat-row">
+        <div class="stat-card"><div class="value">14</div><div class="label">Files available</div></div>
+        <div class="stat-card"><div class="value">27.5 MB</div><div class="label">Uncompressed size</div></div>
+        <div class="stat-card"><div class="value">8,139,214</div><div class="label">Total rows</div></div>
+        <div class="stat-card"><div class="value">TSV(.gz)</div><div class="label">Format</div></div>
+    </div>
+</header>
+
+<main>
+
+    <!-- ============ BULK DOWNLOAD ============ -->
+    <div class="bulk-bar">
+        <div class="bulk-info">
+            <h3>📦 Download the entire dataset</h3>
+            <p>All 14 files, gzipped and packaged as a single archive (25.8 MB).</p>
+        </div>
+        <div class="bulk-actions">
+            <a class="bulk-btn primary" href="data/saurus_data_all.zip" download>📦 Download all (25.8 MB)</a>
+            <a class="bulk-btn secondary" href="#files">⬇ Pick individual files</a>
+        </div>
+    </div>
+
+    <h2 class="section-title" id="files">Individual files</h2>
+    <table class="dl-table">
+        <thead>
+            <tr>
+                <th>File</th>
+                <th>Module</th>
+                <th>Description</th>
+                <th style="text-align:right;">Rows</th>
+                <th style="text-align:right;">Size</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+        <tbody>
+<tr><td class="dl-fname">mlst_all.tsv</td><td><span class="dl-module">MLST</span></td><td class="dl-desc">One row per sample: ST, status, identity, coverage, allele profile</td><td class="dl-rows">19,997</td><td class="dl-size">122.1 KB</td><td><a class="dl-btn" href="data/mlst_all.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">spa_all.tsv</td><td><span class="dl-module">spa</span></td><td class="dl-desc">spa type, repeat pattern, count, confidence, status</td><td class="dl-rows">19,997</td><td class="dl-size">131.0 KB</td><td><a class="dl-btn" href="data/spa_all.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">sccmec_cge_all.tsv</td><td><span class="dl-module">SCCmec</span></td><td class="dl-desc">SCCmecFinder output — type, MRSA status, confidence, evidence</td><td class="dl-rows">19,997</td><td class="dl-size">196.2 KB</td><td><a class="dl-btn" href="data/sccmec_cge_all.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">sccmec_rpet_all.tsv</td><td><span class="dl-module">SCCmec</span></td><td class="dl-desc">sccmec output — type, subtype, mec class, ccr complexes, genes</td><td class="dl-rows">19,997</td><td class="dl-size">93.0 KB</td><td><a class="dl-btn" href="data/sccmec_rpet_all.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">capsule_all.tsv</td><td><span class="dl-module">Capsule</span></td><td class="dl-desc">cap5/cap8 serotype, completeness, scores, gene list</td><td class="dl-rows">19,997</td><td class="dl-size">77.2 KB</td><td><a class="dl-btn" href="data/capsule_all.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">agr_all.tsv</td><td><span class="dl-module">agr</span></td><td class="dl-desc">agr type, group, match score, canonical agrD</td><td class="dl-rows">19,997</td><td class="dl-size">69.7 KB</td><td><a class="dl-btn" href="data/agr_all.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">amr_all.tsv</td><td><span class="dl-module">AMR</span></td><td class="dl-desc">One row per sample×gene: gene, num hits, identities</td><td class="dl-rows">351,938</td><td class="dl-size">1.2 MB</td><td><a class="dl-btn" href="data/amr_all.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">amr_gene_freq.tsv</td><td><span class="dl-module">AMR</span></td><td class="dl-desc">One row per gene: num genomes, prevalence %, occurrences</td><td class="dl-rows">223</td><td class="dl-size">1.7 KB</td><td><a class="dl-btn" href="data/amr_gene_freq.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">vfdb_all.tsv</td><td><span class="dl-module">Virulence</span></td><td class="dl-desc">One row per sample×gene: gene, num hits, identities</td><td class="dl-rows">7,422,630</td><td class="dl-size">24.6 MB</td><td><a class="dl-btn" href="data/vfdb_all.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">vfdb_gene_freq.tsv</td><td><span class="dl-module">Virulence</span></td><td class="dl-desc">One row per gene: num genomes, prevalence %, occurrences</td><td class="dl-rows">142</td><td class="dl-size">1.3 KB</td><td><a class="dl-btn" href="data/vfdb_gene_freq.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">plasmid_all.tsv</td><td><span class="dl-module">Plasmid</span></td><td class="dl-desc">One row per sample×replicon: gene, num hits, identities</td><td class="dl-rows">225,244</td><td class="dl-size">929.8 KB</td><td><a class="dl-btn" href="data/plasmid_all.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">plasmid_gene_freq.tsv</td><td><span class="dl-module">Plasmid</span></td><td class="dl-desc">One row per replicon: num genomes, prevalence %, occurrences</td><td class="dl-rows">214</td><td class="dl-size">2.8 KB</td><td><a class="dl-btn" href="data/plasmid_gene_freq.tsv.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">cc.txt</td><td><span class="dl-module">Lineages</span></td><td class="dl-desc">GCA accession → clonal complex → MLST ST</td><td class="dl-rows">17,910</td><td class="dl-size">117.2 KB</td><td><a class="dl-btn" href="data/cc.txt.gz" download>⬇ Download</a></td></tr>
+<tr><td class="dl-fname">cc_analysis.json</td><td><span class="dl-module">Lineages</span></td><td class="dl-desc">Aggregated stats: top CCs, top STs, coverage</td><td class="dl-rows">931</td><td class="dl-size">1.4 KB</td><td><a class="dl-btn" href="data/cc_analysis.json.gz" download>⬇ Download</a></td></tr>
+        </tbody>
+    </table>
+
+    <div class="note-block">
+        <h3>📖 How to use these files</h3>
+        <p>All files are gzipped TSV. Decompress locally then open in pandas, R, or any tool:</p>
+        <pre>gunzip mlst_all.tsv.gz
+head -5 mlst_all.tsv</pre>
+        <p>Or read directly from Python without extracting:</p>
+        <ul>
+            <li><code>pd.read_csv('mlst_all.tsv.gz', sep='\t')</code> — pandas (auto-decompresses)</li>
+            <li><code>read.delim('mlst_all.tsv.gz', sep='\t')</code> — R</li>
+        </ul>
+
+        <h3>🧬 Long-format gene files</h3>
+        <p><code>amr_all.tsv</code>, <code>vfdb_all.tsv</code>, <code>plasmid_all.tsv</code> are long format — one row per present (sample, gene). To pivot to wide:</p>
+        <pre>df.pivot_table(index='accession', columns='gene',
+               values='num_hits', fill_value=0)</pre>
+
+        <h3>📎 Related resources</h3>
+        <ul>
+            <li>Source genomes: <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=1280" target="_blank">NCBI Assembly database</a></li>
+            <li>Download accessions via <code>datasets download genome accession --inputfile list.txt</code></li>
+            <li>Typing pipeline: <a href="https://github.com/bbeckley-hub/staphscope-typing-tool" target="_blank">StaphScope on GitHub</a></li>
+        </ul>
+    </div>
+</main>
+
+<footer class="saurus-footer">
+    <div class="footer-line full-name">
+        <strong style="color:#d4af37;">SAURUS</strong> — Staphylococcus aureus Unified Resource for Universal Surveillance
+    </div>
+    <div class="footer-line">
+        University of Ghana Medical School · MIT License · Last generated 2026-10-08
+    </div>
+    <div class="footer-line">
+        <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
+        <a href="about.html">About</a> ·
+        <a href="mailto:brownbeckley94@gmail.com">Contact</a>
+    </div>
+</footer>
+
+</body>
+</html>
