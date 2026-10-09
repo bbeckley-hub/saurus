@@ -6,15 +6,17 @@
 
 **Staphylococcus aureus Unified Resource for Universal Surveillance**
 
-*One database. Every typing module. Free and open.*
+*One database. Every typing module. Every genome geolocated. Free and open.*
 
 [![Live Site](https://img.shields.io/badge/🌐_Live_Site-bbeckley--hub.github.io/saurus-d4af37?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-[![Genomes](https://img.shields.io/badge/Genomes-20K%20→%20126K-blue?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
-[![Modules](https://img.shields.io/badge/Modules-9-purple?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
-[![Status](https://img.shields.io/badge/Status-active-brightgreen?style=for-the-badge)]()
+[![Genomes](https://img.shields.io/badge/Genomes-26K%20→%20126K-blue?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
+[![Modules](https://img.shields.io/badge/Modules-11-purple?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
+[![Countries](https://img.shields.io/badge/Countries-105-0ea5e9?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/geography.html)
+[![Status](https://img.shields.io/badge/Status-v0.2-brightgreen?style=for-the-badge)](https://github.com/bbeckley-hub/saurus/releases)
 
 [**🏠 Home**](https://bbeckley-hub.github.io/saurus/) ·
+[**🌍 Geography**](https://bbeckley-hub.github.io/saurus/geography.html) ·
 [**🧬 Lineages**](https://bbeckley-hub.github.io/saurus/lineages.html) ·
 [**📥 Downloads**](https://bbeckley-hub.github.io/saurus/downloads.html) ·
 [**ℹ️ About**](https://bbeckley-hub.github.io/saurus/about.html)
@@ -25,19 +27,20 @@
 
 ## 📖 What is SAURUS?
 
-**SAURUS** is an open-access genomic resource that integrates every major *Staphylococcus aureus* typing and gene-annotation scheme into a single, queryable interface:
+**SAURUS** is an open-access genomic resource that integrates every major *Staphylococcus aureus* typing and gene-annotation scheme — **plus country, isolation source, host, and collection year** — into a single, queryable interface:
 
 | Category | Modules |
 |---|---|
 | **Typing** | MLST · spa · SCCmec (CGE + RPet) · agr · capsule |
 | **Genes** | AMR · Virulence (VFDB) · Plasmid replicons |
 | **Clinical** | MRSA/MSSA consensus |
+| **Epidemiology** | Country · isolation source · host · collection year |
 | **Lineage context** | Curated catalogue of ~50 clonal complexes |
 | **Retrieval** | Search → filter → export accession lists in one click |
 
 No login, no API key, no install. Runs entirely in your browser over HTTPS.
 
-> **The core deliverable is accession retrieval.** Every page lets you filter by genotype and download the exact list of genome accessions that match — ready to feed to `datasets download genome accession`.
+> **The core deliverable is accession retrieval.** Every page lets you filter by genotype *and* geography and download the exact list of genome accessions that match — ready to feed to `datasets download genome accession`.
 
 ---
 
@@ -48,9 +51,10 @@ SAURUS is being built incrementally toward a single milestone: **the complete an
 | Milestone | Scope | Status |
 |---|---|---|
 | **v0.1** | 20K RefSeq (GCF) genomes, 9 modules | ✅ **live** |
-| **v0.2** | + Country · Source · Year metadata | 🔄 in progress |
-| **v0.3** | Full 26,352 GCF genomes | 📋 planned |
-| **v0.4** | + 100K GCA genomes with Shelenkov merge | 📋 planned |
+| **v0.2** | + Country · Source · Host · Year metadata · **Geography page** | ✅ **live** |
+| **v0.3** | Full 26,197 GCF genomes · 913 STs · 13 CCs | ✅ **merged into v0.2** |
+| **v0.4** | + 33,985 unique GCA genomes | 🔜 **next** |
+| **v0.5** | + 73,472 Shelenkov-only GCA genomes | 📋 planned |
 | **v1.0** | **126,245 genomes · unified master table · citable resource** | 🎯 target |
 
 See the [**Roadmap**](#-roadmap) below for details.
@@ -60,46 +64,83 @@ See the [**Roadmap**](#-roadmap) below for details.
 ## ✨ Features
 
 <table>
-<tr><td width="50%" valign="top">
+<tr>
+<td width="50%" valign="top">
 
 ### 🔬 Interactive typing pages
+
 - **Live search** with exact-match operators (`ST5`, `CC5`, `t002`)
-- **Multi-column filters** — combine ST + SCCmec + agr + capsule + MRSA
+- **Multi-column filters** — combine ST + SCCmec + agr + capsule + MRSA + **Country + Source**
 - **Column visibility toggle** — persisted per browser
 - **Row selection** with select-all-visible
-- **Sortable columns** — numeric-aware for ST, CC, spa, SCCmec
+- **Sortable columns** — numeric-aware
 - **Pagination** — 20 / 50 / 100 rows per page
 - **Export** — TSV · CSV · JSON · **accession-only**
 
-</td><td width="50%" valign="top">
+</td>
+<td width="50%" valign="top">
+
+### 🌍 Geography &amp; Metadata
+
+- **26,349 BioSample records** across **105 countries**
+- **250 source categories** — clinical, food, environmental, animal
+- **4 interactive charts** — countries, sources, timeline, hosts
+- **5 filters** — country · source · host · year · assembly level
+- **Full provenance** — raw submitter strings preserved
+- Combined queries: *`ST5` + `MRSA` + `United States` + `blood`*
+
+</td>
+</tr>
+<tr>
+<td valign="top">
 
 ### 🧬 Gene retrieval pages
+
 - **Up to 5 genes per query**
 - **ANY / ALL** match logic
 - **Curated headline genes** for AMR, virulence, plasmid
 - One-click **accession list export**
 - **Click-to-copy** accession per row
-- **Frequency table** — sortable, filterable, min-prevalence slider
+- **Frequency table** — sortable, filterable
 
-</td></tr>
-<tr><td valign="top">
+</td>
+<td valign="top">
 
 ### 📚 Lineage catalogue
+
 - ~50 curated clonal complexes
 - **Live sample counts** from the current dataset
 - **Reference-only cards** for lineages with no samples yet
 - **Export all accessions** per lineage
 - Geographic + clinical + virulence context per CC
 
-</td><td valign="top">
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+### 📊 Statistics page
+
+- Top 20 STs with **MRSA % overlay**
+- CC distribution · spa distribution
+- **SCCmec RPet vs CGE** side by side
+- **4-level alluvial:** SCCmec → agr → Capsule → MRSA
+- CC × SCCmec heatmap
+- Capsule by CC stacked bars
+
+</td>
+<td valign="top">
 
 ### 📥 Bulk downloads
-- Every merged TSV available as `.tsv.gz`
+
+- Every merged TSV as `.tsv.gz`
 - Row counts + file sizes at a glance
+- **`metadata.tsv.gz`** — full BioSample table
 - **Long-format gene tables** — pivot-ready
 - One-file-per-module layout
 
-</td></tr>
+</td>
+</tr>
 </table>
 
 ---
@@ -110,77 +151,90 @@ See the [**Roadmap**](#-roadmap) below for details.
 
 ### 👉 **https://bbeckley-hub.github.io/saurus/**
 
-### Example workflow — get all ST5 MRSA blood isolates carrying *mecA* and PVL
+### Example workflow — get all ST5 MRSA blood isolates from the United States
 
-1. Open [**Lineages**](https://bbeckley-hub.github.io/saurus/lineages.html) → click **CC5** → **Export accessions**
-2. Open [**MRSA**](https://bbeckley-hub.github.io/saurus/pages/mrsa.html) → filter `MRSA Status = MRSA`, `CC = CC5`
-3. Open [**AMR**](https://bbeckley-hub.github.io/saurus/pages/amr.html) → click **mecA** chip → narrow further
-4. Click **🧬 Accessions** → save the `.txt` file
-5. Feed it to NCBI:
+1. Open [**MRSA**](https://bbeckley-hub.github.io/saurus/pages/mrsa.html) → filter:
+   - `MRSA Status = MRSA`
+   - `MLST = ST5`
+   - `Country = United States`
+   - `Source = blood`
+2. Click **🧬 Accessions** → save the `.txt` file
+3. Feed it to NCBI:
+
    ```bash
    datasets download genome accession --inputfile accessions.txt
    ```
-6. ✅ You have 10K+ genomes, filtered by genotype, on your laptop
+
+4. ✅ You have the exact genomes you want, filtered by genotype *and* geography
+
+Or start from the [**Geography page**](https://bbeckley-hub.github.io/saurus/geography.html) to browse the collection by country, source, host, or year.
 
 ---
 
 ## 🗺️ Roadmap
 
-<details open>
-<summary><b>v0.1 — Foundation (current)</b> ✅</summary>
+<details>
+<summary><b>v0.1 — Foundation</b> ✅ live</summary>
 
 - [x] 9 typing + gene modules live
-- [x] Consistent nav across all 12 pages
+- [x] Consistent nav across all pages
 - [x] CC column added to MLST and MRSA pages
 - [x] Lineage catalogue with live sample counts
 - [x] Bulk download index
 - [x] GitHub Pages deployment
-- **Dataset:** 20,000 RefSeq genomes · 13 CCs · ~600 STs
+
+**Dataset:** 20,000 RefSeq genomes
 
 </details>
 
 <details>
-<summary><b>v0.2 — Epidemiological metadata</b> 🔄</summary>
+<summary><b>v0.2 — Epidemiological metadata</b> ✅ live</summary>
 
-- [ ] Fetch country + isolation source + host + collection year from NCBI BioSample
-- [ ] Normalize free-text sources into categories (blood · wound · respiratory · nasal · food · animal · environment · clinical)
-- [ ] Add **Country** and **Source** filter dropdowns to every typing page
-- [ ] Add **Country × ST** and **Source × CC** cross-tab breakdowns to MRSA page
-- [ ] New **Geography** page — world map of isolates by country
-- [ ] New **Source** page — MRSA rate by isolation site
-
-**Why this matters:** country + source is what turns a typing archive into an **epidemiological surveillance platform** — the version of SAURUS that gets cited.
+- [x] Country + isolation source + host + collection year from NCBI BioSample
+- [x] Free-text sources normalized into ~30 categories
+- [x] **Country** and **Source** filters on every typing page
+- [x] **Country × MRSA** and **Source × MRSA** cross-tabs
+- [x] New **Geography** page — 4 charts, 5 filters, full metadata browser
+- [x] `metadata.tsv.gz` added to downloads
 
 </details>
 
 <details>
-<summary><b>v0.3 — Complete RefSeq coverage</b> 📋</summary>
+<summary><b>v0.3 — Complete RefSeq coverage</b> ✅ merged into v0.2</summary>
 
-- [ ] Run StaphScope on remaining 6,352 GCF genomes (batch 3 in progress)
-- [ ] Extend all 9 modules to full **26,352 RefSeq** set
-- [ ] Add **per-batch provenance** — users see which genomes came from which release
+- [x] Full 26,197 GCF genomes merged
+- [x] 913 unique STs · 13 clonal complexes · 1,966 spa types · 57 SCCmec types
+- [x] 63.5% MRSA rate across the full collection
+
+</details>
+
+<details open>
+<summary><b>v0.4 — GenBank merge</b> 🔜 next</summary>
+
+- [ ] Process 33,985 unique GCA genomes through StaphScope
+- [ ] Per-batch provenance — users see which genomes came from which release
+- [ ] Merge with existing GCF collection into a unified master table
+- [ ] Handle GCA ↔ GCF paired accessions
 
 </details>
 
 <details>
-<summary><b>v0.4 — GenBank merge + full repository</b> 📋</summary>
+<summary><b>v0.5 — Shelenkov-only GenBank</b> 📋 planned</summary>
 
-- [ ] Process remaining **99,893 GCA genomes** from NCBI GenBank
-- [ ] Merge with Shelenkov et al. (2025) dataset — 86,318 AMR/VF/plasmid annotations
-- [ ] Resolve GCA ↔ GCF paired accessions
-- [ ] Handle the ~**125** Shelenkov-only accessions (withdrawn from NCBI)
-- [ ] **Deduplication pass** — remove identical isolates sequenced multiple times
+- [ ] + 73,472 GCA genomes where SCCmec / agr / capsule are re-typed by StaphScope
+- [ ] AMR / virulence / plasmid annotations carried forward from Shelenkov et al. (2025)
+- [ ] Deduplication pass
 
 </details>
 
 <details>
-<summary><b>v1.0 — Full resource</b> 🎯</summary>
+<summary><b>v1.0 — Full resource</b> 🎯 target</summary>
 
 - [ ] **126,245 genomes** with unified master table
 - [ ] Cross-module filter UI — CC + SCCmec + agr + capsule + country + source + any gene
 - [ ] Boolean query builder for advanced users
 - [ ] **Zenodo DOI** for citable release
-- [ ] Database article submitted (BMC Genomic Data / Database Oxford)
+- [ ] Database article submitted (*Database* — Oxford)
 
 </details>
 
@@ -188,17 +242,16 @@ See the [**Roadmap**](#-roadmap) below for details.
 
 ## 🧬 Data sources
 
-<table>
-<tr><th>Layer</th><th>Source</th><th>Coverage</th></tr>
-<tr><td><b>Typing</b></td><td><a href="https://github.com/bbeckley-hub/staphscope-typing-tool">StaphScope v2.0.0</a> on RefSeq genomes</td><td>20,000 → 126K</td></tr>
-<tr><td><b>AMR genes</b></td><td><a href="https://doi.org/10.1186/s12863-025-01363-w">Shelenkov et al. 2025</a></td><td>86,318 GCA</td></tr>
-<tr><td><b>Virulence (VFDB)</b></td><td>Shelenkov et al. 2025</td><td>98,950 GCA</td></tr>
-<tr><td><b>Plasmid replicons</b></td><td>Shelenkov et al. 2025</td><td>86,318 GCA</td></tr>
-<tr><td><b>Lineage reference</b></td><td>Curated (literature-validated)</td><td>~50 CCs</td></tr>
-<tr><td><b>Country / source</b> (v0.2)</td><td><a href="https://www.ncbi.nlm.nih.gov/biosample/">NCBI BioSample</a></td><td>~50–75% coverage</td></tr>
-</table>
+| Layer | Source | Coverage |
+|---|---|---|
+| **Typing** | [StaphScope v2.0.0](https://github.com/bbeckley-hub/staphscope-typing-tool) on RefSeq genomes | 26,197 GCF → 126K |
+| **Country / source / host / year** | [NCBI BioSample](https://www.ncbi.nlm.nih.gov/biosample/) via `datasets summary genome` | 26,349 records · 92% country · 74% source |
+| **AMR genes** | [Shelenkov et al. 2025](https://doi.org/10.1186/s12863-025-01363-w) | 86,318 GCA |
+| **Virulence (VFDB)** | Shelenkov et al. 2025 | 98,950 GCA |
+| **Plasmid replicons** | Shelenkov et al. 2025 | 86,318 GCA |
+| **Lineage reference** | Curated (literature-validated) | ~50 CCs |
 
-All genome identifiers use the standard **`GCA_XXXXXXXXX.Y`** or **`GCF_XXXXXXXXX.Y`** format.
+All genome identifiers use the standard `GCA_XXXXXXXXX.Y` or `GCF_XXXXXXXXX.Y` format.
 
 ---
 
@@ -214,24 +267,30 @@ saurus/
     ├── .nojekyll
     ├── index.html                 ← landing page
     ├── about.html                 ← project + team + methods
+    ├── statistics.html            ← 9+ charts (ST+MRSA, CC×SCCmec, alluvial)
+    ├── geography.html             ← NEW — metadata browser + 4 charts
     ├── lineages.html              ← curated CC catalogue
     ├── downloads.html             ← bulk data index
-    ├── data/                      ← bulk TSV.gz downloads
-    ├── pages/
-    │   ├── mlst.html              ← MLST + CC
-    │   ├── spa.html
-    │   ├── sccmec.html            ← CGE + RPet + subtype tabs
-    │   ├── capsule.html
-    │   ├── agr.html
-    │   ├── mrsa.html              ← comprehensive MRSA + CC breakdown
-    │   ├── amr.html               ← gene retrieval
-    │   ├── vfdb.html
-    │   ├── plasmid.html
-    │   └── data/                  ← gene retrieval JSON indexes
-    └── ...
+    ├── assets/
+    │   └── chart.min.js           ← Chart.js (bundled locally)
+    ├── data/                      ← bulk .tsv.gz downloads
+    │   ├── *.tsv.gz               ← typing + gene tables
+    │   ├── metadata.tsv.gz        ← NEW — BioSample metadata
+    │   └── saurus_data_all.zip    ← everything, one archive
+    └── pages/
+        ├── mlst.html              ← MLST + CC
+        ├── spa.html
+        ├── sccmec.html            ← CGE + RPet + subtype tabs
+        ├── capsule.html
+        ├── agr.html
+        ├── mrsa.html              ← MRSA + CC breakdown + country/source cross-tabs
+        ├── amr.html               ← gene retrieval
+        ├── vfdb.html
+        ├── plasmid.html
+        └── data/                  ← gene retrieval JSON indexes
 ```
 
-> `merged/`, `batches/`, and `scripts/` are git-ignored — they hold the local pipeline that runs on the HPC.
+> `merged/`, `batches/`, and `scripts/` are git-ignored — they hold the local pipeline.
 
 ---
 
@@ -253,7 +312,16 @@ Open **http://localhost:8000/**.
 
 ## 🧪 Regenerating pages
 
-Each page is produced by a self-contained Python script. Given the merged TSVs in `merged/`:
+Each page is produced by a self-contained Python script in `merged/`. The recommended way is:
+
+```bash
+cd merged/
+bash ~/saurus/scripts/Regenerate_all.sh
+```
+
+This runs every generator, gzips `metadata.tsv`, refreshes the bulk zip, and finishes with `fix_nav.py` to guarantee the 15-link nav across all pages.
+
+### Manual regeneration (per-module)
 
 ```bash
 cd merged/
@@ -275,10 +343,15 @@ python3 generate_gene_page.py --db all --dir . \
     --outdir ../docs/pages/ --datadir ../docs/pages/data
 
 # Supporting pages
-python3 generate_index.py      --dir . -o ../docs/index.html
-python3 generate_about.py              -o ../docs/about.html
-python3 generate_lineages.py           -o ../docs/lineages.html
-python3 generate_downloads.py  --dir . -o ../docs/downloads.html
+python3 generate_statistics.py  --dir . -o ../docs/statistics.html
+python3 generate_geography.py           -o ../docs/geography.html
+python3 generate_index.py       --dir . -o ../docs/index.html
+python3 generate_about.py               -o ../docs/about.html
+python3 generate_lineages.py            -o ../docs/lineages.html
+python3 generate_downloads.py   --dir . -o ../docs/downloads.html
+
+# Nav consistency (must be last)
+python3 fix_nav.py ../docs
 ```
 
 ---
@@ -307,8 +380,12 @@ If you use SAURUS in your research, please cite the pipeline and the source gene
 
 ### Gene dataset
 
-> **Shelenkov A, Slavokhotova A, Yunusova M, et al.** Genomic typing, antimicrobial resistance gene, virulence factor and plasmid replicon database for the important pathogenic bacteria *Staphylococcus aureus*. *BMC Genom Data*. 2025;26:65.
+> **Shelenkov A, Slavakhotova A, Yunusova M, et al.** Genomic typing, antimicrobial resistance gene, virulence factor and plasmid replicon database for the important pathogenic bacteria *Staphylococcus aureus*. *BMC Genom Data*. 2025;26:65.
 > [doi:10.1186/s12863-025-01363-w](https://doi.org/10.1186/s12863-025-01363-w)
+
+### Metadata source
+
+> **NCBI BioSample** — country, isolation source, host, and collection date attributes attached to each RefSeq assembly.
 
 ### Cite SAURUS itself
 
@@ -323,10 +400,10 @@ SAURUS stands on the shoulders of the open-source genomics community. We thank:
 
 - **Brown Beckley & Vincent Amarh** — for StaphScope, the typing engine
 - **Andrey Shelenkov & colleagues** — for publishing their gene dataset openly
+- **NCBI** — for the `datasets` CLI, AMRFinderPlus, and the Assembly + BioSample databases
 - **Torsten Seemann** — for `mlst`, `ABRicate`, and a decade of pipeline standards
 - **Robert A. Petit III** — for `sccmec` and `agrVATE` contributions
 - **Center for Genomic Epidemiology (DTU)** — for `SCCmecFinder`
-- **NCBI** — for the `datasets` CLI, AMRFinderPlus, and the Assembly/BioSample databases
 - **PubMLST & Ridom** — for allele and spa-type reference databases
 - **The Python scientific stack** — pandas, numpy, and every dependency in between
 
