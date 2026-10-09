@@ -302,7 +302,6 @@ tbody tr:hover td { background: #f8fafc; }
         </span>
     </a>
     <div class="links">
-
         <a href="../index.html">Home</a>
         <a href="../pages/mlst.html">MLST</a>
         <a href="../pages/spa.html">spa</a>
@@ -313,10 +312,11 @@ tbody tr:hover td { background: #f8fafc; }
         <a href="../pages/amr.html">AMR</a>
         <a href="../pages/vfdb.html">Virulence</a>
         <a href="../pages/plasmid.html" class="active">Plasmid</a>
+        <a href="../statistics.html">Statistics</a>
+        <a href="../geography.html">Geography</a>
         <a href="../lineages.html">Lineages</a>
         <a href="../downloads.html">Downloads</a>
         <a href="../about.html">About</a>
-    </div>
     </div>
 </nav>
 
@@ -519,10 +519,22 @@ async function ensureIndex() {
         loadStatus.textContent = '✓ Index loaded (' +
             Object.keys(sampleIndex.samples).length.toLocaleString() + ' samples)';
         setTimeout(() => { loadStatus.style.display = 'none'; }, 2000);
-    } catch (e) {
-        loadStatus.textContent = '⚠️ Could not load index: ' + e.message;
-        loadStatus.style.color = '#dc2626';
-    } finally {
+        } catch (e) {
+            loadStatus.textContent = '⚠️ Could not load index';
+            loadStatus.style.color = '#dc2626';
+            const parent = loadStatus.closest('.gene-picker');
+            if (parent && !parent.querySelector('.file-help')) {
+                const help = document.createElement('div');
+                help.className = 'file-help';
+                help.style.cssText = 'margin-top:12px;padding:12px 14px;background:#fef3c7;border-left:4px solid #f59e0b;border-radius:6px;color:#78350f;font-size:0.88em;line-height:1.5;';
+                help.innerHTML =
+                    '<strong>⚠️ Browser blocked the data fetch</strong><br>' +
+                    'Serve the folder over HTTP, not <code>file://</code>:<br>' +
+                    '<code style="display:inline-block;margin-top:6px;padding:3px 8px;background:#fff;border-radius:3px;font-family:monospace;">cd ~/saurus/merged &amp;&amp; python3 -m http.server 8000</code><br>' +
+                    'Then open <code>http://localhost:8000/amr.html</code>';
+                parent.appendChild(help);
+            }
+        } finally {
         indexLoading = false;
     }
 }

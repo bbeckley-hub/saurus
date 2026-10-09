@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistics — SAURUS</title>
+<style>
+
+:root {
+    --gold: #d4af37; --navy: #0a1628; --accent: #0ea5e9;
+    --bg: #f8fafc; --card: #fff; --text: #1e293b;
+    --muted: #64748b; --border: #e2e8f0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; }
+
+.saurus-nav {
+    background: var(--navy); color: #fff; padding: 20px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    position: sticky; top: 0; z-index: 100;
+}
+.saurus-nav .brand { display: flex; align-items: center; gap: 20px; text-decoration: none; flex-shrink: 0; }
+.saurus-nav .brand-emoji { font-size: 5.6em; line-height: 1; }
+.saurus-nav .brand-text { display: flex; flex-direction: column; gap: 3px; }
+.saurus-nav .brand-name { font-weight: 800; font-size: 3.45em; letter-spacing: 1px; color: var(--gold); line-height: 1; }
+.saurus-nav .brand-tagline { font-size: 1.0em; font-weight: 400; color: #94a3b8; line-height: 1.15; max-width: 520px; }
+.saurus-nav .links { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.saurus-nav .links a { color: #cbd5e1; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 0.9em; font-weight: 500; transition: all 0.15s; }
+.saurus-nav .links a:hover { background: rgba(255,255,255,0.08); color: white; }
+.saurus-nav .links a.active { background: var(--gold); color: var(--navy); font-weight: 600; }
+
+.page-header { background: linear-gradient(135deg, #0f766e 0%, var(--navy) 100%); color: white; padding: 40px 32px 32px; }
+.page-header h1 { font-size: 2.2em; margin-bottom: 6px; font-weight: 700; }
+.page-header .subtitle { color: #99f6e4; font-size: 1.05em; margin-bottom: 20px; }
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; max-width: 1400px; }
+.stat-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 14px 16px; }
+.stat-card .value { font-size: 1.7em; font-weight: 800; color: var(--gold); line-height: 1.1; }
+.stat-card .label { font-size: 0.78em; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+main { max-width: 1500px; margin: 0 auto; padding: 28px 32px 60px; }
+
+.section-title { font-size: 1.3em; color: var(--navy); margin: 24px 0 16px; font-weight: 800;
+    padding-bottom: 8px; border-bottom: 3px solid var(--accent); display: inline-block; }
+.section-desc { color: var(--muted); font-size: 0.94em; margin-bottom: 20px; max-width: 800px; }
+
+.chart-grid { display: grid; gap: 22px; margin-bottom: 28px; }
+.chart-grid.two { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
+.chart-grid.three { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.chart-grid.full { grid-template-columns: 1fr; }
+
+.chart-card {
+    background: var(--card); border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 20px 22px;
+    transition: all 0.2s;
+}
+.chart-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.chart-card h3 { font-size: 1.05em; color: var(--navy); font-weight: 800; margin-bottom: 4px; }
+.chart-card .chart-sub { font-size: 0.82em; color: var(--muted); margin-bottom: 16px; }
+.chart-canvas-wrap { position: relative; height: 340px; }
+.chart-canvas-wrap.tall { height: 520px; }
+.chart-canvas-wrap.short { height: 260px; }
+
+/* Heatmap */
+.heatmap-wrap { overflow-x: auto; margin-top: 10px; }
+.heatmap-table { border-collapse: separate; border-spacing: 3px; font-size: 0.82em; }
+.heatmap-table th {
+    font-weight: 700; color: #475569; padding: 6px 8px;
+    font-family: 'SF Mono', Monaco, monospace; font-size: 0.78em;
+    text-align: center; white-space: nowrap;
+}
+.heatmap-table th.row-header { text-align: right; padding-right: 10px; }
+.heatmap-table td {
+    width: 46px; height: 34px; text-align: center; vertical-align: middle;
+    font-weight: 700; border-radius: 5px; color: white; font-size: 0.78em;
+    font-family: 'SF Mono', Monaco, monospace; transition: transform 0.12s; cursor: default;
+}
+.heatmap-table td:hover { transform: scale(1.12); z-index: 2; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.heatmap-legend { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 0.82em; color: var(--muted); font-weight: 600; }
+.heatmap-legend .scale { display: flex; height: 12px; border-radius: 6px; overflow: hidden; width: 180px; }
+.heatmap-legend .scale span { flex: 1; }
+
+/* Alluvial */
+.alluvial-wrap {
+    position: relative;
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    border-radius: 10px;
+    padding: 8px;
+    overflow-x: auto;
+}
+.alluvial-svg { display: block; min-width: 1000px; }
+.alluvial-node rect {
+    transition: opacity 0.15s;
+    cursor: pointer;
+}
+.alluvial-node:hover rect { opacity: 1; }
+.alluvial-flow { transition: opacity 0.15s; }
+
+.note-block {
+    background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+    border-left: 6px solid var(--gold);
+    border-radius: 12px; padding: 18px 22px; margin: 24px 0;
+    color: #78350f; font-size: 0.92em; line-height: 1.6;
+}
+.note-block strong { color: #92400e; }
+
+.saurus-footer { background: var(--navy); color: #94a3b8; padding: 32px; text-align: center; font-size: 0.88em; margin-top: 60px; }
+.saurus-footer a { color: var(--gold); text-decoration: none; }
+.saurus-footer .footer-line { margin: 6px 0; }
+.saurus-footer .full-name { color: #cbd5e1; font-size: 0.95em; letter-spacing: 0.2px; }
+
+@media (max-width: 900px) {
+    .saurus-nav { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .saurus-nav .brand-tagline { max-width: 100%; }
+    .saurus-nav .brand-emoji { font-size: 3.6em; }
+    .saurus-nav .brand-name { font-size: 2.2em; }
+    .chart-grid.two, .chart-grid.three { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+    .page-header { padding: 28px 20px 24px; }
+    main { padding: 20px 16px 40px; }
+    .saurus-nav { padding: 14px 16px; }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="saurus-nav">
+    <a class="brand" href="index.html">
+        <span class="brand-emoji">🦖</span>
+        <span class="brand-text">
+            <span class="brand-name">SAURUS</span>
+            <span class="brand-tagline">Staphylococcus aureus Unified Resource for Universal Surveillance</span>
+        </span>
+    </a>
+    <div class="links">
+        <a href="index.html">Home</a>
+        <a href="pages/mlst.html">MLST</a>
+        <a href="pages/spa.html">spa</a>
+        <a href="pages/sccmec.html">SCCmec</a>
+        <a href="pages/capsule.html">Capsule</a>
+        <a href="pages/agr.html">agr</a>
+        <a href="pages/mrsa.html">MRSA</a>
+        <a href="pages/amr.html">AMR</a>
+        <a href="pages/vfdb.html">Virulence</a>
+        <a href="pages/plasmid.html">Plasmid</a>
+        <a href="statistics.html" class="active">Statistics</a>
+        <a href="geography.html">Geography</a>
+        <a href="lineages.html">Lineages</a>
+        <a href="downloads.html">Downloads</a>
+        <a href="about.html">About</a>
+    </div>
+</nav>
+
+<header class="page-header">
+    <h1>📊 Statistics</h1>
+    <div class="subtitle">Distribution and prevalence of every typing scheme across the collection</div>
+    <div class="stat-row">
+        <div class="stat-card"><div class="value">26,197</div><div class="label">Genomes</div></div>
+        <div class="stat-card"><div class="value">913</div><div class="label">Unique STs</div></div>
+        <div class="stat-card"><div class="value">13</div><div class="label">Clonal Complexes</div></div>
+        <div class="stat-card"><div class="value">1,966</div><div class="label">spa Types</div></div>
+        <div class="stat-card"><div class="value">57</div><div class="label">SCCmec RPet</div></div>
+        <div class="stat-card"><div class="value">14</div><div class="label">SCCmec CGE</div></div>
+        <div class="stat-card"><div class="value">63.5%</div><div class="label">MRSA</div></div>
+    </div>
+</header>
+
+<main>
+
+    <!-- ============ MRSA overview ============ -->
+    <h2 class="section-title">🔬 MRSA vs MSSA</h2>
+    <p class="section-desc">Proportion of methicillin-resistant and methicillin-susceptible isolates across the entire dataset.</p>
+    <div class="chart-grid two">
+        <div class="chart-card">
+            <h3>MRSA / MSSA composition</h3>
+            <div class="chart-sub">N = 26,197 genomes</div>
+            <div class="chart-canvas-wrap short"><canvas id="mrsaChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <h3>Capsule type distribution</h3>
+            <div class="chart-sub">cap5 vs cap8 serotypes</div>
+            <div class="chart-canvas-wrap short"><canvas id="capChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- ============ MLST / CC ============ -->
+    <h2 class="section-title">🧬 MLST &amp; Clonal Complexes</h2>
+    <p class="section-desc">Top sequence types with MRSA rate overlay — bars show genome count, the red percentage shows how methicillin-resistant each lineage is.</p>
+    <div class="chart-grid full">
+        <div class="chart-card">
+            <h3>Top 20 sequence types — with MRSA %</h3>
+            <div class="chart-sub">Blue bars = genome count (left axis). Red % = MRSA rate (right axis).</div>
+            <div class="chart-canvas-wrap tall"><canvas id="stChart"></canvas></div>
+        </div>
+    </div>
+    <div class="chart-grid two">
+        <div class="chart-card">
+            <h3>Clonal complex distribution</h3>
+            <div class="chart-sub">Top 15 CCs by genome count</div>
+            <div class="chart-canvas-wrap"><canvas id="ccChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <h3>spa type distribution</h3>
+            <div class="chart-sub">Top 20 spa types</div>
+            <div class="chart-canvas-wrap tall"><canvas id="spaChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- ============ SCCmec (RPet + CGE) ============ -->
+    <h2 class="section-title">🛡️ SCCmec — RPet vs CGE callers</h2>
+    <p class="section-desc">
+        Cassette chromosome <em>mec</em> type, computed by two independent callers.
+        RPet reports subtype-level (IVa, IVc, IVg) while CGE reports coarser types.
+    </p>
+    <div class="chart-grid two">
+        <div class="chart-card">
+            <h3>SCCmec — RPet caller</h3>
+            <div class="chart-sub">Top 12 types · subtype resolution</div>
+            <div class="chart-canvas-wrap"><canvas id="rpetChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <h3>SCCmec — CGE caller</h3>
+            <div class="chart-sub">Top 12 types · SCCmecFinder</div>
+            <div class="chart-canvas-wrap"><canvas id="cgeChart"></canvas></div>
+        </div>
+    </div>
+    <div class="chart-grid two">
+        <div class="chart-card">
+            <h3>RPet ↔ CGE agreement</h3>
+            <div class="chart-sub">Concordance between the two callers (94.4% agree)</div>
+            <div class="chart-canvas-wrap short"><canvas id="agreeChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <h3>agr type distribution</h3>
+            <div class="chart-sub">Accessory gene regulator groups I–IV</div>
+            <div class="chart-canvas-wrap short"><canvas id="agrChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- ============ SCCmec × agr stacked ============ -->
+    <h2 class="section-title">🔀 SCCmec × agr — lineage-cassette association</h2>
+    <p class="section-desc">
+        Each bar shows the composition of quorum-sensing types within a given SCCmec type.
+        Reveals which agr groups preferentially co-occur with which cassettes.
+    </p>
+    <div class="chart-card">
+        <h3>SCCmec type (RPet) × agr group</h3>
+        <div class="chart-sub">Stacked bar — one segment per agr type</div>
+        <div class="chart-canvas-wrap tall"><canvas id="sccAgrChart"></canvas></div>
+    </div>
+
+    <!-- ============ ALLUVIAL ============ -->
+    <h2 class="section-title">🌈 Multi-dimensional flow</h2>
+    <p class="section-desc">
+        A four-level alluvial showing how each isolate partitions through
+        <strong>SCCmec → agr → Capsule → MRSA status</strong>.
+        Wider ribbons = more genomes. Hover a ribbon to see exact counts.
+    </p>
+    <div class="chart-card">
+        <h3>Lineage flow — SCCmec → agr → Capsule → MRSA</h3>
+        <div class="chart-sub">Only isolates with all four fields assigned are shown</div>
+        <div class="alluvial-wrap">
+            <svg class="alluvial-svg" id="alluvial" viewBox="0 0 1100 700" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+    </div>
+
+    <!-- ============ CC × SCCmec heatmap ============ -->
+    <h2 class="section-title">🌡️ Clonal complex × SCCmec</h2>
+    <p class="section-desc">The classic lineage–cassette association table. Darker = more genomes.</p>
+    <div class="chart-card">
+        <h3>Lineage–cassette heatmap</h3>
+        <div class="chart-sub">Counts of genomes in each CC × SCCmec (RPet) combination</div>
+        <div class="heatmap-wrap"><table class="heatmap-table" id="heatmap"></table></div>
+        <div class="heatmap-legend">
+            <span>Low</span>
+            <div class="scale">
+                <span style="background:#f0fdfa;"></span>
+                <span style="background:#99f6e4;"></span>
+                <span style="background:#5eead4;"></span>
+                <span style="background:#14b8a6;"></span>
+                <span style="background:#0f766e;"></span>
+                <span style="background:#134e4a;"></span>
+            </div>
+            <span>High</span>
+        </div>
+    </div>
+
+    <!-- ============ Capsule by CC ============ -->
+    <h2 class="section-title">💊 Capsule type by clonal complex</h2>
+    <p class="section-desc">Stacked distribution of cap5 vs cap8 across the top clonal complexes.</p>
+    <div class="chart-card">
+        <h3>Capsule type by CC</h3>
+        <div class="chart-sub">Stacked bar: Type 5 (green) vs Type 8 (red)</div>
+        <div class="chart-canvas-wrap tall"><canvas id="capCcChart"></canvas></div>
+    </div>
+
+    <div class="note-block">
+        <strong>📊 Reading these charts</strong>
+        <p>All data reflects the current SAURUS collection of 26,197 RefSeq genomes (updated 2026-10-09 17:48:45). Bar charts show genome counts; donuts show proportional composition; the heatmap shows co-occurrence; the alluvial shows hierarchical flow through four typing layers.</p>
+    </div>
+
+</main>
+
+<footer class="saurus-footer">
+    <div class="footer-line full-name">
+        <strong style="color:#d4af37;">SAURUS</strong> — Staphylococcus aureus Unified Resource for Universal Surveillance
+    </div>
+    <div class="footer-line">
+        University of Ghana Medical School · MIT License · Data updated 2026-10-09 17:48:45
+    </div>
+    <div class="footer-line">
+        <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
+        <a href="about.html">About</a> ·
+        <a href="mailto:brownbeckley94@gmail.com">Contact</a>
+    </div>
+</footer>
+
+<script src="assets/chart.min.js"></script>
+<script>
+const DATA = {"top_sts": [{"label": "ST5", "count": 4710, "mrsa_pct": 80.4}, {"label": "ST8", "count": 3857, "mrsa_pct": 82.4}, {"label": "ST398", "count": 1876, "mrsa_pct": 71.0}, {"label": "ST22", "count": 1773, "mrsa_pct": 91.5}, {"label": "ST105", "count": 969, "mrsa_pct": 98.9}, {"label": "ST30", "count": 757, "mrsa_pct": 34.9}, {"label": "ST1", "count": 748, "mrsa_pct": 38.2}, {"label": "ST59", "count": 743, "mrsa_pct": 82.6}, {"label": "ST45", "count": 565, "mrsa_pct": 41.1}, {"label": "ST239", "count": 517, "mrsa_pct": 94.8}, {"label": "ST15", "count": 421, "mrsa_pct": 0.7}, {"label": "ST9", "count": 384, "mrsa_pct": 70.8}, {"label": "ST97", "count": 374, "mrsa_pct": 17.4}, {"label": "ST188", "count": 342, "mrsa_pct": 3.5}, {"label": "ST121", "count": 312, "mrsa_pct": 4.5}, {"label": "ST7", "count": 295, "mrsa_pct": 6.1}, {"label": "ST6", "count": 281, "mrsa_pct": 36.7}, {"label": "ST72", "count": 221, "mrsa_pct": 44.3}, {"label": "ST88", "count": 219, "mrsa_pct": 65.3}, {"label": "ST36", "count": 209, "mrsa_pct": 100.0}], "cc_dist": [{"label": "CC5", "count": 6713}, {"label": "CC8", "count": 5359}, {"label": "CC398", "count": 1876}, {"label": "CC1", "count": 1804}, {"label": "CC22", "count": 1803}, {"label": "CC30", "count": 1182}, {"label": "CC59", "count": 829}, {"label": "CC45", "count": 669}, {"label": "CC15", "count": 527}, {"label": "CC97", "count": 463}, {"label": "CC121", "count": 312}, {"label": "CC93", "count": 49}, {"label": "CC130", "count": 39}], "spa_top": [{"label": "t002", "count": 3272}, {"label": "t008", "count": 2354}, {"label": "t011", "count": 763}, {"label": "t437", "count": 543}, {"label": "t127", "count": 469}, {"label": "t622", "count": 458}, {"label": "t899", "count": 450}, {"label": "t189", "count": 412}, {"label": "t032", "count": 359}, {"label": "t034", "count": 330}, {"label": "t037", "count": 324}, {"label": "t091", "count": 259}, {"label": "t084", "count": 255}, {"label": "t311", "count": 253}, {"label": "t9649", "count": 223}, {"label": "t064", "count": 217}, {"label": "t688", "count": 200}, {"label": "t024", "count": 197}, {"label": "t019", "count": 196}, {"label": "t242", "count": 194}], "rpet_dist": [{"label": "Type IV(2B)", "count": 7703}, {"label": "Type II(2A)", "count": 4486}, {"label": "Type V (5C)", "count": 1744}, {"label": "Type III(3A)", "count": 545}, {"label": "Type I(1B)", "count": 502}, {"label": "Composite (Type II(2A) + Type VIII(4A))", "count": 264}, {"label": "Type XII (9C)", "count": 255}, {"label": "Type ? (C1-B)", "count": 207}, {"label": "Orphan C (No ccr)", "count": 104}, {"label": "Composite (Type IV(2B) + Type VI(4B))", "count": 87}, {"label": "Composite (Type IV(2B) + Type ? (C1-B))", "count": 83}, {"label": "Orphan A (No ccr)", "count": 78}], "cge_dist": [{"label": "IV(2B)", "count": 8003}, {"label": "II(2A)", "count": 4884}, {"label": "V(5C2&5)", "count": 1620}, {"label": "III(3A)", "count": 571}, {"label": "I(1B)", "count": 549}, {"label": "XII(9C2)", "count": 389}, {"label": "V(5C2)", "count": 197}, {"label": "IV(2B&5)", "count": 127}, {"label": "VII(5C1)", "count": 92}, {"label": "VIII(4A)", "count": 71}, {"label": "VI(4B)", "count": 61}, {"label": "IX(1C2)", "count": 33}], "agr_dist": [{"label": "I", "count": 13793}, {"label": "II", "count": 8681}, {"label": "III", "count": 2815}, {"label": "IV", "count": 656}], "cap_dist": [{"label": "Type 5", "count": 18011}, {"label": "Type 8", "count": 8071}], "mrsa_dist": [{"label": "MRSA", "count": 16637}, {"label": "MSSA", "count": 9560}], "agreement": [{"label": "Agree", "count": 15700}, {"label": "Both Missing", "count": 9555}, {"label": "Disagree", "count": 926}, {"label": "One Missing", "count": 16}], "heatmap": {"rows": ["CC5", "CC8", "CC398", "CC1", "CC22", "CC30", "CC59", "CC45", "CC15", "CC97", "CC121", "CC93"], "cols": ["Type IV(2B)", "Type II(2A)", "Type V (5C)", "Type III(3A)", "Type I(1B)", "Composite (Type II(2A) + Type VIII(4A))", "Type XII (9C)", "Type ? (C1-B)"], "data": [[661, 3942, 25, 1, 348, 250, 0, 46], [3366, 10, 109, 503, 130, 11, 14, 64], [333, 1, 898, 0, 1, 0, 0, 17], [255, 2, 124, 0, 0, 0, 182, 0], [1532, 0, 6, 0, 1, 0, 0, 55], [252, 294, 6, 0, 0, 0, 0, 0], [451, 1, 209, 0, 0, 0, 0, 1], [103, 33, 65, 1, 1, 0, 0, 0], [0, 1, 15, 0, 0, 0, 0, 0], [28, 0, 46, 0, 2, 0, 0, 1], [8, 0, 6, 0, 0, 0, 0, 0], [49, 0, 0, 0, 0, 0, 0, 0]]}, "cap_by_cc": {"rows": ["CC5", "CC8", "CC398", "CC1", "CC22", "CC30", "CC59", "CC45", "CC15", "CC97", "CC121", "CC93"], "series": ["Type 5", "Type 8"], "data": [[6420, 4773, 1874, 556, 1801, 1, 0, 6, 0, 449, 0, 0], [279, 581, 0, 1224, 0, 1177, 826, 662, 514, 14, 307, 49]]}, "scc_agr": {"rows": ["Type IV(2B)", "Type II(2A)", "Type V (5C)", "Type III(3A)", "Type I(1B)", "Composite (Type II(2A) + Type VIII(4A))", "Type XII (9C)", "Type ? (C1-B)"], "series": ["I", "II", "III", "IV"], "data": [[6237, 43, 1456, 541, 135, 11, 0, 153], [598, 4137, 163, 1, 367, 252, 255, 51], [779, 299, 40, 0, 0, 0, 0, 0], [22, 0, 70, 1, 0, 0, 0, 2]]}, "alluvial": [{"sccmec": "Type IV(2B)", "agr": "I", "capsule": "Type 8", "mrsa": "MRSA", "count": 772}, {"sccmec": "Type II(2A)", "agr": "II", "capsule": "Type 5", "mrsa": "MRSA", "count": 4133}, {"sccmec": "Other", "agr": "I", "capsule": "Type 5", "mrsa": "MRSA", "count": 390}, {"sccmec": "Type IV(2B)", "agr": "I", "capsule": "Type 5", "mrsa": "MRSA", "count": 5464}, {"sccmec": "Type III(3A)", "agr": "I", "capsule": "Type 8", "mrsa": "MRSA", "count": 538}, {"sccmec": "Type II(2A)", "agr": "III", "capsule": "Type 8", "mrsa": "MRSA", "count": 299}, {"sccmec": "Other", "agr": "II", "capsule": "Type 5", "mrsa": "MRSA", "count": 946}, {"sccmec": "Type V (5C)", "agr": "I", "capsule": "Type 5", "mrsa": "MRSA", "count": 1158}, {"sccmec": "Type IV(2B)", "agr": "III", "capsule": "Type 8", "mrsa": "MRSA", "count": 776}, {"sccmec": "Other", "agr": "III", "capsule": "Type 8", "mrsa": "MRSA", "count": 142}, {"sccmec": "Type IV(2B)", "agr": "II", "capsule": "Type 5", "mrsa": "MRSA", "count": 593}, {"sccmec": "Type V (5C)", "agr": "I", "capsule": "Type 8", "mrsa": "MRSA", "count": 298}, {"sccmec": "Type V (5C)", "agr": "II", "capsule": "Type 5", "mrsa": "MRSA", "count": 145}, {"sccmec": "Type I(1B)", "agr": "II", "capsule": "Type 5", "mrsa": "MRSA", "count": 367}, {"sccmec": "Type I(1B)", "agr": "I", "capsule": "Type 5", "mrsa": "MRSA", "count": 134}, {"sccmec": "Other", "agr": "IV", "capsule": "Type 8", "mrsa": "MRSA", "count": 37}, {"sccmec": "Type IV(2B)", "agr": "IV", "capsule": "Type 8", "mrsa": "MRSA", "count": 19}, {"sccmec": "Type II(2A)", "agr": "I", "capsule": "Type 8", "mrsa": "MRSA", "count": 33}, {"sccmec": "Other", "agr": "I", "capsule": "Type 8", "mrsa": "MRSA", "count": 77}, {"sccmec": "Type V (5C)", "agr": "III", "capsule": "Type 8", "mrsa": "MRSA", "count": 40}, {"sccmec": "Type V (5C)", "agr": "IV", "capsule": "Type 8", "mrsa": "MRSA", "count": 69}, {"sccmec": "Type III(3A)", "agr": "I", "capsule": "Type 5", "mrsa": "MRSA", "count": 1}, {"sccmec": "Type V (5C)", "agr": "II", "capsule": "Type 8", "mrsa": "MRSA", "count": 18}, {"sccmec": "Type II(2A)", "agr": "I", "capsule": "Type 5", "mrsa": "MRSA", "count": 10}, {"sccmec": "Other", "agr": "IV", "capsule": "Type 5", "mrsa": "MRSA", "count": 1}, {"sccmec": "Type IV(2B)", "agr": "III", "capsule": "Type 5", "mrsa": "MRSA", "count": 2}, {"sccmec": "Type V (5C)", "agr": "IV", "capsule": "Type 5", "mrsa": "MRSA", "count": 1}, {"sccmec": "Type III(3A)", "agr": "II", "capsule": "Type 5", "mrsa": "MRSA", "count": 1}, {"sccmec": "Type I(1B)", "agr": "I", "capsule": "Type 8", "mrsa": "MRSA", "count": 1}, {"sccmec": "Type IV(2B)", "agr": "II", "capsule": "Type 8", "mrsa": "MRSA", "count": 3}, {"sccmec": "Type III(3A)", "agr": "IV", "capsule": "Type 8", "mrsa": "MRSA", "count": 1}, {"sccmec": "Type IV(2B)", "agr": "IV", "capsule": "Type 5", "mrsa": "MRSA", "count": 3}, {"sccmec": "Other", "agr": "II", "capsule": "Type 8", "mrsa": "MRSA", "count": 2}, {"sccmec": "Other", "agr": "III", "capsule": "Type 5", "mrsa": "MRSA", "count": 1}]};
+
+const COLORS = {
+    blue: '#3b82f6', green: '#10b981', amber: '#f59e0b', red: '#dc2626',
+    purple: '#8b5cf6', teal: '#14b8a6', pink: '#ec4899', indigo: '#6366f1',
+};
+const PALETTE = ['#3b82f6','#10b981','#f59e0b','#dc2626','#8b5cf6','#14b8a6',
+                 '#ec4899','#6366f1','#f97316','#06b6d4','#84cc16','#a855f7'];
+const AGR_COLORS = { 'I': '#10b981', 'II': '#3b82f6', 'III': '#f59e0b', 'IV': '#dc2626' };
+const MRSA_COLORS = { 'MRSA': '#dc2626', 'MSSA': '#3b82f6', 'Unknown': '#94a3b8' };
+
+Chart.defaults.font.family = "'Inter', -apple-system, sans-serif";
+Chart.defaults.color = '#475569';
+Chart.defaults.plugins.legend.labels.boxWidth = 12;
+Chart.defaults.plugins.legend.labels.padding = 12;
+
+function shortLabel(l) { return l.length <= 22 ? l : l.slice(0, 20) + '…'; }
+
+// ---------- MRSA donut ----------
+new Chart(document.getElementById('mrsaChart'), {
+    type: 'doughnut',
+    data: {
+        labels: DATA.mrsa_dist.map(x => x.label),
+        datasets: [{
+            data: DATA.mrsa_dist.map(x => x.count),
+            backgroundColor: DATA.mrsa_dist.map(x => MRSA_COLORS[x.label] || '#94a3b8'),
+            borderColor: '#fff', borderWidth: 3,
+        }],
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '62%',
+        plugins: { legend: { position: 'right' } } },
+});
+
+// ---------- Capsule donut ----------
+new Chart(document.getElementById('capChart'), {
+    type: 'doughnut',
+    data: {
+        labels: DATA.cap_dist.map(x => x.label),
+        datasets: [{
+            data: DATA.cap_dist.map(x => x.count),
+            backgroundColor: DATA.cap_dist.map(x =>
+                x.label === 'Type 5' ? COLORS.green :
+                x.label === 'Type 8' ? COLORS.red : '#94a3b8'),
+            borderColor: '#fff', borderWidth: 3,
+        }],
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '62%',
+        plugins: { legend: { position: 'right' } } },
+});
+
+// ---------- ST bar + MRSA line ----------
+new Chart(document.getElementById('stChart'), {
+    type: 'bar',
+    data: {
+        labels: DATA.top_sts.map(x => x.label),
+        datasets: [
+            { label: 'Genomes',
+               data: DATA.top_sts.map(x => x.count),
+               backgroundColor: COLORS.blue, borderRadius: 5,
+               yAxisID: 'y', order: 2 },
+            { label: 'MRSA %',
+               data: DATA.top_sts.map(x => x.mrsa_pct),
+               type: 'line', borderColor: COLORS.red, backgroundColor: COLORS.red,
+               borderWidth: 2.5, pointRadius: 4, pointHoverRadius: 6,
+               tension: 0.3, yAxisID: 'y1', order: 1 },
+        ],
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { position: 'top' } },
+        scales: {
+            y:  { beginAtZero: true, position: 'left', title: { display: true, text: 'Genome count' }, grid: { color: '#f1f5f9' } },
+            y1: { beginAtZero: true, max: 100, position: 'right', title: { display: true, text: 'MRSA %' }, grid: { display: false }, ticks: { callback: v => v + '%' } },
+            x:  { grid: { display: false } },
+        },
+    },
+});
+
+// ---------- CC bar ----------
+new Chart(document.getElementById('ccChart'), {
+    type: 'bar',
+    data: {
+        labels: DATA.cc_dist.map(x => x.label),
+        datasets: [{ label: 'Genomes', data: DATA.cc_dist.map(x => x.count),
+                       backgroundColor: COLORS.purple, borderRadius: 5 }],
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } },
+});
+
+// ---------- spa horizontal bar ----------
+new Chart(document.getElementById('spaChart'), {
+    type: 'bar',
+    data: {
+        labels: DATA.spa_top.map(x => x.label),
+        datasets: [{ label: 'Genomes', data: DATA.spa_top.map(x => x.count),
+                       backgroundColor: COLORS.green, borderRadius: 5 }],
+    },
+    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true, grid: { color: '#f1f5f9' } }, y: { grid: { display: false } } } },
+});
+
+// ---------- SCCmec RPet bar ----------
+new Chart(document.getElementById('rpetChart'), {
+    type: 'bar',
+    data: {
+        labels: DATA.rpet_dist.map(x => x.label),
+        datasets: [{ label: 'Genomes', data: DATA.rpet_dist.map(x => x.count),
+                       backgroundColor: DATA.rpet_dist.map((_, i) => PALETTE[i % PALETTE.length]),
+                       borderRadius: 5 }],
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                   x: { grid: { display: false }, ticks: { maxRotation: 30 } } } },
+});
+
+// ---------- SCCmec CGE bar ----------
+new Chart(document.getElementById('cgeChart'), {
+    type: 'bar',
+    data: {
+        labels: DATA.cge_dist.map(x => x.label),
+        datasets: [{ label: 'Genomes', data: DATA.cge_dist.map(x => x.count),
+                       backgroundColor: DATA.cge_dist.map((_, i) => PALETTE[(i+2) % PALETTE.length]),
+                       borderRadius: 5 }],
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                   x: { grid: { display: false }, ticks: { maxRotation: 30 } } } },
+});
+
+// ---------- Agreement donut ----------
+new Chart(document.getElementById('agreeChart'), {
+    type: 'doughnut',
+    data: {
+        labels: DATA.agreement.map(x => x.label),
+        datasets: [{
+            data: DATA.agreement.map(x => x.count),
+            backgroundColor: DATA.agreement.map(x =>
+                x.label === 'Agree'         ? COLORS.green :
+                x.label === 'Disagree'      ? COLORS.red   :
+                x.label === 'One Missing'   ? COLORS.amber : '#94a3b8'),
+            borderColor: '#fff', borderWidth: 3,
+        }],
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '62%',
+        plugins: { legend: { position: 'right' } } },
+});
+
+// ---------- agr donut ----------
+new Chart(document.getElementById('agrChart'), {
+    type: 'doughnut',
+    data: {
+        labels: DATA.agr_dist.map(x => 'agr ' + x.label),
+        datasets: [{
+            data: DATA.agr_dist.map(x => x.count),
+            backgroundColor: DATA.agr_dist.map(x => AGR_COLORS[x.label] || '#94a3b8'),
+            borderColor: '#fff', borderWidth: 3,
+        }],
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '62%',
+        plugins: { legend: { position: 'right' } } },
+});
+
+// ---------- SCCmec × agr stacked bar ----------
+new Chart(document.getElementById('sccAgrChart'), {
+    type: 'bar',
+    data: {
+        labels: DATA.scc_agr.rows,
+        datasets: DATA.scc_agr.series.map((agrType, i) => ({
+            label: 'agr ' + agrType,
+            data: DATA.scc_agr.data[i],
+            backgroundColor: AGR_COLORS[agrType],
+            borderRadius: 5,
+        })),
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: {
+            x: { stacked: true, grid: { display: false }, ticks: { maxRotation: 30 } },
+            y: { stacked: true, beginAtZero: true,
+                  title: { display: true, text: 'Genomes' },
+                  grid: { color: '#f1f5f9' } },
+        },
+    },
+});
+
+// ---------- Heatmap (CC × SCCmec RPet) ----------
+(function() {
+    const hm = DATA.heatmap;
+    const max = Math.max(1, ...hm.data.flat());
+    const colorFor = v => {
+        if (v === 0) return '#f8fafc';
+        const t = Math.pow(v / max, 0.6);
+        const stops = [[240,253,250],[153,246,228],[94,234,212],[20,184,166],[15,118,110],[19,78,74]];
+        const [r, g, b] = stops[Math.min(stops.length - 1, Math.floor(t * stops.length))];
+        return `rgb(${r},${g},${b})`;
+    };
+    const textColor = v => Math.pow(v / max, 0.6) > 0.4 ? '#fff' : '#134e4a';
+    const table = document.getElementById('heatmap');
+    let html = '<thead><tr><th></th>';
+    for (const c of hm.cols) html += '<th>' + shortLabel(c) + '</th>';
+    html += '</tr></thead><tbody>';
+    for (let i = 0; i < hm.rows.length; i++) {
+        html += '<tr><th class="row-header">' + hm.rows[i] + '</th>';
+        for (let j = 0; j < hm.cols.length; j++) {
+            const v = hm.data[i][j];
+            html += '<td style="background:' + colorFor(v) + ';color:' + textColor(v) +
+                    ';" title="' + hm.rows[i] + ' × ' + hm.cols[j] + ': ' + v + '">' +
+                    (v > 0 ? v : '') + '</td>';
+        }
+        html += '</tr>';
+    }
+    html += '</tbody>';
+    table.innerHTML = html;
+})();
+
+// ---------- Capsule by CC stacked ----------
+new Chart(document.getElementById('capCcChart'), {
+    type: 'bar',
+    data: {
+        labels: DATA.cap_by_cc.rows,
+        datasets: [
+            { label: 'Type 5', data: DATA.cap_by_cc.data[0], backgroundColor: COLORS.green, borderRadius: 5 },
+            { label: 'Type 8', data: DATA.cap_by_cc.data[1], backgroundColor: COLORS.red,   borderRadius: 5 },
+        ],
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { x: { stacked: true, grid: { display: false } },
+                   y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Genomes' }, grid: { color: '#f1f5f9' } } } },
+});
+
+// ---------- Alluvial: SCCmec → agr → Capsule → MRSA ----------
+(function() {
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const svg = document.getElementById('alluvial');
+
+    const flows = DATA.alluvial;
+    if (!flows.length) {
+        svg.innerHTML = '<text x="550" y="350" text-anchor="middle" fill="#94a3b8" font-size="14">No complete 4-field rows available</text>';
+        return;
+    }
+
+    const W = 1100, H = 700;
+    const PAD_TOP = 40, PAD_BOT = 40;
+    const COL_X = [80, 380, 680, 980];
+    const NODE_W = 14;
+    const NODE_GAP = 8;
+
+    // Group totals per level
+    const LEVELS = ['sccmec', 'agr', 'capsule', 'mrsa'];
+    const totals = LEVELS.map(() => new Map());
+    for (const f of flows) {
+        LEVELS.forEach((lvl, i) => {
+            const k = f[lvl];
+            totals[i].set(k, (totals[i].get(k) || 0) + f.count);
+        });
+    }
+
+    // Sort keys by total desc, but keep agr in I-IV order
+    const AGR_ORDER = ['I', 'II', 'III', 'IV'];
+    const keysAt = LEVELS.map((lvl, i) => {
+        const entries = [...totals[i].entries()];
+        if (lvl === 'agr') {
+            entries.sort((a, b) => AGR_ORDER.indexOf(a[0]) - AGR_ORDER.indexOf(b[0]));
+        } else {
+            entries.sort((a, b) => b[1] - a[1]);
+        }
+        return entries.map(e => e[0]);
+    });
+
+    // Total flow count
+    const grandTotal = flows.reduce((s, f) => s + f.count, 0);
+    const span = H - PAD_TOP - PAD_BOT;
+
+    // Node y-positions per level
+    const nodeYs = LEVELS.map((_, i) => {
+        const keys = keysAt[i];
+        const totalH = span - NODE_GAP * (keys.length - 1);
+        const usedH = [];
+        let y = PAD_TOP;
+        for (const k of keys) {
+            const h = (totals[i].get(k) / grandTotal) * totalH;
+            usedH.push(h);
+        }
+        // Column total must equal span; scale proportionally
+        const sumH = usedH.reduce((a, b) => a + b, 0);
+        const scale = totalH / Math.max(1, sumH);
+        const result = [];
+        let cur = PAD_TOP;
+        for (let j = 0; j < keys.length; j++) {
+            const h = usedH[j] * scale;
+            result.push({ key: keys[j], y: cur, h: h, cursor: cur });
+            cur += h + NODE_GAP;
+        }
+        return result;
+    });
+
+    // For each level transition, compute ribbon flows
+    const ribbons = [];   // {fromLevel, fromKey, toKey, count, y0Start, y0End, y1Start, y1End}
+    for (let i = 0; i < LEVELS.length - 1; i++) {
+        const fromLevel = LEVELS[i], toLevel = LEVELS[i + 1];
+        const pairCounts = new Map();
+        for (const f of flows) {
+            const k = f[fromLevel] + '||' + f[toLevel];
+            pairCounts.set(k, (pairCounts.get(k) || 0) + f.count);
+        }
+
+        // Track cursor positions per node
+        const cursorsFrom = new Map();
+        const cursorsTo   = new Map();
+        for (const n of nodeYs[i])     cursorsFrom.set(n.key, n.y);
+        for (const n of nodeYs[i + 1]) cursorsTo.set(n.key, n.y);
+
+        // Sort pairs (from asc, then to asc) for tidy stacking
+        const sorted = [...pairCounts.entries()].sort((a, b) => {
+            const [fa, ta] = a[0].split('||');
+            const [fb, tb] = b[0].split('||');
+            const ia = keysAt[i].indexOf(fa), ib = keysAt[i].indexOf(fb);
+            if (ia !== ib) return ia - ib;
+            return keysAt[i + 1].indexOf(ta) - keysAt[i + 1].indexOf(tb);
+        });
+
+        for (const [key, count] of sorted) {
+            const [fromKey, toKey] = key.split('||');
+            const fromNode = nodeYs[i].find(n => n.key === fromKey);
+            const toNode   = nodeYs[i + 1].find(n => n.key === toKey);
+            if (!fromNode || !toNode) continue;
+
+            const fromColTotal = totals[i].get(fromKey);
+            const toColTotal   = totals[i + 1].get(toKey);
+            const fromColSpan  = fromNode.h;
+            const toColSpan    = toNode.h;
+
+            const hFrom = (count / fromColTotal) * fromColSpan;
+            const hTo   = (count / toColTotal)   * toColSpan;
+
+            const y0Start = cursorsFrom.get(fromKey);
+            const y0End   = y0Start + hFrom;
+            const y1Start = cursorsTo.get(toKey);
+            const y1End   = y1Start + hTo;
+
+            cursorsFrom.set(fromKey, y0End);
+            cursorsTo.set(toKey, y1End);
+
+            ribbons.push({
+                fromLevel: i,
+                fromKey, toKey, count,
+                x0: COL_X[i] + NODE_W,
+                x1: COL_X[i + 1],
+                y0Start, y0End, y1Start, y1End,
+            });
+        }
+    }
+
+    // Color helper per level
+    function nodeColor(levelIdx, key) {
+        if (levelIdx === 1) return AGR_COLORS[key] || '#94a3b8';   // agr
+        if (levelIdx === 3) return MRSA_COLORS[key] || '#94a3b8';  // MRSA
+        if (levelIdx === 2) return key === 'Type 5' ? COLORS.green : key === 'Type 8' ? COLORS.red : '#94a3b8';
+        return PALETTE[keysAt[0].indexOf(key) % PALETTE.length];   // SCCmec
+    }
+
+    // Draw ribbons first (behind nodes)
+    for (const r of ribbons) {
+        const c = nodeColor(r.fromLevel, r.fromKey);
+        const path = document.createElementNS(SVG_NS, 'path');
+        const mx0 = (r.x0 + r.x1) / 2;
+        path.setAttribute('d',
+            `M ${r.x0} ${r.y0Start} ` +
+            `C ${mx0} ${r.y0Start}, ${mx0} ${r.y1Start}, ${r.x1} ${r.y1Start} ` +
+            `L ${r.x1} ${r.y1End} ` +
+            `C ${mx0} ${r.y1End}, ${mx0} ${r.y0End}, ${r.x0} ${r.y0End} Z`
+        );
+        path.setAttribute('fill', c);
+        path.setAttribute('fill-opacity', '0.4');
+        path.setAttribute('class', 'alluvial-flow');
+        const title = document.createElementNS(SVG_NS, 'title');
+        title.textContent = `${r.fromKey} → ${r.toKey}: ${r.count.toLocaleString()} genomes`;
+        path.appendChild(title);
+        svg.appendChild(path);
+    }
+
+    // Draw nodes + labels
+    for (let i = 0; i < LEVELS.length; i++) {
+        for (const n of nodeYs[i]) {
+            const c = nodeColor(i, n.key);
+            const g = document.createElementNS(SVG_NS, 'g');
+            g.setAttribute('class', 'alluvial-node');
+
+            const rect = document.createElementNS(SVG_NS, 'rect');
+            rect.setAttribute('x', COL_X[i]);
+            rect.setAttribute('y', n.y);
+            rect.setAttribute('width', NODE_W);
+            rect.setAttribute('height', Math.max(2, n.h));
+            rect.setAttribute('rx', 3);
+            rect.setAttribute('fill', c);
+            g.appendChild(rect);
+
+            const label = document.createElementNS(SVG_NS, 'text');
+            const total = totals[i].get(n.key);
+            const isRight = i === LEVELS.length - 1;
+            const labelX = isRight ? COL_X[i] - 8 : COL_X[i] + NODE_W + 8;
+            label.setAttribute('x', labelX);
+            label.setAttribute('y', n.y + n.h / 2 + 4);
+            label.setAttribute('text-anchor', isRight ? 'end' : 'start');
+            label.setAttribute('font-size', '12');
+            label.setAttribute('font-weight', '700');
+            label.setAttribute('fill', '#334155');
+            label.textContent = `${shortLabel(n.key)} (${total.toLocaleString()})`;
+            g.appendChild(label);
+
+            const tooltip = document.createElementNS(SVG_NS, 'title');
+            tooltip.textContent = `${n.key}: ${total.toLocaleString()} genomes`;
+            g.appendChild(tooltip);
+
+            svg.appendChild(g);
+        }
+
+        // Column header
+        const header = document.createElementNS(SVG_NS, 'text');
+        const headers = ['SCCmec', 'agr', 'Capsule', 'MRSA'];
+        header.setAttribute('x', COL_X[i] + NODE_W / 2);
+        header.setAttribute('y', 20);
+        header.setAttribute('text-anchor', 'middle');
+        header.setAttribute('font-size', '13');
+        header.setAttribute('font-weight', '800');
+        header.setAttribute('fill', '#0a1628');
+        header.textContent = headers[i];
+        svg.appendChild(header);
+    }
+})();
+</script>
+</body>
+</html>

@@ -603,6 +603,60 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     .quote-banner .quote-inner { min-height: 130px; }
 }
 
+/* ---------- Tool cards (downstream tools) ---------- */
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 14px 0 24px;
+}
+.tool-card {
+    display: flex; flex-direction: column;
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 18px 18px 16px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.18s;
+    position: relative;
+}
+.tool-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    border-left-color: var(--gold-dark);
+    background: #ffffff;
+}
+.tool-card .tool-name {
+    font-size: 1.02em;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+}
+.tool-card .tool-name::after {
+    content: '↗';
+    font-size: 0.85em;
+    color: var(--muted);
+    transition: color 0.15s;
+}
+.tool-card:hover .tool-name::after { color: var(--gold-dark); }
+.tool-card .tool-desc {
+    font-size: 0.86em;
+    color: #475569;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+.tool-card .tool-meta {
+    font-size: 0.76em;
+    color: var(--muted);
+    font-family: 'SF Mono', Monaco, monospace;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+}
+
 </style>
 </head>
 <body>
@@ -616,7 +670,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
         </span>
     </a>
     <div class="links">
-        <a href="index.html">Home</a><a href="pages/mlst.html">MLST</a><a href="pages/spa.html">spa</a><a href="pages/sccmec.html">SCCmec</a><a href="pages/capsule.html">Capsule</a><a href="pages/agr.html">agr</a><a href="pages/mrsa.html">MRSA</a><a href="pages/amr.html">AMR</a><a href="pages/vfdb.html">Virulence</a><a href="pages/plasmid.html">Plasmid</a><a href="lineages.html">Lineages</a><a href="downloads.html">Downloads</a><a href="about.html" class='active'>About</a>
+        <a href="index.html">Home</a><a href="pages/mlst.html">MLST</a><a href="pages/spa.html">spa</a><a href="pages/sccmec.html">SCCmec</a><a href="pages/capsule.html">Capsule</a><a href="pages/agr.html">agr</a><a href="pages/mrsa.html">MRSA</a><a href="pages/amr.html">AMR</a><a href="pages/vfdb.html">Virulence</a><a href="pages/plasmid.html">Plasmid</a><a href="statistics.html">Statistics</a><a href="geography.html">Geography</a><a href="lineages.html">Lineages</a><a href="downloads.html">Downloads</a><a href="about.html" class='active'>About</a>
     </div>
 </nav>
 
@@ -652,13 +706,16 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
         <p>
             It fills a gap in the <em>S. aureus</em> research community: no other single resource
             combines MLST, spa, SCCmec, agr, capsule, AMR genes, virulence factors, and plasmid
-            replicons — with an interactive, exportable interface that lets you retrieve genome
+            replicons <strong>with country, isolation source, host, and collection year</strong> —
+            all behind an interactive, exportable interface that lets you retrieve genome
             accessions in seconds.
         </p>
 
         <div class="stat-callout">
             <div class="s"><span class="s-num">126K</span><span class="s-lbl">Target Genomes</span></div>
-            <div class="s"><span class="s-num">9</span><span class="s-lbl">Integrated Modules</span></div>
+            <div class="s"><span class="s-num">11</span><span class="s-lbl">Integrated Modules</span></div>
+            <div class="s"><span class="s-num">105</span><span class="s-lbl">Countries</span></div>
+            <div class="s"><span class="s-num">250</span><span class="s-lbl">Source Categories</span></div>
             <div class="s"><span class="s-num">700+</span><span class="s-lbl">Gene Determinants</span></div>
             <div class="s"><span class="s-num">100%</span><span class="s-lbl">Open Access</span></div>
         </div>
@@ -698,6 +755,12 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
                 <h4>Rich context</h4>
                 <p>Cross-tabulated typing, prevalence bars, MRSA/MSSA consensus, and lineage-aware views.</p>
             </div>
+            <div class="feature-card">
+                <span class="f-icon">🌍</span>
+                <h4>Geography-aware</h4>
+                <p>Filter by country, source, host, and collection year on every module — or browse the
+                dedicated Geography page with interactive world-scale charts.</p>
+            </div>
         </div>
     </section>
 
@@ -716,24 +779,36 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
                 <span class="badge">LIVE</span><br>
                 20K RefSeq genomes · 9 typing + gene modules · lineage catalogue · accession export
             </li>
-            <li class="current">
+            <li class="done">
                 <strong>v0.2 — Epidemiological metadata</strong>
-                <span class="badge">IN PROGRESS</span><br>
-                Country · isolation source · host · collection year — turning SAURUS into a
-                surveillance-grade resource with geographic filters and source-driven analyses
+                <span class="badge">LIVE</span><br>
+                Country · isolation source · host · collection year — extracted from NCBI BioSample
+                for every genome. Geography page with 4 charts, plus Country + Source columns and
+                filters on every typing module (MLST, spa, SCCmec, Capsule, agr, MRSA)
+            </li>
+            <li class="done">
+                <strong>v0.3 — Complete RefSeq coverage</strong>
+                <span class="badge">LIVE</span><br>
+                Full 26,197 GCF genomes merged · 913 unique STs · 13 clonal complexes ·
+                1,966 spa types · 57 SCCmec types · 63.5% MRSA
+            </li>
+            <li class="current">
+                <strong>v0.4 — GenBank merge (GCA)</strong>
+                <span class="badge">NEXT</span><br>
+                + 33,985 unique GCA genomes processed through StaphScope · batch-by-batch
+                with per-batch provenance · merges into a unified master table alongside
+                the current GCF collection
             </li>
             <li>
-                <strong>v0.3 — Complete RefSeq coverage</strong><br>
-                Full 26,352 GCF genomes with per-batch provenance
-            </li>
-            <li>
-                <strong>v0.4 — GenBank merge</strong><br>
-                99,893 GCA genomes + Shelenkov et al. (2025) AMR/VF/plasmid annotations merged into
-                a single unified master table
+                <strong>v0.5 — Shelenkov-only GenBank</strong><br>
+                + 73,472 GCA genomes where SCCmec / agr / capsule are re-typed by StaphScope
+                and AMR / virulence / plasmid annotations are carried forward from
+                Shelenkov et al. (2025)
             </li>
             <li>
                 <strong>v1.0 — Full resource</strong><br>
                 126,245 genomes · cross-module filter UI · Zenodo DOI · citable release
+                with frozen data version and machine-readable metadata
             </li>
         </ul>
     </section>
@@ -797,6 +872,169 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
             <a href="https://github.com/bbeckley-hub/staphscope-typing-tool" target="_blank">GitHub</a>,
             and the SAURUS website generator code is available on
             <a href="https://github.com/bbeckley-hub/saurus" target="_blank">GitHub</a>.
+        </p>
+    </section>
+
+    <!-- ============ DOWNSTREAM TOOLS ============ -->
+    <section class="about-section">
+        <h2>🔧 Downstream tools &amp; pipelines</h2>
+        <p>
+            SAURUS provides the accession list and the typing context. The next step —
+            phylogenetics, outbreak investigation, pangenome analysis — is done with
+            the tools below. Each entry is a well-validated, open-source solution that
+            complements SAURUS in a standard <em>S. aureus</em> workflow.
+        </p>
+
+        <h3>🔬 Integrated pipelines</h3>
+        <div class="tool-grid">
+            <a class="tool-card" href="https://github.com/bactopia/bactopia" target="_blank" rel="noopener">
+                <div class="tool-name">Bactopia</div>
+                <div class="tool-desc">Complete bacterial genome analysis pipeline — QC, assembly, annotation, typing, AMR. Accepts raw reads or assemblies.</div>
+                <div class="tool-meta">Nextflow · Robert Petit III · uses 100+ tools</div>
+            </a>
+            <a class="tool-card" href="https://github.com/bbeckley-hub/staphscope-typing-tool" target="_blank" rel="noopener">
+                <div class="tool-name">StaphScope</div>
+                <div class="tool-desc">The species-optimized typing pipeline powering SAURUS. MLST, spa, SCCmec, agr, capsule, AMR, virulence, plasmids.</div>
+                <div class="tool-meta">Python · Brown Beckley · BMC Genomics 2026</div>
+            </a>
+            <a class="tool-card" href="https://github.com/tseemann/nullarbor" target="_blank" rel="noopener">
+                <div class="tool-name">Nullarbor</div>
+                <div class="tool-desc">End-to-end pipeline for bacterial outbreak analysis — assembly, MLST, resistance, core-genome phylogeny, and interactive report.</div>
+                <div class="tool-meta">Perl · Torsten Seemann</div>
+            </a>
+            <a class="tool-card" href="https://github.com/riccabolla/StaphSCAN" target="_blank" rel="noopener">
+                <div class="tool-name">StaphSCAN</div>
+                <div class="tool-desc">S. aureus-specific typing pipeline. MLST, spa, SCCmec, agr, capsule.</div>
+                <div class="tool-meta">Python · Riccado Bollini</div>
+            </a>
+        </div>
+
+        <h3>🧬 Extended typing</h3>
+        <div class="tool-grid">
+            <a class="tool-card" href="https://github.com/B-UMMI/chewBBACA" target="_blank" rel="noopener">
+                <div class="tool-name">chewBBACA</div>
+                <div class="tool-desc">cgMLST and wgMLST allele calling — higher resolution than classical MLST for outbreak tracing.</div>
+                <div class="tool-meta">Python · B-UMMI · widely used in PulseNet</div>
+            </a>
+            <a class="tool-card" href="https://pubmlst.org/organisms/staphylococcus-aureus" target="_blank" rel="noopener">
+                <div class="tool-name">PubMLST</div>
+                <div class="tool-desc">The authoritative allele and sequence-type database for MLST. SAURUS uses PubMLST-based ST assignment.</div>
+                <div class="tool-meta">Web database · Jolley &amp; Maiden</div>
+            </a>
+            <a class="tool-card" href="https://github.com/tseemann/mlst" target="_blank" rel="noopener">
+                <div class="tool-name">mlst (standalone)</div>
+                <div class="tool-desc">Scan contigs against PubMLST typing schemes. Same underlying tool as the MLST module in SAURUS.</div>
+                <div class="tool-meta">Perl · Torsten Seemann</div>
+            </a>
+        </div>
+
+        <h3>🌳 Phylogenetics &amp; recombination</h3>
+        <div class="tool-grid">
+            <a class="tool-card" href="https://github.com/iqtree/iqtree3" target="_blank" rel="noopener">
+                <div class="tool-name">IQ-TREE 3</div>
+                <div class="tool-desc">Maximum-likelihood phylogenetics with model selection. The de-facto standard for bacterial SNP trees.</div>
+                <div class="tool-meta">C++ · Bui Quang Minh et al.</div>
+            </a>
+            <a class="tool-card" href="https://github.com/nickjcroucher/gubbins" target="_blank" rel="noopener">
+                <div class="tool-name">Gubbins</div>
+                <div class="tool-desc">Removes recombination from whole-genome alignments before phylogenetic inference — critical for S. aureus.</div>
+                <div class="tool-meta">Python · Nick Croucher</div>
+            </a>
+            <a class="tool-card" href="https://github.com/kloetzl/ClonalFrameML" target="_blank" rel="noopener">
+                <div class="tool-name">ClonalFrameML</div>
+                <div class="tool-desc">Maps recombination events onto a clonal genealogy. Accurate for high-recombination species.</div>
+                <div class="tool-meta">C++ · Didelot &amp; Wilson</div>
+            </a>
+        </div>
+
+        <h3>🔬 Outbreak investigation</h3>
+        <div class="tool-grid">
+            <a class="tool-card" href="https://github.com/tseemann/snippy" target="_blank" rel="noopener">
+                <div class="tool-name">Snippy</div>
+                <div class="tool-desc">Rapid haplotype and SNP calling from reads against a reference. Standard tool for within-outbreak SNP distances.</div>
+                <div class="tool-meta">Perl · Torsten Seemann</div>
+            </a>
+            <a class="tool-card" href="https://github.com/simonrharris/SKA" target="_blank" rel="noopener">
+                <div class="tool-name">SKA</div>
+                <div class="tool-desc">Split Kmer Analysis — reference-free SNP typing without alignment. Fast for large collections.</div>
+                <div class="tool-meta">C++ · Simon Harris</div>
+            </a>
+            <a class="tool-card" href="https://github.com/CFSAN-Biostatistics/snp-pipeline" target="_blank" rel="noopener">
+                <div class="tool-name">CFSAN SNP Pipeline</div>
+                <div class="tool-desc">FDA reference SNP pipeline for outbreak surveillance. High-confidence SNP matrices.</div>
+                <div class="tool-meta">Python · US FDA</div>
+            </a>
+        </div>
+
+        <h3>📊 Pangenome &amp; comparative genomics</h3>
+        <div class="tool-grid">
+            <a class="tool-card" href="https://github.com/gtonkinhill/panaroo" target="_blank" rel="noopener">
+                <div class="tool-name">Panaroo</div>
+                <div class="tool-desc">Pangenome analysis with graph-based error correction — better than Roary for clonal species.</div>
+                <div class="tool-meta">Python · Tonkin-Hill et al.</div>
+            </a>
+            <a class="tool-card" href="https://github.com/henskensm/roary" target="_blank" rel="noopener">
+                <div class="tool-name">Roary</div>
+                <div class="tool-desc">Classic bacterial pangenome tool. Quick ortholog clustering and core/accessory gene partitioning.</div>
+                <div class="tool-meta">Perl · Page et al.</div>
+            </a>
+            <a class="tool-card" href="https://github.com/tseemann/prokka" target="_blank" rel="noopener">
+                <div class="tool-name">Prokka</div>
+                <div class="tool-desc">Rapid prokaryotic genome annotation. Produces GFF3, FAA, and GBK files for downstream analysis.</div>
+                <div class="tool-meta">Perl · Torsten Seemann</div>
+            </a>
+            <a class="tool-card" href="https://github.com/oschwengers/bakta" target="_blank" rel="noopener">
+                <div class="tool-name">Bakta</div>
+                <div class="tool-desc">Modern Prokka replacement with a larger database and standardized output. Fully reproducible.</div>
+                <div class="tool-meta">Python · Schwengers et al.</div>
+            </a>
+        </div>
+
+        <h3>💊 AMR &amp; virulence confirmation</h3>
+        <div class="tool-grid">
+            <a class="tool-card" href="https://github.com/ncbi/amr" target="_blank" rel="noopener">
+                <div class="tool-name">AMRFinderPlus</div>
+                <div class="tool-desc">NCBI's curated AMR gene and point-mutation detection. Same tool embedded in StaphScope's AMR module.</div>
+                <div class="tool-meta">C++ · NCBI</div>
+            </a>
+            <a class="tool-card" href="https://github.com/tseemann/abricate" target="_blank" rel="noopener">
+                <div class="tool-name">ABRicate</div>
+                <div class="tool-desc">Mass screening against CARD, ResFinder, VFDB, PlasmidFinder, and other resistance and virulence databases.</div>
+                <div class="tool-meta">Perl · Torsten Seemann</div>
+            </a>
+            <a class="tool-card" href="https://card.mcmaster.ca/" target="_blank" rel="noopener">
+                <div class="tool-name">CARD</div>
+                <div class="tool-desc">Comprehensive Antibiotic Resistance Database — reference resource for resistance gene annotation.</div>
+                <div class="tool-meta">Web database · McMaster University</div>
+            </a>
+            <a class="tool-card" href="http://www.mgc.ac.cn/VFs/" target="_blank" rel="noopener">
+                <div class="tool-name">VFDB</div>
+                <div class="tool-desc">Virulence Factor Database — the reference for virulence gene nomenclature in bacterial genomics.</div>
+                <div class="tool-meta">Web database · Chen et al.</div>
+            </a>
+        </div>
+
+        <h3>🎨 Visualization &amp; reporting</h3>
+        <div class="tool-grid">
+            <a class="tool-card" href="https://microreact.org/" target="_blank" rel="noopener">
+                <div class="tool-name">Microreact</div>
+                <div class="tool-desc">Interactive phylogeny + metadata visualization. Upload a tree + TSV, get a shareable web report.</div>
+                <div class="tool-meta">Web · Sanger Institute</div>
+            </a>
+            <a class="tool-card" href="https://itol.embl.de/" target="_blank" rel="noopener">
+                <div class="tool-name">iTOL</div>
+                <div class="tool-desc">Interactive Tree Of Life — annotation and display of phylogenetic trees with rich metadata layers.</div>
+                <div class="tool-meta">Web · Letunic &amp; Bork</div>
+            </a>
+            <a class="tool-card" href="https://github.com/evolbioinfo/phyD3" target="_blank" rel="noopener">
+                <div class="tool-name">Phandango</div>
+                <div class="tool-desc">Interactive visualization of bacterial genome phylogenies with associated metadata (AMR, virulence, lineage).</div>
+                <div class="tool-meta">JavaScript · Hadfield et al.</div>
+            </a>
+        </div>
+
+        <p style="margin-top:24px;font-size:0.9em;color:#64748b;">
+            All tools listed above are open-source and actively maintained. If you use them alongside SAURUS, please cite each tool directly in addition to citing SAURUS.
         </p>
     </section>
 
@@ -934,7 +1172,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     <div class="footer-line">
         <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
         <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Updated 2026-10-08
+        Updated 2026-10-09
     </div>
 </footer>
 
