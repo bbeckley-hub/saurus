@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SAURUS — Staphylococcus aureus Unified Resource for Universal Surveillance</title>
-<meta name="description" content="A comprehensive genomic resource for Staphylococcus aureus — MLST, spa, SCCmec, capsule, agr typing, gene retrieval, and full BioSample metadata (country, isolation source, host, collection year) across 26,197 genomes.">
+<meta name="description" content="A comprehensive genomic resource for Staphylococcus aureus — MLST, spa, SCCmec, capsule, agr typing, gene retrieval, and full BioSample metadata (country, isolation source, host, collection year) across 36,197 genomes.">
 <style>
 
 :root {
@@ -524,6 +524,81 @@ body {
     color: #334155;
 }
 
+/* ---------- ARGUS strip ---------- */
+.argus-strip-section {
+    background: linear-gradient(135deg, #0a1628 0%, #1e1b4b 100%);
+    padding: 48px 32px 40px;
+    color: white;
+    position: relative; overflow: hidden;
+}
+.argus-strip-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(212,175,55,0.1) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.4; pointer-events: none;
+}
+.argus-strip-inner {
+    max-width: 1300px; margin: 0 auto;
+    position: relative; z-index: 1;
+}
+.argus-strip-head {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(212,175,55,0.25);
+}
+.argus-strip-head .eye {
+    font-size: 2.4em; line-height: 1;
+    filter: drop-shadow(0 0 14px rgba(212,175,55,0.6));
+}
+.argus-strip-head .txt h3 {
+    color: var(--gold); font-size: 1.5em;
+    font-weight: 900; letter-spacing: 2px;
+    margin-bottom: 2px;
+}
+.argus-strip-head .txt p {
+    color: #94a3b8; font-size: 0.85em;
+    letter-spacing: 0.3px;
+}
+.argus-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+}
+.argus-mini {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 3px;
+    transition: all 0.2s;
+    text-align: center;
+    cursor: default;
+}
+a.argus-mini { cursor: pointer; }
+.argus-mini:hover {
+    background: rgba(255,255,255,0.09);
+    border-color: var(--pc, #d4af37);
+    transform: translateY(-2px);
+}
+.argus-mini.current {
+    background: rgba(59,130,246,0.15);
+    border-color: rgba(59,130,246,0.55);
+}
+.argus-mini .am-emoji { font-size: 1.5em; line-height: 1; }
+.argus-mini .am-name {
+    font-weight: 900; font-size: 0.82em;
+    letter-spacing: 0.8px;
+    color: var(--pc, #d4af37);
+}
+.argus-mini .am-pathogen {
+    font-size: 0.68em; color: #94a3b8;
+    font-style: italic;
+}
+
 /* ---------- Cite section ---------- */
 .cite-block {
     background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
@@ -630,16 +705,16 @@ body {
         <h1>SAURUS</h1>
         <p class="hero-sub">Staphylococcus aureus Unified Resource for Universal Surveillance</p>
         <p class="hero-desc">
-            A comprehensive, integrated genomic resource combining MLST, spa, SCCmec,
-            capsule, agr, virulence, AMR, and plasmid annotations — plus <strong>country,
-            isolation source, host, and collection year</strong> — for
-            <strong>26,197 publicly available S. aureus genomes</strong>.
-            Search, filter, and retrieve accessions — for free.
+            Typing, gene annotations, and epidemiological metadata for
+            <strong>36,197 public <em>S. aureus</em> genomes</strong> —
+            MLST, spa, SCCmec, capsule, agr, AMR, virulence, plasmid, plus
+            <strong>country, source, host, and collection year</strong>.
+            Filter. Verify. Download your accession list.
         </p>
         <div class="hero-cta">
             <a class="btn-primary" href="#modules">🧬 Explore Modules</a>
-            <a class="btn-geo" href="geography.html">🌍 Geography & Metadata</a>
-            <a class="btn-secondary" href="https://github.com/bbeckley-hub/saurus" target="_blank">⭐ GitHub</a>
+            <a class="btn-geo" href="geography.html">🌍 Geography &amp; Metadata</a>
+            <a class="btn-secondary" href="https://github.com/bbeckley-hub/saurus" target="_blank">⭐ Star us on GitHub</a>
         </div>
     </div>
 </header>
@@ -656,7 +731,14 @@ body {
 
 <section class="stats-strip">
     <div class="stats-grid">
-        <div class="stat"><span class="num">26,197</span><span class="lbl">Genomes</span></div><div class="stat geo-stat"><span class="num">106</span><span class="lbl">Countries</span></div><div class="stat"><span class="num">914</span><span class="lbl">MLST STs</span></div><div class="stat"><span class="num">3,056</span><span class="lbl">spa Types</span></div><div class="stat"><span class="num">63.5%</span><span class="lbl">MRSA Rate</span></div><div class="stat"><span class="num">57</span><span class="lbl">SCCmec Types</span></div><div class="stat geo-stat"><span class="num">250</span><span class="lbl">Source Categories</span></div><div class="stat geo-stat"><span class="num">1940–2026</span><span class="lbl">Collection Years</span></div><div class="stat"><span class="num">223</span><span class="lbl">AMR Genes</span></div><div class="stat"><span class="num">142</span><span class="lbl">Virulence Genes</span></div>
+        <div class="stat"><span class="num">36,197</span><span class="lbl">Genomes</span></div><div class="stat geo-stat"><span class="num">139</span><span class="lbl">Countries</span></div><div class="stat"><span class="num">1,270</span><span class="lbl">MLST STs</span></div><div class="stat"><span class="num">4,018</span><span class="lbl">spa Types</span></div><div class="stat"><span class="num">56.3%</span><span class="lbl">MRSA Rate</span></div><div class="stat"><span class="num">57</span><span class="lbl">SCCmec Types</span></div><div class="stat geo-stat"><span class="num">1,000</span><span class="lbl">Source Categories</span></div><div class="stat geo-stat"><span class="num">1900–2026</span><span class="lbl">Collection Years</span></div><div class="stat"><span class="num">223</span><span class="lbl">AMR Genes</span></div><div class="stat"><span class="num">142</span><span class="lbl">Virulence Genes</span></div>
+    </div>
+    <div style="max-width:1400px;margin:20px auto 0;text-align:center;color:#94a3b8;font-size:0.82em;
+                letter-spacing:0.3px;display:flex;flex-wrap:wrap;justify-content:center;gap:24px;">
+        <span><strong style="color:#38bdf8;">89%</strong> have country</span>
+        <span><strong style="color:#38bdf8;">71%</strong> have isolation source</span>
+        <span><strong style="color:#38bdf8;">87%</strong> have host</span>
+        <span><strong style="color:#38bdf8;">86%</strong> have collection year</span>
     </div>
 </section>
 
@@ -676,10 +758,10 @@ body {
                 without writing a single line of code.
             </p>
             <div class="fc-stats">
-                <span><strong>106</strong> countries</span>
-                <span><strong>250</strong> source categories</span>
-                <span><strong>1940–2026</strong> collection years</span>
-                <span><strong>106</strong>% coverage of country</span>
+                <span><strong>139</strong> countries</span>
+                <span><strong>1,000</strong> source categories</span>
+                <span><strong>1900–2026</strong> collection years</span>
+                <span><strong>89%</strong> have country</span>
             </div>
         </div>
         <a class="fc-cta" href="geography.html">Explore →</a>
@@ -706,7 +788,7 @@ body {
             </div>
             <div class="mc-desc">Sequence types (STs) and clonal complexes — the gold-standard for global S. aureus epidemiology.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">914</span>
+                <span class="mc-stat-num">1,270</span>
                 <span class="mc-stat-lbl">unique STs</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -721,7 +803,7 @@ body {
             </div>
             <div class="mc-desc">High-resolution outbreak tracking via the hypervariable spa repeat region.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">3,056</span>
+                <span class="mc-stat-num">4,018</span>
                 <span class="mc-stat-lbl">spa types</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -781,7 +863,7 @@ body {
             </div>
             <div class="mc-desc">Consensus MRSA/MSSA call with cross-tabs against CC, ST, spa, SCCmec, agr, capsule — plus country and intake source.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">16,637</span>
+                <span class="mc-stat-num">20,394</span>
                 <span class="mc-stat-lbl">MRSA isolates</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -861,8 +943,8 @@ body {
         </div>
         <div class="howto-card">
             <span class="step">2</span>
-            <h4>Filter by genotype <em>and</em> geography</h4>
-            <p>Combine filters — e.g. <code>ST5</code> + <code>CC5</code> + <code>MRSA</code> + <code>United States</code> + <code>blood</code>. Every module now carries <strong>country</strong> and <strong>intake source</strong> columns.</p>
+            <h4>Combine genotype + geography</h4>
+            <p>Stack filters: e.g. <code>ST5</code> + <code>CC5</code> + <code>MRSA</code> + <code>United States</code> + <code>blood</code> + <code>mecA</code>. Every module carries <strong>country</strong> and <strong>source</strong> columns alongside the typing data.</p>
         </div>
         <div class="howto-card">
             <span class="step">3</span>
@@ -874,6 +956,28 @@ body {
             <h4>Download genomes</h4>
             <p>Feed the list to NCBI:
             <code>datasets download genome accession --inputfile list.txt</code> — that's it.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============ ARGUS FAMILY ============ -->
+<section class="argus-strip-section">
+    <div class="argus-strip-inner">
+        <div class="argus-strip-head">
+            <span class="eye">&#128065;&#65039;</span>
+            <div class="txt">
+                <h3>ARGUS</h3>
+                <p>Antimicrobial Resistance Genomic Unified Surveillance &middot; one family, seven ESKAPE pathogens</p>
+            </div>
+        </div>
+        <div class="argus-mini-grid">
+            <a class="argus-mini current" style="--pc: #3b82f6;" href="index.html"><span class="am-emoji">🦖</span><span class="am-name">SAURUS</span><span class="am-pathogen">S. aureus</span></a>
+<div class="argus-mini" style="--pc: #7c3aed;"><span class="am-emoji">🌑</span><span class="am-name">ECLIPSE</span><span class="am-pathogen">E. coli</span></div>
+<div class="argus-mini" style="--pc: #0d9488;"><span class="am-emoji">🌊</span><span class="am-name">ABYSS</span><span class="am-pathogen">A. baumannii</span></div>
+<div class="argus-mini" style="--pc: #dc2626;"><span class="am-emoji">🏆</span><span class="am-name">KLEOS</span><span class="am-pathogen">K. pneumoniae</span></div>
+<div class="argus-mini" style="--pc: #06b6d4;"><span class="am-emoji">💧</span><span class="am-name">PSEUDA</span><span class="am-pathogen">P. aeruginosa</span></div>
+<div class="argus-mini" style="--pc: #f59e0b;"><span class="am-emoji">👑</span><span class="am-name">EMPIRE</span><span class="am-pathogen">E. faecium</span></div>
+<div class="argus-mini" style="--pc: #475569;"><span class="am-emoji">🌀</span><span class="am-name">ENTROPY</span><span class="am-pathogen">Enterobacter</span></div>
         </div>
     </div>
 </section>
@@ -914,15 +1018,15 @@ body {
         University of Ghana Medical School · Department of Medical Biochemistry · MIT License
     </div>
     <div class="footer-line">
-        <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
+        <a href="https://github.com/bbeckley-hub/saurus">⭐ Star on GitHub</a> ·
         <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Data updated 2026-10-09 17:54:57
+        Data updated 2026-10-12 18:11:41
     </div>
 </footer>
 
 <script>
 (function() {
-    const QUOTES = [{"text": "Imagination is more important than knowledge.", "author": "Albert Einstein"}, {"text": "The important thing is not to stop questioning. Curiosity has its own reason for existing.", "author": "Albert Einstein"}, {"text": "Nothing in life is to be feared, it is only to be understood.", "author": "Marie Curie"}, {"text": "Somewhere, something incredible is waiting to be known.", "author": "Carl Sagan"}, {"text": "We are made of star-stuff.", "author": "Carl Sagan"}, {"text": "Extraordinary claims require extraordinary evidence.", "author": "Carl Sagan"}, {"text": "The good thing about science is that it's true whether or not you believe in it.", "author": "Neil deGrasse Tyson"}, {"text": "The first principle is that you must not fool yourself — and you are the easiest person to fool.", "author": "Richard Feynman"}, {"text": "I would rather have questions that can't be answered than answers that can't be questioned.", "author": "Richard Feynman"}, {"text": "In science, there are no shortcuts to truth.", "author": "Karl Popper"}, {"text": "Science cannot solve the ultimate mystery of nature because we ourselves are a part of the mystery we are trying to solve.", "author": "Max Planck"}, {"text": "If I have seen further, it is by standing on the shoulders of giants.", "author": "Isaac Newton"}, {"text": "Science is not only a disciple of reason but also one of romance and passion.", "author": "Stephen Hawking"}, {"text": "Look up at the stars and not down at your feet.", "author": "Stephen Hawking"}, {"text": "Science and everyday life cannot and should not be separated.", "author": "Rosalind Franklin"}, {"text": "If you know you're on the right track, if you have this inner knowledge, then nobody can turn you off.", "author": "Barbara McClintock"}, {"text": "The reward for work well done is the opportunity to do more.", "author": "Jonas Salk"}, {"text": "The more clearly we can focus our attention on the wonders of the universe about us, the less taste we shall have for destruction.", "author": "Rachel Carson"}, {"text": "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.", "author": "Marie Curie"}, {"text": "The universe is not required to be in perfect harmony with human ambition.", "author": "Carl Sagan"}, {"text": "Equipped with his five senses, man explores the universe around him and calls the adventure Science.", "author": "Edwin Hubble"}, {"text": "The saddest aspect of life right now is that science gathers knowledge faster than society gathers wisdom.", "author": "Isaac Asimov"}, {"text": "Chance favors the prepared mind.", "author": "Louis Pasteur"}, {"text": "Science knows no country, because knowledge belongs to humanity.", "author": "Louis Pasteur"}, {"text": "The microbe is nothing; the terrain is everything.", "author": "Louis Pasteur"}, {"text": "Gentlemen, it is the microbes who will have the last word.", "author": "Louis Pasteur"}, {"text": "The pure culture is the foundation for all research on infectious disease.", "author": "Robert Koch"}, {"text": "One sometimes finds what one is not looking for.", "author": "Alexander Fleming"}, {"text": "The single biggest threat to man's continued dominance on the planet is the virus.", "author": "Joshua Lederberg"}, {"text": "We shall have to learn to aim our therapeutic missiles chemically.", "author": "Paul Ehrlich"}, {"text": "Medicine is a science of uncertainty and an art of probability.", "author": "William Osler"}, {"text": "The very first requirement in a hospital is that it should do the sick no harm.", "author": "Florence Nightingale"}, {"text": "It is not the strongest of the species that survives, but the one most responsive to change.", "author": "Charles Darwin"}, {"text": "It is not enough to have a good mind; the main thing is to use it well.", "author": "René Descartes"}, {"text": "Somewhere in the world there is a gene that will change how we see disease.", "author": "Siddhartha Mukherjee"}, {"text": "Better is possible. It does not take genius. It takes diligence, moral clarity, and ingenuity.", "author": "Atul Gawande"}, {"text": "Every genome is a story. SAURUS helps you read the chapters on resistance, virulence, and lineage.", "author": "Brown Beckley"}, {"text": "StaphScope turns raw sequence into structured, decision-ready typing information.", "author": "Brown Beckley"}, {"text": "Open data saves lives. Surveillance belongs to everyone.", "author": "Brown Beckley"}, {"text": "Behind every ST, every spa type, every SCCmec cassette, there is an epidemiological story worth telling.", "author": "Brown Beckley"}, {"text": "Where a pathogen comes from is half the story of where it goes next.", "author": "Brown Beckley"}];
+    const QUOTES = [{"text": "Imagination is more important than knowledge.", "author": "Albert Einstein"}, {"text": "The important thing is not to stop questioning. Curiosity has its own reason for existing.", "author": "Albert Einstein"}, {"text": "Nothing in life is to be feared, it is only to be understood.", "author": "Marie Curie"}, {"text": "Somewhere, something incredible is waiting to be known.", "author": "Carl Sagan"}, {"text": "We are made of star-stuff.", "author": "Carl Sagan"}, {"text": "Extraordinary claims require extraordinary evidence.", "author": "Carl Sagan"}, {"text": "The good thing about science is that it's true whether or not you believe in it.", "author": "Neil deGrasse Tyson"}, {"text": "The first principle is that you must not fool yourself — and you are the easiest person to fool.", "author": "Richard Feynman"}, {"text": "I would rather have questions that can't be answered than answers that can't be questioned.", "author": "Richard Feynman"}, {"text": "In science, there are no shortcuts to truth.", "author": "Karl Popper"}, {"text": "Science cannot solve the ultimate mystery of nature because we ourselves are a part of the mystery we are trying to solve.", "author": "Max Planck"}, {"text": "If I have seen further, it is by standing on the shoulders of giants.", "author": "Isaac Newton"}, {"text": "Science is not only a disciple of reason but also one of romance and passion.", "author": "Stephen Hawking"}, {"text": "Look up at the stars and not down at your feet.", "author": "Stephen Hawking"}, {"text": "Science and everyday life cannot and should not be separated.", "author": "Rosalind Franklin"}, {"text": "If you know you're on the right track, if you have this inner knowledge, then nobody can turn you off.", "author": "Barbara McClintock"}, {"text": "The reward for work well done is the opportunity to do more.", "author": "Jonas Salk"}, {"text": "The more clearly we can focus our attention on the wonders of the universe about us, the less taste we shall have for destruction.", "author": "Rachel Carson"}, {"text": "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.", "author": "Marie Curie"}, {"text": "The universe is not required to be in perfect harmony with human ambition.", "author": "Carl Sagan"}, {"text": "Equipped with his five senses, man explores the universe around him and calls the adventure Science.", "author": "Edwin Hubble"}, {"text": "The saddest aspect of life right now is that science gathers knowledge faster than society gathers wisdom.", "author": "Isaac Asimov"}, {"text": "Chance favors the prepared mind.", "author": "Louis Pasteur"}, {"text": "Science knows no country, because knowledge belongs to humanity.", "author": "Louis Pasteur"}, {"text": "The microbe is nothing; the terrain is everything.", "author": "Louis Pasteur"}, {"text": "Gentlemen, it is the microbes who will have the last word.", "author": "Louis Pasteur"}, {"text": "The pure culture is the foundation for all research on infectious disease.", "author": "Robert Koch"}, {"text": "One sometimes finds what one is not looking for.", "author": "Alexander Fleming"}, {"text": "The single biggest threat to man's continued dominance on the planet is the virus.", "author": "Joshua Lederberg"}, {"text": "We shall have to learn to aim our therapeutic missiles chemically.", "author": "Paul Ehrlich"}, {"text": "Medicine is a science of uncertainty and an art of probability.", "author": "William Osler"}, {"text": "The very first requirement in a hospital is that it should do the sick no harm.", "author": "Florence Nightingale"}, {"text": "It is not the strongest of the species that survives, but the one most responsive to change.", "author": "Charles Darwin"}, {"text": "It is not enough to have a good mind; the main thing is to use it well.", "author": "René Descartes"}, {"text": "Somewhere in the world there is a gene that will change how we see disease.", "author": "Siddhartha Mukherjee"}, {"text": "Better is possible. It does not take genius. It takes diligence, moral clarity, and ingenuity.", "author": "Atul Gawande"}, {"text": "Every genome is a story. SAURUS helps you read the chapters on resistance, virulence, and lineage.", "author": "Brown Beckley"}, {"text": "StaphScope turns raw sequence into structured, decision-ready typing information.", "author": "Brown Beckley"}, {"text": "Open data saves lives. Surveillance belongs to everyone.", "author": "Brown Beckley"}, {"text": "Behind every ST, every spa type, every SCCmec cassette, there is an epidemiological story worth telling.", "author": "Brown Beckley"}, {"text": "Where a pathogen comes from is half the story of where it goes next.", "author": "Brown Beckley"}, {"text": "Argus Panoptes never slept. Neither should surveillance.", "author": "Brown Beckley"}, {"text": "One pathogen at a time is how surveillance fails. Seven at once is how it works.", "author": "Brown Beckley"}];
     const ROTATE_MS = 10000;
 
     const banner   = document.getElementById('quote-banner');

@@ -81,6 +81,37 @@ main { max-width: 1400px; margin: 0 auto; padding: 28px 32px 60px; }
     padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     margin-bottom: 18px;
 }
+.meta-filters {
+    display: flex; gap: 12px; align-items: flex-end;
+    padding-bottom: 14px; margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+.mf-label {
+    display: flex; flex-direction: column; gap: 4px;
+    font-size: 0.72em; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.4px;
+}
+.mf-select {
+    padding: 8px 12px; border: 2px solid var(--border);
+    border-radius: 8px; background: white; font-size: 1.15em;
+    font-family: inherit; color: var(--text);
+    min-width: 180px; cursor: pointer; outline: none;
+    transition: border 0.15s; text-transform: none;
+    letter-spacing: 0;
+    font-weight: 600;
+}
+.mf-select:focus { border-color: var(--accent); }
+.mf-clear {
+    padding: 9px 14px; border: 2px solid var(--border);
+    border-radius: 8px; background: white;
+    font-family: inherit; font-size: 0.82em;
+    font-weight: 700; color: var(--muted);
+    cursor: pointer; transition: all 0.15s;
+    text-transform: uppercase; letter-spacing: 0.4px;
+}
+.mf-clear:hover { border-color: #ef4444; color: #991b1b; }
+.mf-clear:disabled { opacity: 0.4; cursor: not-allowed; }
 .picker-label {
     font-size: 0.82em; color: var(--muted);
     font-weight: 700; text-transform: uppercase;
@@ -194,6 +225,7 @@ tbody tr:hover td { background: #f8fafc; }
     font-family: 'SF Mono', Monaco, monospace;
     font-weight: 700; color: var(--text); font-size: 0.88em;
 }
+.meta-cell { font-size: 0.85em; color: #475569; }
 .match-yes { color: #059669; font-weight: 800; font-size: 1.1em; text-align: center; }
 .match-no  { color: #cbd5e1; text-align: center; }
 .copy-btn {
@@ -335,6 +367,21 @@ tbody tr:hover td { background: #f8fafc; }
     <!-- ============ TAB 1: GENE SEARCH ============ -->
     <div class="tab-panel active" id="tab-search">
         <div class="gene-picker">
+            <div class="meta-filters">
+                <label class="mf-label">
+                    <span>Country</span>
+                    <select id="flt-country" class="mf-select">
+                        <option value="">All countries</option>
+                    </select>
+                </label>
+                <label class="mf-label">
+                    <span>Source</span>
+                    <select id="flt-source" class="mf-select">
+                        <option value="">All sources</option>
+                    </select>
+                </label>
+                <button id="flt-clear" class="mf-clear" title="Clear filters">✕ Clear</button>
+            </div>
             <span class="picker-label">Quick pick — click genes to filter samples</span>
             <div class="chip-row" id="chip-row"></div>
             <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -518,6 +565,7 @@ async function ensureIndex() {
         indexLoaded = true;
         loadStatus.textContent = '✓ Index loaded (' +
             Object.keys(sampleIndex.samples).length.toLocaleString() + ' samples)';
+        populateMetaFilters();
         setTimeout(() => { loadStatus.style.display = 'none'; }, 2000);
         } catch (e) {
             loadStatus.textContent = '⚠️ Could not load index';
@@ -537,6 +585,33 @@ async function ensureIndex() {
         } finally {
         indexLoading = false;
     }
+}
+
+// ---------- metadata filters ----------
+function populateMetaFilters() {
+    const countries = new Map();
+    const sources = new Map();
+    for (const rec of Object.values(sampleIndex.samples)) {
+        if (Array.isArray(rec)) continue;
+        const c = rec.c; const s = rec.s;
+        if (c && c !== "—") countries.set(c, (countries.get(c)||0) + 1);
+        if (s && s !== "—") sources.set(s,  (sources.get(s)||0)  + 1);
+    }
+    const sortByCount = (a, b) => b[1] - a[1];
+    const cOpts = [...countries.entries()].sort(sortByCount)
+        .map(([k, n]) => `<option value="${esc(k)}">${esc(k)} (${n})</option>`).join("");
+    const sOpts = [...sources.entries()].sort(sortByCount)
+        .map(([k, n]) => `<option value="${esc(k)}">${esc(k)} (${n})</option>`).join("");
+    const cSel = document.getElementById("flt-country");
+    const sSel = document.getElementById("flt-source");
+    cSel.innerHTML = '<option value="">All countries</option>' + cOpts;
+    sSel.innerHTML = '<option value="">All sources</option>' + sOpts;
+    cSel.addEventListener("change", runSearch);
+    sSel.addEventListener("change", runSearch);
+    const clr = document.getElementById("flt-clear");
+    clr.addEventListener("click", () => {
+        cSel.value = ""; sSel.value = ""; runSearch();
+    });
 }
 
 // ---------- render gene chips ----------
@@ -621,18 +696,32 @@ function runSearch() {
         return;
     }
     const selIdxs = selected.map(id => sampleIndex.genes.findIndex(g => g.id === id));
+    const cSel = document.getElementById("flt-country");
+    const sSel = document.getElementById("flt-source");
+    const countryFilter = cSel ? cSel.value : "";
+    const sourceFilter  = sSel ? sSel.value  : "";
     const matches = [];
-    for (const [acc, present] of Object.entries(sampleIndex.samples)) {
-        const presentSet = new Set(present);
+    for (const [acc, rec] of Object.entries(sampleIndex.samples)) {
+        if (countryFilter && (!rec.c || rec.c !== countryFilter)) continue;
+        if (sourceFilter  && (!rec.s || rec.s !== sourceFilter))  continue;
+        const geneArr = Array.isArray(rec) ? rec : (rec.g || []);
+        const presentSet = new Set(geneArr);
         const okFlags = selIdxs.map(i => presentSet.has(i));
         const ok = matchMode === 'ANY' ? okFlags.some(x => x) : okFlags.every(x => x);
         if (ok) {
-            matches.push({ accession: acc, okFlags });
+            matches.push({
+                accession: acc,
+                okFlags,
+                country: Array.isArray(rec) ? '—' : (rec.c || '—'),
+                source:  Array.isArray(rec) ? '—' : (rec.s || '—'),
+                year:    Array.isArray(rec) ? '—' : (rec.y || '—'),
+            });
         }
     }
     results = matches;
     currentPage = 1;
     renderResults();
+    updateClearButton();
 }
 
 // ---------- render results ----------
@@ -642,7 +731,7 @@ function renderHead() {
         const g = GENE_META.find(x => x.id === id);
         cols.push(g.label);
     }
-    cols.push('Copy');
+    cols.push('Country', 'Source', 'Year', 'Copy');
     let html = '<tr>';
     for (const c of cols) html += '<th>' + esc(c) + '</th>';
     html += '</tr>';
@@ -698,6 +787,9 @@ function renderResults() {
             cells += '<td class="' + (ok ? 'match-yes' : 'match-no') + '">' +
                 (ok ? '✓' : '·') + '</td>';
         }
+        cells += '<td class="meta-cell">' + esc(r.country || '—') + '</td>';
+        cells += '<td class="meta-cell">' + esc(r.source  || '—') + '</td>';
+        cells += '<td class="meta-cell">' + esc(r.year    || '—') + '</td>';
         cells += '<td><button class="copy-btn" data-acc="' + esc(r.accession) + '">📋</button></td>';
         return '<tr>' + cells + '</tr>';
     }).join('');
@@ -738,6 +830,15 @@ function renderResults() {
     updateExportButtons();
 }
 
+function updateClearButton() {
+    const cSel = document.getElementById("flt-country");
+    const sSel = document.getElementById("flt-source");
+    const clr  = document.getElementById("flt-clear");
+    if (!clr) return;
+    const active = (cSel && cSel.value) || (sSel && sSel.value);
+    clr.disabled = !active;
+}
+
 function updateExportButtons() {
     document.querySelectorAll('.export-btn').forEach(b => {
         b.disabled = selected.length === 0 || results.length === 0;
@@ -759,7 +860,7 @@ document.querySelectorAll('.export-btn').forEach(btn => {
         }
 
         const geneLabels = selected.map(id => GENE_META.find(x => x.id === id).label);
-        const header = ['Accession', ...geneLabels];
+        const header = ['Accession', ...geneLabels, 'Country', 'Source', 'Year'];
 
         if (fmt === 'tsv' || fmt === 'csv') {
             const sep = fmt === 'tsv' ? '\t' : ',';
@@ -767,7 +868,8 @@ document.querySelectorAll('.export-btn').forEach(btn => {
             const hdrLine = header.map(h => quote ? '"' + h + '"' : h).join(sep);
             const lines = [hdrLine];
             for (const r of results) {
-                const vals = [r.accession, ...r.okFlags.map(ok => ok ? '1' : '0')];
+                const vals = [r.accession, ...r.okFlags.map(ok => ok ? '1' : '0'),
+                              r.country || '—', r.source || '—', r.year || '—'];
                 lines.push(vals.map(v => {
                     const s = String(v);
                     if (quote) return '"' + s.replace(/"/g, '""') + '"';
@@ -782,6 +884,9 @@ document.querySelectorAll('.export-btn').forEach(btn => {
                 selected.forEach((id, i) => {
                     o[GENE_META.find(x => x.id === id).label] = r.okFlags[i];
                 });
+                o.country = r.country || '—';
+                o.source  = r.source  || '—';
+                o.year    = r.year    || '—';
                 return o;
             });
             download(base + '.json', JSON.stringify(out, null, 2), 'application/json');
