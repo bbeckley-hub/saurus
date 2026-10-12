@@ -13,6 +13,7 @@
 [![Genomes](https://img.shields.io/badge/Genomes-26K%20→%20126K-blue?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
 [![Modules](https://img.shields.io/badge/Modules-11-purple?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
 [![Countries](https://img.shields.io/badge/Countries-105-0ea5e9?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/geography.html)
+[![Part of ARGUS](https://img.shields.io/badge/Part%20of-ARGUS-0a1628?style=for-the-badge)](https://github.com/bbeckley-hub/eclipse)
 [![Status](https://img.shields.io/badge/Status-v0.2-brightgreen?style=for-the-badge)](https://github.com/bbeckley-hub/saurus/releases)
 
 [**🏠 Home**](https://bbeckley-hub.github.io/saurus/) ·
@@ -41,6 +42,26 @@
 No login, no API key, no install. Runs entirely in your browser over HTTPS.
 
 > **The core deliverable is accession retrieval.** Every page lets you filter by genotype *and* geography and download the exact list of genome accessions that match — ready to feed to `datasets download genome accession`.
+
+---
+
+## 👁️ Part of the ARGUS family
+
+SAURUS is the **flagship build** of **ARGUS** — *Antimicrobial Resistance Genomic Unified Surveillance* — a family of independent, open genomic surveillance sites, each dedicated to one of the WHO priority ESKAPE pathogens. Every resource shares the same architecture: accession-first, metadata-integrated, no login, no install, MIT-licensed. Each has its own name, its own DOI, and its own community.
+
+Named for **Argus Panoptes** — the hundred-eyed giant of Greek myth who never slept — the umbrella is a bet that AMR surveillance has to be *unified* to be useful, and that the pathogens driving the crisis deserve the same treatment.
+
+| Resource | Pathogen | Status |
+|---|---|---|
+| 🦖 **SAURUS** | *Staphylococcus aureus* | **This repo** — [live](https://bbeckley-hub.github.io/saurus/) |
+| 🌑 **ECLIPSE** | *Escherichia coli* | [Live](https://bbeckley-hub.github.io/eclipse) |
+| 🌊 **ABYSS** | *Acinetobacter baumannii* | Planned |
+| 🏆 **KLEOS** | *Klebsiella pneumoniae* | Planned |
+| 💧 **PSEUDA** | *Pseudomonas aeruginosa* | Planned |
+| 👑 **EMPIRE** | *Enterococcus faecium* | Planned |
+| 🌀 **ENTROPY** | *Enterobacter* spp. | Planned |
+
+Every sibling is built on the same architecture — a static site, accession-first design, with a shared generator template. That means once one resource works, the next one ships in weeks rather than months, and every resource benefits from improvements made in any other.
 
 ---
 
