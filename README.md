@@ -14,7 +14,7 @@
 [![Modules](https://img.shields.io/badge/Modules-11-purple?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
 [![Countries](https://img.shields.io/badge/Countries-105-0ea5e9?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/geography.html)
 [![Part of ARGUS](https://img.shields.io/badge/Part%20of-ARGUS-0a1628?style=for-the-badge)](https://github.com/bbeckley-hub/eclipse)
-[![Status](https://img.shields.io/badge/Status-v0.2-brightgreen?style=for-the-badge)](https://github.com/bbeckley-hub/saurus/releases)
+[![Status](https://img.shields.io/badge/Status-v0.3-brightgreen?style=for-the-badge)](https://github.com/bbeckley-hub/saurus/releases)
 
 [**🏠 Home**](https://bbeckley-hub.github.io/saurus/) ·
 [**🌍 Geography**](https://bbeckley-hub.github.io/saurus/geography.html) ·
