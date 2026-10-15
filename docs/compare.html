@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compare — SAURUS</title>
+<style>
+
+:root { --gold:#d4af37; --navy:#0a1628; --accent:#8b5cf6;
+        --bg:#f8fafc; --card:#fff; --text:#1e293b; --muted:#64748b; --border:#e2e8f0; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+       background:var(--bg); color:var(--text); line-height:1.5; }
+
+.saurus-nav { background:var(--navy); color:#fff; padding:20px 32px;
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+    box-shadow:0 2px 12px rgba(0,0,0,0.1); position:sticky; top:0; z-index:100; }
+.saurus-nav .brand { display:flex; align-items:center; gap:20px; text-decoration:none; flex-shrink:0; }
+.saurus-nav .brand-emoji { font-size:5.6em; line-height:1; flex-shrink:0; }
+.saurus-nav .brand-text { display:flex; flex-direction:column; gap:3px; }
+.saurus-nav .brand-name { font-weight:800; font-size:3.45em; letter-spacing:1px; color:var(--gold); line-height:1; }
+.saurus-nav .brand-tagline { font-size:1.0em; font-weight:400; color:#94a3b8; line-height:1.15; max-width:520px; }
+.saurus-nav .links { display:flex; gap:2px; align-items:center; flex-wrap:wrap; }
+.saurus-nav .links a { color:#cbd5e1; text-decoration:none; padding:6px 10px; border-radius:6px;
+    font-size:0.85em; font-weight:500; transition:all 0.15s; white-space:nowrap; }
+.saurus-nav .links a:hover { background:rgba(255,255,255,0.08); color:white; }
+.saurus-nav .links a.active { background:var(--gold); color:var(--navy); font-weight:600; }
+
+.page-header { background:linear-gradient(135deg,#5b21b6 0%, var(--navy) 100%); color:white; padding:40px 32px 32px; }
+.page-header h1 { font-size:2.2em; margin-bottom:6px; font-weight:700; }
+.page-header .subtitle { color:#ddd6fe; font-size:1.05em; margin-bottom:24px; }
+.stat-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; max-width:1400px; }
+.stat-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
+    border-radius:10px; padding:16px 18px; backdrop-filter:blur(8px); }
+.stat-card .value { font-size:1.9em; font-weight:800; color:var(--gold); line-height:1.1; }
+.stat-card .label { font-size:0.82em; color:#cbd5e1; text-transform:uppercase; letter-spacing:0.5px; margin-top:4px; }
+
+main { max-width:1500px; margin:0 auto; padding:28px 32px 60px; }
+
+.controls { background:var(--card); border-radius:12px; padding:16px 20px;
+    border:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,0.04);
+    margin-bottom:24px; display:flex; flex-wrap:wrap; gap:16px; align-items:center; }
+.picker { display:flex; flex-direction:column; gap:4px;
+    font-size:0.78em; color:var(--muted); font-weight:600;
+    text-transform:uppercase; letter-spacing:0.3px; }
+.picker select { padding:9px 12px; border:2px solid var(--border); border-radius:8px;
+    background:white; font-size:0.9em; font-family:inherit; color:var(--text);
+    min-width:200px; cursor:pointer; outline:none; }
+.picker select:focus { border-color:var(--accent); }
+.swap-btn { padding:9px 16px; border:2px solid var(--border); border-radius:8px;
+    background:white; font-weight:700; cursor:pointer; font-family:inherit;
+    color:var(--muted); transition:all 0.15s; }
+.swap-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+.compare-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px; }
+.compare-card { background:var(--card); border-radius:14px; border:1px solid var(--border);
+    box-shadow:0 2px 8px rgba(0,0,0,0.04); padding:22px 24px; }
+.compare-card h3 { font-size:1.2em; color:var(--navy); margin-bottom:6px; font-weight:800; }
+.compare-card .n-samples { font-size:0.85em; color:var(--muted); font-weight:600; margin-bottom:18px; }
+
+.metric-row { display:flex; justify-content:space-between; align-items:center;
+    padding:9px 0; border-bottom:1px solid #f1f5f9; font-size:0.92em; }
+.metric-row:last-child { border-bottom:none; }
+.metric-row .metric-label { color:var(--muted); font-weight:600; }
+.metric-row .metric-value { font-weight:700; color:var(--text); font-family:'SF Mono',Monaco,monospace; }
+.metric-row .metric-value.highlight { color:var(--accent); }
+
+.bars-wrap { margin-top:16px; }
+.bars-wrap h4 { font-size:0.88em; color:var(--muted); font-weight:700;
+    text-transform:uppercase; letter-spacing:0.4px; margin-bottom:10px; }
+.bar-row { display:flex; align-items:center; gap:10px; margin-bottom:6px; font-size:0.85em; }
+.bar-row .bar-label { min-width:90px; color:var(--text);
+    font-family:'SF Mono',Monaco,monospace; font-weight:600; }
+.bar-row .bar-track { flex:1; height:8px; background:#f1f5f9; border-radius:4px; overflow:hidden; }
+.bar-row .bar-fill { height:100%; background:var(--accent); border-radius:4px; }
+.bar-row .bar-pct { min-width:55px; text-align:right; font-weight:700;
+    font-family:'SF Mono',Monaco,monospace; color:var(--text); font-size:0.82em; }
+
+.empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
+.empty-state .icon { font-size:3em; opacity:0.4; margin-bottom:12px; }
+
+.note-block { background:linear-gradient(135deg,#faf5ff 0%,#f3e8ff 100%);
+    border-left:6px solid var(--accent); border-radius:12px; padding:18px 22px;
+    margin:24px 0; color:#4c1d95; font-size:0.92em; line-height:1.6; }
+.note-block strong { color:#5b21b6; }
+
+.saurus-footer { background:var(--navy); color:#94a3b8; padding:32px;
+    text-align:center; font-size:0.88em; margin-top:60px; }
+.saurus-footer a { color:var(--gold); text-decoration:none; }
+.saurus-footer .footer-line { margin:6px 0; }
+.saurus-footer .full-name { color:#cbd5e1; font-size:0.95em; letter-spacing:0.2px; }
+
+@media (max-width:900px) {
+    .saurus-nav { flex-direction:column; align-items:flex-start; gap:12px; }
+    .saurus-nav .brand-tagline { max-width:100%; }
+    .saurus-nav .brand-emoji { font-size:3.6em; }
+    .saurus-nav .brand-name { font-size:2.2em; }
+    .compare-grid { grid-template-columns:1fr; }
+}
+@media (max-width:700px) {
+    .page-header { padding:28px 20px 24px; }
+    main { padding:20px 16px 40px; }
+    .saurus-nav { padding:14px 16px; }
+    .picker select { min-width:100%; }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="saurus-nav">
+    <a class="brand" href="index.html">
+        <span class="brand-emoji">🦖</span>
+        <span class="brand-text">
+            <span class="brand-name">SAURUS</span>
+            <span class="brand-tagline">Staphylococcus aureus Unified Resource for Universal Surveillance</span>
+        </span>
+    </a>
+    <div class="links">
+        <a href="index.html">Home</a>
+        <a href="pages/mlst.html">MLST</a>
+        <a href="pages/spa.html">spa</a>
+        <a href="pages/sccmec.html">SCCmec</a>
+        <a href="pages/capsule.html">Capsule</a>
+        <a href="pages/agr.html">agr</a>
+        <a href="pages/mrsa.html">MRSA</a>
+        <a href="pages/amr.html">AMR</a>
+        <a href="pages/vfdb.html">Virulence</a>
+        <a href="pages/plasmid.html">Plasmid</a>
+        <a href="statistics.html">Statistics</a>
+        <a href="trends.html">Trends</a>
+        <a href="compare.html" class="active">Compare</a>
+        <a href="geography.html">Geography</a>
+        <a href="lineages.html">Lineages</a>
+        <a href="downloads.html">Downloads</a>
+        <a href="about.html">About</a>
+    </div>
+</nav>
+
+<header class="page-header">
+    <h1>⚖️ Compare</h1>
+    <div class="subtitle">Pick two groups on any axis. See them side by side across every typing layer.</div>
+    <div class="stat-row" id="stat-row"></div>
+</header>
+
+<main>
+
+    <div class="controls">
+        <label class="picker">
+            <span>Compare by</span>
+            <select id="mode-select"></select>
+        </label>
+        <label class="picker">
+            <span>Group A</span>
+            <select id="a-select"></select>
+        </label>
+        <label class="picker">
+            <span>Group B</span>
+            <select id="b-select"></select>
+        </label>
+        <button class="swap-btn" id="swap-btn" title="Swap A and B">⇄ Swap</button>
+    </div>
+
+    <div class="compare-grid" id="compare-grid">
+        <div class="empty-state"><div class="icon">⏳</div><div>Loading comparison data…</div></div>
+    </div>
+
+    <div class="note-block">
+        <strong>📊 How to read this comparison</strong>
+        <p>Both groups are aggregated across every typing layer. <strong>N</strong> is the number of genomes in that group with a valid record for the layer in question. MRSA consensus and SCCmec both use the CGE caller. Small groups (N &lt; 30) can have noisy percentages; treat those as directional rather than definitive.</p>
+    </div>
+
+</main>
+
+<footer class="saurus-footer">
+    <div class="footer-line full-name">
+        <strong style="color:#d4af37;">SAURUS</strong> — Staphylococcus aureus Unified Resource for Universal Surveillance
+    </div>
+    <div class="footer-line">University of Ghana Medical School · MIT License</div>
+    <div class="footer-line">
+        <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
+        <a href="about.html">About</a> ·
+        <a href="mailto:brownbeckley94@gmail.com">Contact</a>
+    </div>
+</footer>
+
+<script>
+const DATA_URL = 'data/compare_data.json';
+let DATA = null;
+
+const state = {
+    mode: null,
+    a: null,
+    b: null,
+};
+
+// ---------- helpers ----------
+function esc(s) {
+    return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function shortLabel(s, n) {
+    n = n || 26;
+    s = String(s);
+    return s.length <= n ? s : s.slice(0, n - 1) + '…';
+}
+
+// ---------- pickers ----------
+function renderModeOptions() {
+    const sel = document.getElementById('mode-select');
+    sel.innerHTML = Object.keys(DATA.modes).map(k =>
+        '<option value="' + k + '">' + esc(DATA.modes[k].label) + '</option>'
+    ).join('');
+    sel.addEventListener('change', () => {
+        state.mode = sel.value;
+        state.a = DATA.modes[state.mode].values[0] || null;
+        state.b = DATA.modes[state.mode].values[1] || null;
+        renderValueOptions();
+        render();
+    });
+    state.mode = Object.keys(DATA.modes)[0];
+    sel.value = state.mode;
+}
+
+function renderValueOptions() {
+    const vals = DATA.modes[state.mode].values;
+    if (!state.a) state.a = vals[0];
+    if (!state.b) state.b = vals[1] || vals[0];
+
+    for (const which of ['a', 'b']) {
+        const sel = document.getElementById(which + '-select');
+        sel.innerHTML = vals.map(v =>
+            '<option value="' + esc(v) + '"' + (state[which] === v ? ' selected' : '') + '>' +
+            esc(shortLabel(v, 40)) + '</option>'
+        ).join('');
+        sel.addEventListener('change', () => {
+            state[which] = sel.value;
+            render();
+        });
+    }
+}
+
+// ---------- summary cards ----------
+function renderStats() {
+    const row = document.getElementById('stat-row');
+    const modeLabel = DATA.modes[state.mode]?.label || '—';
+    const a = state.a ? state.a : '—';
+    const b = state.b ? state.b : '—';
+    const cards = [
+        { v: modeLabel, l: 'Comparing by' },
+        { v: shortLabel(a, 16), l: 'Group A' },
+        { v: shortLabel(b, 16), l: 'Group B' },
+        { v: DATA.total_rows.toLocaleString(), l: 'Total genomes' },
+        { v: Object.keys(DATA.modes).length.toString(), l: 'Compare modes' },
+        { v: Object.keys(DATA.profiles[state.mode] || {}).length.toString(), l: 'Values in mode' },
+    ];
+    row.innerHTML = cards.map(c =>
+        '<div class="stat-card"><div class="value">' + c.v + '</div><div class="label">' + c.l + '</div></div>'
+    ).join('');
+}
+
+// ---------- profile rendering ----------
+function renderMetricRow(label, aVal, bVal) {
+    return '<div class="metric-row">' +
+        '<span class="metric-label">' + esc(label) + '</span>' +
+        '<span class="metric-value">' + esc(aVal) + '</span>' +
+        '<span class="metric-value">' + esc(bVal) + '</span>' +
+    '</div>';
+}
+
+function renderBarList(title, aList, bList) {
+    // Combine keys, sorted by max across both
+    const combined = {};
+    for (const item of [...aList, ...bList]) {
+        combined[item.value] = Math.max(
+            combined[item.value] || 0,
+            item.pct || 0
+        );
+    }
+    const keys = Object.keys(combined)
+        .sort((x, y) => combined[y] - combined[x])
+        .slice(0, 8);
+
+    if (!keys.length) return '';
+
+    const aMap = Object.fromEntries(aList.map(i => [i.value, i.pct]));
+    const bMap = Object.fromEntries(bList.map(i => [i.value, i.pct]));
+
+    const row = (k, val) =>
+        '<div class="bar-row">' +
+            '<span class="bar-label">' + esc(shortLabel(k, 14)) + '</span>' +
+            '<div class="bar-track"><div class="bar-fill" style="width:' + Math.max(2, val || 0) + '%;"></div></div>' +
+            '<span class="bar-pct">' + ((val || 0).toFixed(1)) + '%</span>' +
+        '</div>';
+
+    const aRows = keys.map(k => row(k, aMap[k])).join('');
+    const bRows = keys.map(k => row(k, bMap[k])).join('');
+
+    return '<div class="bars-wrap">' +
+        '<h4>' + esc(title) + '</h4>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">' +
+            '<div>' + aRows + '</div>' +
+            '<div>' + bRows + '</div>' +
+        '</div>' +
+    '</div>';
+}
+
+function renderCard(which, value, profile) {
+    if (!profile || profile.n === 0) {
+        return '<div class="compare-card">' +
+            '<h3>' + esc(value) + '</h3>' +
+            '<div class="n-samples">No data available</div>' +
+        '</div>';
+    }
+
+    // Summary metrics
+    const metrics = [
+        ['N genomes', profile.n.toLocaleString()],
+        ['MRSA rate', profile.mrsa_pct + '%'],
+        ['MRSA / MSSA', profile.mrsa.toLocaleString() + ' / ' + profile.mssa.toLocaleString()],
+        ['Year range',
+            profile.year_min && profile.year_max
+                ? profile.year_min + '–' + profile.year_max
+                : '—'],
+        ['Top CC', profile.top_cc[0]?.value || '—'],
+        ['Top ST', profile.top_st[0]?.value || '—'],
+        ['Top spa', profile.top_spa[0]?.value || '—'],
+        ['Top SCCmec', profile.top_sccmec[0]?.value || '—'],
+        ['Top capsule', profile.top_capsule[0]?.value || '—'],
+        ['Top agr', profile.top_agr[0]?.value || '—'],
+        ['Top source', profile.top_source[0]?.value || '—'],
+        ['Top country', profile.top_country[0]?.value || '—'],
+    ];
+
+    const metricHtml = metrics.map(([k, v]) =>
+        '<div class="metric-row">' +
+            '<span class="metric-label">' + esc(k) + '</span>' +
+            '<span class="metric-value">' + esc(v) + '</span>' +
+        '</div>'
+    ).join('');
+
+    return '<div class="compare-card">' +
+        '<h3>' + esc(value) + '</h3>' +
+        '<div class="n-samples">N = ' + profile.n.toLocaleString() + ' genomes</div>' +
+        metricHtml +
+    '</div>';
+}
+
+function renderBarsSection(aProfile, bProfile) {
+    if (!aProfile || !bProfile) return '';
+    const sections = [
+        ['Top clonal complexes', aProfile.top_cc, bProfile.top_cc],
+        ['Top spa types', aProfile.top_spa, bProfile.top_spa],
+        ['Top SCCmec types', aProfile.top_sccmec, bProfile.top_sccmec],
+        ['Top sources', aProfile.top_source, bProfile.top_source],
+        ['Top countries', aProfile.top_country, bProfile.top_country],
+    ];
+    const html = sections.map(([t, a, b]) => renderBarList(t, a || [], b || [])).join('');
+    return '<div class="compare-card" style="grid-column: 1 / -1;">' +
+        '<h3>Layer-by-layer comparison</h3>' +
+        '<div class="n-samples">Shared axes — highest percentages across both groups shown</div>' +
+        html +
+    '</div>';
+}
+
+function render() {
+    renderStats();
+
+    if (!state.mode || !state.a || !state.b || !DATA.profiles[state.mode]) {
+        document.getElementById('compare-grid').innerHTML =
+            '<div class="empty-state" style="grid-column:1/-1;">' +
+            '<div class="icon">⚖️</div><div>Pick two groups to compare</div></div>';
+        return;
+    }
+
+    const aProfile = DATA.profiles[state.mode][state.a];
+    const bProfile = DATA.profiles[state.mode][state.b];
+
+    const html =
+        renderCard('a', state.a, aProfile) +
+        renderCard('b', state.b, bProfile) +
+        renderBarsSection(aProfile, bProfile);
+
+    document.getElementById('compare-grid').innerHTML = html;
+}
+
+// ---------- swap ----------
+document.getElementById('swap-btn').addEventListener('click', () => {
+    const tmp = state.a;
+    state.a = state.b;
+    state.b = tmp;
+    document.getElementById('a-select').value = state.a;
+    document.getElementById('b-select').value = state.b;
+    render();
+});
+
+// ---------- init ----------
+fetch(DATA_URL)
+    .then(r => {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+    })
+    .then(data => {
+        DATA = data;
+        renderModeOptions();
+        renderValueOptions();
+        render();
+    })
+    .catch(err => {
+        document.getElementById('compare-grid').innerHTML =
+            '<div class="empty-state" style="grid-column:1/-1;">' +
+            '<div class="icon">⚠️</div>' +
+            '<div>Could not load comparison data</div>' +
+            '<div style="margin-top:8px;font-size:0.9em;">' + esc(err.message) + '</div>' +
+            '<div style="margin-top:16px;padding:12px;background:#fef3c7;border-left:4px solid #f59e0b;border-radius:6px;color:#78350f;font-size:0.85em;max-width:600px;margin-left:auto;margin-right:auto;text-align:left;">' +
+            'Serve this page over HTTP, not <code>file://</code>.<br>' +
+            '<code>cd ~/saurus/docs &amp;&amp; python3 -m http.server 8000</code><br>' +
+            'Then open <code>http://localhost:8000/compare.html</code>' +
+            '</div></div>';
+    });
+</script>
+</body>
+</html>

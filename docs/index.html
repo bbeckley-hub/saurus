@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SAURUS — Staphylococcus aureus Unified Resource for Universal Surveillance</title>
-<meta name="description" content="A comprehensive genomic resource for Staphylococcus aureus — MLST, spa, SCCmec, capsule, agr typing, gene retrieval, and full BioSample metadata (country, isolation source, host, collection year) across 46,197 genomes.">
+<meta name="description" content="A comprehensive genomic resource for Staphylococcus aureus — MLST, spa, SCCmec, capsule, agr typing, gene retrieval, and full BioSample metadata (country, isolation source, host, collection year) across 56,197 genomes.">
 <style>
 
 :root {
@@ -58,12 +58,12 @@ body {
     color: #94a3b8; line-height: 1.15; max-width: 520px;
 }
 .saurus-nav .links {
-    display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
+    display: flex; gap: 2px; align-items: center; flex-wrap: wrap;
 }
 .saurus-nav .links a {
     color: #cbd5e1; text-decoration: none;
-    padding: 8px 14px; border-radius: 6px;
-    font-size: 0.9em; font-weight: 500;
+    padding: 6px 10px; border-radius: 6px;
+    font-size: 0.85em; font-weight: 500;
     transition: all 0.15s; white-space: nowrap;
 }
 .saurus-nav .links a:hover { background: rgba(255,255,255,0.08); color: white; }
@@ -693,6 +693,8 @@ a.argus-mini { cursor: pointer; }
         <a href="pages/vfdb.html">Virulence</a>
         <a href="pages/plasmid.html">Plasmid</a>
         <a href="statistics.html">Statistics</a>
+        <a href="trends.html">Trends</a>
+        <a href="compare.html">Compare</a>
         <a href="geography.html">Geography</a>
         <a href="lineages.html">Lineages</a>
         <a href="downloads.html">Downloads</a>
@@ -706,7 +708,7 @@ a.argus-mini { cursor: pointer; }
         <p class="hero-sub">Staphylococcus aureus Unified Resource for Universal Surveillance</p>
         <p class="hero-desc">
             Typing, gene annotations, and epidemiological metadata for
-            <strong>46,197 public <em>S. aureus</em> genomes</strong> —
+            <strong>56,197 public <em>S. aureus</em> genomes</strong> —
             MLST, spa, SCCmec, capsule, agr, AMR, virulence, plasmid, plus
             <strong>country, source, host, and collection year</strong>.
             Filter. Verify. Download your accession list.
@@ -731,7 +733,7 @@ a.argus-mini { cursor: pointer; }
 
 <section class="stats-strip">
     <div class="stats-grid">
-        <div class="stat"><span class="num">46,197</span><span class="lbl">Genomes</span></div><div class="stat geo-stat"><span class="num">139</span><span class="lbl">Countries</span></div><div class="stat"><span class="num">1,505</span><span class="lbl">MLST STs</span></div><div class="stat"><span class="num">4,508</span><span class="lbl">spa Types</span></div><div class="stat"><span class="num">57.4%</span><span class="lbl">MRSA Rate</span></div><div class="stat"><span class="num">58</span><span class="lbl">SCCmec Types</span></div><div class="stat geo-stat"><span class="num">1,000</span><span class="lbl">Source Categories</span></div><div class="stat geo-stat"><span class="num">1900–2026</span><span class="lbl">Collection Years</span></div><div class="stat"><span class="num">223</span><span class="lbl">AMR Genes</span></div><div class="stat"><span class="num">142</span><span class="lbl">Virulence Genes</span></div>
+        <div class="stat"><span class="num">56,197</span><span class="lbl">Genomes</span></div><div class="stat geo-stat"><span class="num">139</span><span class="lbl">Countries</span></div><div class="stat"><span class="num">1,643</span><span class="lbl">MLST STs</span></div><div class="stat"><span class="num">4,954</span><span class="lbl">spa Types</span></div><div class="stat"><span class="num">56.4%</span><span class="lbl">MRSA Rate</span></div><div class="stat"><span class="num">15</span><span class="lbl">SCCmec Types</span></div><div class="stat geo-stat"><span class="num">1,000</span><span class="lbl">Source Categories</span></div><div class="stat geo-stat"><span class="num">1900–2026</span><span class="lbl">Collection Years</span></div><div class="stat"><span class="num">223</span><span class="lbl">AMR Genes</span></div><div class="stat"><span class="num">142</span><span class="lbl">Virulence Genes</span></div>
     </div>
     <div style="max-width:1400px;margin:20px auto 0;text-align:center;color:#94a3b8;font-size:0.82em;
                 letter-spacing:0.3px;display:flex;flex-wrap:wrap;justify-content:center;gap:24px;">
@@ -745,10 +747,10 @@ a.argus-mini { cursor: pointer; }
 <!-- ============ FEATURED GEOGRAPHY CARD ============ -->
 <section class="featured-section">
     <div class="featured-card">
-        <div class="fc-badge">New · v0.2</div>
+        <div class="fc-badge">Now · v0.3</div>
         <div class="fc-icon">🌍</div>
         <div class="fc-body">
-            <h3>Geography &amp; Metadata — new in v0.2</h3>
+            <h3>Geography &amp; Metadata — live in v0.3</h3>
             <p>
                 Every genome is now linked to its <strong>country of origin</strong>,
                 <strong>isolation source</strong>, <strong>host species</strong>,
@@ -788,7 +790,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">Sequence types (STs) and clonal complexes — the gold-standard for global S. aureus epidemiology.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">1,505</span>
+                <span class="mc-stat-num">1,643</span>
                 <span class="mc-stat-lbl">unique STs</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -803,7 +805,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">High-resolution outbreak tracking via the hypervariable spa repeat region.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">4,508</span>
+                <span class="mc-stat-num">4,954</span>
                 <span class="mc-stat-lbl">spa types</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -818,7 +820,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">CGE + RPet callers, subtypes, and MRSA consensus. Disagreements highlighted.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">58</span>
+                <span class="mc-stat-num">15</span>
                 <span class="mc-stat-lbl">SCCmec types</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -863,7 +865,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">Consensus MRSA/MSSA call with cross-tabs against CC, ST, spa, SCCmec, agr, capsule — plus country and intake source.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">26,514</span>
+                <span class="mc-stat-num">31,716</span>
                 <span class="mc-stat-lbl">MRSA isolates</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -1020,7 +1022,7 @@ a.argus-mini { cursor: pointer; }
     <div class="footer-line">
         <a href="https://github.com/bbeckley-hub/saurus">⭐ Star on GitHub</a> ·
         <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Data updated 2026-10-14 12:51:09
+        Data updated 2026-10-15 18:05:07
     </div>
 </footer>
 
