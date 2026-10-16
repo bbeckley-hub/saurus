@@ -14,7 +14,7 @@
 [![Modules](https://img.shields.io/badge/Modules-11-purple?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
 [![Countries](https://img.shields.io/badge/Countries-105-0ea5e9?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/geography.html)
 [![Part of ARGUS](https://img.shields.io/badge/Part%20of-ARGUS-0a1628?style=for-the-badge)](https://github.com/bbeckley-hub/eclipse)
-[![Status](https://img.shields.io/badge/Status-v0.3-brightgreen?style=for-the-badge)](https://github.com/bbeckley-hub/saurus/releases)
+[![Status](https://img.shields.io/badge/Status-v0.5-brightgreen?style=for-the-badge)](https://github.com/bbeckley-hub/saurus/releases)
 
 [**🏠 Home**](https://bbeckley-hub.github.io/saurus/) ·
 [**🌍 Geography**](https://bbeckley-hub.github.io/saurus/geography.html) ·
@@ -76,7 +76,7 @@ SAURUS is being built incrementally toward a single milestone: **the complete an
 | **v0.3** | Full 26,197 GCF genomes · 913 STs · 13 CCs | ✅ **merged into v0.2** |
 | **v0.4** | + 33,985 unique GCA genomes | 🔜 **next** |
 | **v0.5** | + 73,472 Shelenkov-only GCA genomes | 📋 planned |
-| **v1.0** | **126,245 genomes · unified master table · citable resource** | 🎯 target |
+| **v1.0** | **134,299 genomes · unified master table · citable resource** | 🎯 target |
 
 See the [**Roadmap**](#-roadmap) below for details.
 
