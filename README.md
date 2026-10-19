@@ -10,11 +10,11 @@
 
 [![Live Site](https://img.shields.io/badge/🌐_Live_Site-bbeckley--hub.github.io/saurus-d4af37?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-[![Genomes](https://img.shields.io/badge/Genomes-26K%20→%20126K-blue?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
+[![Genomes](https://img.shields.io/badge/Genomes-26K%20→%20134K-blue?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
 [![Modules](https://img.shields.io/badge/Modules-11-purple?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
-[![Countries](https://img.shields.io/badge/Countries-105-0ea5e9?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/geography.html)
+[![Countries](https://img.shields.io/badge/Countries-139-0ea5e9?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/geography.html)
 [![Part of ARGUS](https://img.shields.io/badge/Part%20of-ARGUS-0a1628?style=for-the-badge)](https://github.com/bbeckley-hub/eclipse)
-[![Status](https://img.shields.io/badge/Status-v0.5-brightgreen?style=for-the-badge)](https://github.com/bbeckley-hub/saurus/releases)
+[![Status](https://img.shields.io/badge/Status-v0.6-brightgreen?style=for-the-badge)](https://github.com/bbeckley-hub/saurus/releases)
 
 [**🏠 Home**](https://bbeckley-hub.github.io/saurus/) ·
 [**🌍 Geography**](https://bbeckley-hub.github.io/saurus/geography.html) ·
