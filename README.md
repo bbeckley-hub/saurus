@@ -26,9 +26,27 @@
 
 ---
 
-## 📖 What is SAURUS?
+## 🚨 The Problem — Genomic Data Is Public, but Genomic *Retrieval* Is Still Manual
 
-**SAURUS** is an open-access genomic resource that integrates every major *Staphylococcus aureus* typing and gene-annotation scheme — **plus country, isolation source, host, and collection year** — into a single, queryable interface:
+We now have **134,299 public *Staphylococcus aureus* genomes**. The raw data exists. The annotations exist. The epidemiological metadata exists. And yet the most routine question in genomic epidemiology still requires a script.
+
+Ask for *"all ST5 MRSA bloodstream isolates from the United States between 2015 and 2023 carrying mecA"* and watch what happens:
+
+- You download typing tables from one source.
+- You download gene presence/absence from another.
+- You download NCBI BioSample metadata from a third.
+- You write custom Python to cross-reference accessions.
+- You reconcile column names, accession formats, and version suffixes.
+- You iterate until the join doesn't silently drop records.
+- **Then** you get your accession list.
+
+That is not a data problem. That is an **interface problem** — and it is why the majority of researchers, clinicians, and public health teams who *should* be doing genomic surveillance are locked out of it. The data is free; the workflow is not.
+
+---
+
+## 💡 The Solution — SAURUS
+
+**SAURUS** is an open-access genomic resource that compiles eleven typing, gene-annotation, and epidemiological modules for the entire public *S. aureus* repository into a **single, queryable interface**:
 
 | Category | Modules |
 |---|---|
@@ -39,13 +57,42 @@
 | **Lineage context** | Curated catalogue of ~50 clonal complexes |
 | **Retrieval** | Search → filter → export accession lists in one click |
 
-No login, no API key, no install. Runs entirely in your browser over HTTPS.
+**No login. No API key. No install. No server.** Runs entirely in your browser over HTTPS.
 
-> **The core deliverable is accession retrieval.** Every page lets you filter by genotype *and* geography and download the exact list of genome accessions that match — ready to feed to `datasets download genome accession`.
+> **The core deliverable is accession retrieval.** Every page lets you filter by genotype *and* geography and download the exact list of genome accessions that match — ready to feed directly to `datasets download genome accession`.
+
+### The two-minute workflow
+
+1. Open [**the MRSA page**](https://bbeckley-hub.github.io/saurus/pages/mrsa.html).
+2. Filter: `MRSA Status = MRSA` · `MLST = ST5` · `Country = United States` · `Source = blood`.
+3. Click **🧬 Accessions** → save the `.txt` file.
+4. Run:
+   ```bash
+   datasets download genome accession --inputfile accessions.txt
+   ```
+5. ✅ You have the exact genomes you want — filtered by **genotype, phenotype, and geography** — in the time it takes to drink your coffee.
+
+That is the difference between a *database* and a *tool*. SAURUS is the tool.
 
 ---
 
-## 👁️ Part of the ARGUS family
+## 🌍 The Scale — Why This Matters
+
+| Metric | Value |
+|---|---|
+| **Unique genomes indexed** | **134,299** |
+| **De novo typed genomes** | **98,138** |
+| **MRSA rate across typed collection** | **59.2%** |
+| **Countries represented** | **139** |
+| **Unique sequence types** | **2,116** |
+| **Unique spa types** | **3,932** |
+| **Curated clonal complexes** | **~50** |
+
+These are not toy numbers. This is the largest unified *S. aureus* genomic typing resource built by a single team — and every genome, every annotation, and every metadata field is available **for free**, without login, and will remain available as long as the internet hosts static HTML.
+
+---
+
+## 👁️ Part of the ARGUS Family
 
 SAURUS is the **flagship build** of **ARGUS** — *Antimicrobial Resistance Genomic Unified Surveillance* — a family of independent, open genomic surveillance sites, each dedicated to one of the WHO priority ESKAPE pathogens. Every resource shares the same architecture: accession-first, metadata-integrated, no login, no install, MIT-licensed. Each has its own name, its own DOI, and its own community.
 
@@ -61,11 +108,11 @@ Named for **Argus Panoptes** — the hundred-eyed giant of Greek myth who never 
 | 👑 **EMPIRE** | *Enterococcus faecium* | Planned |
 | 🌀 **ENTROPY** | *Enterobacter* spp. | Planned |
 
-Every sibling is built on the same architecture — a static site, accession-first design, with a shared generator template. That means once one resource works, the next one ships in weeks rather than months, and every resource benefits from improvements made in any other.
+Every sibling is built on the same architecture — a static site, accession-first design, with a shared generator template. Once one resource works, the next ships in weeks rather than months, and every resource benefits from improvements made in any other.
 
 ---
 
-## 🎯 Project goal — annotate all 126,245 public *S. aureus* genomes
+## 🎯 Project Goal — Annotate All Public *S. aureus* Genomes
 
 SAURUS is being built incrementally toward a single milestone: **the complete annotation of every public *S. aureus* genome** in the NCBI Assembly database.
 
@@ -77,8 +124,6 @@ SAURUS is being built incrementally toward a single milestone: **the complete an
 | **v0.4** | + 33,985 unique GCA genomes | 🔜 **next** |
 | **v0.5** | + 73,472 Shelenkov-only GCA genomes | 📋 planned |
 | **v1.0** | **134,299 genomes · unified master table · citable resource** | 🎯 target |
-
-See the [**Roadmap**](#-roadmap) below for details.
 
 ---
 
@@ -166,7 +211,7 @@ See the [**Roadmap**](#-roadmap) below for details.
 
 ---
 
-## 🚀 Quick start
+## 🚀 Quick Start
 
 **Just visit the live site:**
 
@@ -251,7 +296,7 @@ Or start from the [**Geography page**](https://bbeckley-hub.github.io/saurus/geo
 <details>
 <summary><b>v1.0 — Full resource</b> 🎯 target</summary>
 
-- [ ] **126,245 genomes** with unified master table
+- [ ] **134,299 genomes** with unified master table
 - [ ] Cross-module filter UI — CC + SCCmec + agr + capsule + country + source + any gene
 - [ ] Boolean query builder for advanced users
 - [ ] **Zenodo DOI** for citable release
@@ -261,11 +306,11 @@ Or start from the [**Geography page**](https://bbeckley-hub.github.io/saurus/geo
 
 ---
 
-## 🧬 Data sources
+## 🧬 Data Sources
 
 | Layer | Source | Coverage |
 |---|---|---|
-| **Typing** | [StaphScope v2.0.0](https://github.com/bbeckley-hub/staphscope-typing-tool) on RefSeq genomes | 26,197 GCF → 126K |
+| **Typing** | [StaphScope v2.0.0](https://github.com/bbeckley-hub/staphscope-typing-tool) on RefSeq genomes | 26,197 GCF → 134K |
 | **Country / source / host / year** | [NCBI BioSample](https://www.ncbi.nlm.nih.gov/biosample/) via `datasets summary genome` | 26,349 records · 92% country · 74% source |
 | **AMR genes** | [Shelenkov et al. 2025](https://doi.org/10.1186/s12863-025-01363-w) | 86,318 GCA |
 | **Virulence (VFDB)** | Shelenkov et al. 2025 | 98,950 GCA |
@@ -276,7 +321,7 @@ All genome identifiers use the standard `GCA_XXXXXXXXX.Y` or `GCF_XXXXXXXXX.Y` f
 
 ---
 
-## 📁 Repository structure
+## 📁 Repository Structure
 
 ```
 saurus/
@@ -289,14 +334,14 @@ saurus/
     ├── index.html                 ← landing page
     ├── about.html                 ← project + team + methods
     ├── statistics.html            ← 9+ charts (ST+MRSA, CC×SCCmec, alluvial)
-    ├── geography.html             ← NEW — metadata browser + 4 charts
+    ├── geography.html             ← metadata browser + 4 charts
     ├── lineages.html              ← curated CC catalogue
     ├── downloads.html             ← bulk data index
     ├── assets/
     │   └── chart.min.js           ← Chart.js (bundled locally)
     ├── data/                      ← bulk .tsv.gz downloads
     │   ├── *.tsv.gz               ← typing + gene tables
-    │   ├── metadata.tsv.gz        ← NEW — BioSample metadata
+    │   ├── metadata.tsv.gz        ← BioSample metadata
     │   └── saurus_data_all.zip    ← everything, one archive
     └── pages/
         ├── mlst.html              ← MLST + CC
@@ -315,7 +360,7 @@ saurus/
 
 ---
 
-## 🛠️ Running locally
+## 🛠️ Running Locally
 
 **Prerequisites:** Python 3.9+
 
@@ -331,7 +376,7 @@ Open **http://localhost:8000/**.
 
 ---
 
-## 🧪 Regenerating pages
+## 🧪 Regenerating Pages
 
 Each page is produced by a self-contained Python script in `merged/`. The recommended way is:
 
