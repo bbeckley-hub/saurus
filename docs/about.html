@@ -796,9 +796,9 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
         <a href="pages/vfdb.html">Virulence</a>
         <a href="pages/plasmid.html">Plasmid</a>
         <a href="statistics.html">Statistics</a>
+        <a href="geography.html">Geography</a>
         <a href="trends.html">Trends</a>
         <a href="compare.html">Compare</a>
-        <a href="geography.html">Geography</a>
         <a href="lineages.html">Lineages</a>
         <a href="downloads.html">Downloads</a>
         <a href="about.html" class="active">About</a>
@@ -894,7 +894,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
 <div class="pathogen-card" style="--pc: #475569;"><div class="pc-top"><span class="pc-emoji">🌀</span><span class="pc-name">ENTROPY</span></div><div class="pc-pathogen">Enterobacter spp.</div><span class="pc-status planned">PLANNED</span></div>
         </div>
         <p class="argus-footnote">
-            Status as of 2026-10-19. SAURUS launched first (<em>S. aureus</em>) and
+            Status as of 2026-10-28. SAURUS launched first (<em>S. aureus</em>) and
             remains the flagship build; ECLIPSE is the second resource. The remaining
             pathogens are on the roadmap and will ship as their pipelines are built
             and validated.
@@ -921,7 +921,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
         <p>
             Genomic surveillance generates data faster than researchers can query it.
             A typical question — <em>"give me all ST5 MRSA blood isolates from the
-            United States that carry mecA and PVL"</em> — requires, in the current
+            United States that carry SCCmec_type_II(2A) and agr type II"</em> — requires, in the current
             ecosystem, that you either:
         </p>
         <ul>
@@ -1019,31 +1019,26 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
                 Country + Source columns and filters added to every typing module.
             </li>
             <li class="done">
-                <strong>v0.2.1 / v0.2.2 — Metadata at scale</strong>
+                <strong>v0.3–0.6 — Metadata &amp; typing at scale</strong>
                 <span class="badge">LIVE</span><br>
-                26K → 134,299 unique genomes. Deduplicated at the numeric-stem level:
-                7,481 GCF/GCA paired twins removed, 12 GCA version conflicts resolved,
-                76 spuriously-paired accessions filtered. Verified: zero duplicate
-                accessions, zero duplicate stems, zero GCF/GCA pairs.
+                26K → 134,299 unique genomes indexed. Deduplicated at the numeric-stem
+                level: 7,481 GCF/GCA paired twins removed, 12 GCA version conflicts
+                resolved. Expanded RefSeq typing coverage and processed batches of
+                GenBank genomes to bring total de novo typing to 98,138.
             </li>
             <li class="current">
-                <strong>v0.3 — GenBank typing: batch 40K</strong>
-                <span class="badge">IN PROGRESS</span><br>
-                First 10,000 GenBank (GCA) genomes typed through StaphScope —
-                MLST, spa, SCCmec (CGE + RPet), agr, and capsule. Merged into
-                the existing 26,197-genome typing collection.
+                <strong>v0.7 — GenBank Merge &amp; Serverless Architecture</strong>
+                <span class="badge">CURRENT</span><br>
+                134,299 unique genomes indexed · 98,138 de novo typed · 139 countries
+                · 11 interactive modules. Static, serverless GitHub Pages deployment
+                (zero maintenance, no APIs). Dual SCCmec callers (CGE + RPet).
+                Integrated BioSample metadata on every page.
             </li>
             <li>
-                <strong>v0.4 — GenBank typing: batches 50K–70K</strong><br>
-                + 23,985 additional GCA genomes typed. Brings typing coverage to
-                ~60,000 genomes total — RefSeq and GenBank unified in a single
-                master table.
-            </li>
-            <li>
-                <strong>v0.5 — Shelenkov GenBank typing</strong><br>
-                + 59,741 Shelenkov-unique GCA genomes typed. Shelenkov AMR,
-                virulence, and plasmid annotations carried forward. Brings
-                typing coverage to the full current collection.
+                <strong>v0.8 — Full GenBank typing (remaining ~36K)</strong><br>
+                Process the remaining GenBank batches to bring all 134,299 genomes
+                to fully typed status. Complete Shelenkov et al. gene annotations
+                carried forward.
             </li>
             <li>
                 <strong>v1.0 — Full resource</strong><br>
@@ -1160,6 +1155,11 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
                 <div class="tool-name">StaphSCAN</div>
                 <div class="tool-desc">S. aureus-specific typing pipeline. MLST, spa, SCCmec, agr, capsule.</div>
                 <div class="tool-meta">Python · Riccado Bollini</div>
+            </a>
+            <a class="tool-card" href="https://allthebacteria.org/" target="_blank" rel="noopener">
+                <div class="tool-name">AllTheBacteria</div>
+                <div class="tool-desc">Uniform reprocessing of over two million bacterial genomes. Ideal for downstream analysis after retrieving accessions from SAURUS.</div>
+                <div class="tool-meta">Hunt et al. · Domain-scale genomics</div>
             </a>
         </div>
 
@@ -1481,7 +1481,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     <div class="footer-line">
         <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
         <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Updated 2026-10-19
+        Updated 2026-10-28
     </div>
 </footer>
 
