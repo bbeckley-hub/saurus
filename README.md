@@ -6,21 +6,24 @@
 
 **Staphylococcus aureus Unified Resource for Universal Surveillance**
 
-*One database. Every typing module. Every genome geolocated. Free and open.*
+*One database. Every typing module. Every genome geolocated. Every interface — web and terminal.*
 
-[![Live Site](https://img.shields.io/badge/🌐_Live_Site-bbeckley--hub.github.io/saurus-d4af37?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
+[![Live Site](https://img.shields.io/badge/🌐_Live_Site-saurus--db.org-d4af37?style=for-the-badge)](https://saurus-db.org/)
+[![PyPI](https://img.shields.io/badge/PyPI-saurus--cli-3775A9?style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/saurus-cli/)
+[![Bioconda](https://img.shields.io/badge/Conda-bioconda-44A833?style=for-the-badge&logo=anaconda&logoColor=white)](https://anaconda.org/bioconda/saurus-cli)
+[![Docker](https://img.shields.io/badge/Docker-ghcr.io-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://github.com/bbeckley-hub/saurus-cli/pkgs/container/saurus-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-[![Genomes](https://img.shields.io/badge/Genomes-26K%20→%20134K-blue?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
-[![Modules](https://img.shields.io/badge/Modules-11-purple?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/)
-[![Countries](https://img.shields.io/badge/Countries-139-0ea5e9?style=for-the-badge)](https://bbeckley-hub.github.io/saurus/geography.html)
-[![Part of ARGUS](https://img.shields.io/badge/Part%20of-ARGUS-0a1628?style=for-the-badge)](https://github.com/bbeckley-hub/eclipse)
-[![Status](https://img.shields.io/badge/Status-v0.7-brightgreen?style=for-the-badge)](https://github.com/bbeckley-hub/saurus/releases)
+[![Genomes](https://img.shields.io/badge/Genomes-134K-blue?style=for-the-badge)](https://saurus-db.org/)
+[![Modules](https://img.shields.io/badge/Modules-11-purple?style=for-the-badge)](https://saurus-db.org/)
+[![Countries](https://img.shields.io/badge/Countries-139-0ea5e9?style=for-the-badge)](https://saurus-db.org/geography.html)
+[![Part of ARGUS](https://img.shields.io/badge/Part%20of-ARGUS-0a1628?style=for-the-badge)](https://argus-db.org/)
 
-[**🏠 Home**](https://bbeckley-hub.github.io/saurus/) ·
-[**🌍 Geography**](https://bbeckley-hub.github.io/saurus/geography.html) ·
-[**🧬 Lineages**](https://bbeckley-hub.github.io/saurus/lineages.html) ·
-[**📥 Downloads**](https://bbeckley-hub.github.io/saurus/downloads.html) ·
-[**ℹ️ About**](https://bbeckley-hub.github.io/saurus/about.html)
+[**🏠 Home**](https://saurus-db.org/) ·
+[**🌍 Geography**](https://saurus-db.org/geography.html) ·
+[**🧬 Lineages**](https://saurus-db.org/lineages.html) ·
+[**📥 Downloads**](https://saurus-db.org/downloads.html) ·
+[**💻 CLI Manual**](https://saurus-db.org/manual.html) ·
+[**ℹ️ About**](https://saurus-db.org/about.html)
 
 </div>
 
@@ -44,9 +47,38 @@ That is not a data problem. That is an **interface problem** — and it is why t
 
 ---
 
-## 💡 The Solution — SAURUS
+## 💡 The Solution — SAURUS, Two Ways
 
-**SAURUS** is an open-access genomic resource that compiles eleven typing, gene-annotation, and epidemiological modules for the entire public *S. aureus* repository into a **single, queryable interface**:
+**SAURUS** compiles eleven typing, gene-annotation, and epidemiological modules for the entire public *S. aureus* repository into a **single, queryable interface**. You can query it however you already work:
+
+<table>
+<tr>
+<td width="50%" valign="top" align="center">
+
+### 🌐 **Web UI**
+**https://saurus-db.org**
+
+Point, click, filter, export.
+No install. Runs in your browser.
+
+[**→ Open the web app**](https://saurus-db.org/)
+
+</td>
+<td width="50%" valign="top" align="center">
+
+### 💻 **SAURUS-CLI**
+`pip install saurus-cli`
+
+Terminal-native. Pipeline-ready.
+Bundled data, zero downloads.
+
+[**→ Read the CLI manual**](https://saurus-db.org/manual.html)
+
+</td>
+</tr>
+</table>
+
+Both interfaces expose the same 11 modules, the same 134,299 genomes, the same epidemiological metadata — and both produce the same artifact: **a clean accession list** ready to feed directly to `datasets download genome accession`.
 
 | Category | Modules |
 |---|---|
@@ -55,24 +87,91 @@ That is not a data problem. That is an **interface problem** — and it is why t
 | **Clinical** | MRSA/MSSA consensus |
 | **Epidemiology** | Country · isolation source · host · collection year |
 | **Lineage context** | Curated catalogue of ~50 clonal complexes |
-| **Retrieval** | Search → filter → export accession lists in one click |
+| **Retrieval** | Search → filter → export accession lists |
 
-**No login. No API key. No install. No server.** Runs entirely in your browser over HTTPS.
+> **The core deliverable is accession retrieval** — regardless of interface.
 
-> **The core deliverable is accession retrieval.** Every page lets you filter by genotype *and* geography and download the exact list of genome accessions that match — ready to feed directly to `datasets download genome accession`.
+---
 
-### The two-minute workflow
+### 🌐 The Two-Minute Web Workflow
 
-1. Open [**the MRSA page**](https://bbeckley-hub.github.io/saurus/pages/mrsa.html).
-2. Filter: `MRSA Status = MRSA` · `MLST = ST5` · `Country = United States` · `Source = blood`.
-3. Click **🧬 Accessions** → save the `.txt` file.
+1. Open [**saurus-db.org/pages/mrsa.html**](https://saurus-db.org/pages/mrsa.html)
+2. Filter: `MRSA Status = MRSA` · `MLST = ST5` · `Country = United States` · `Source = blood`
+3. Click **🧬 Accessions** → save the `.txt` file
 4. Run:
    ```bash
    datasets download genome accession --inputfile accessions.txt
    ```
-5. ✅ You have the exact genomes you want — filtered by **genotype, phenotype, and geography** — in the time it takes to drink your coffee.
+5. ✅ You have the exact genomes you want — filtered by **genotype, phenotype, and geography**.
 
-That is the difference between a *database* and a *tool*. SAURUS is the tool.
+---
+
+### 💻 The Two-Minute CLI Workflow
+
+```bash
+# Install once
+pip install saurus-cli
+
+# Query with a single lineage signature
+saurus --lineage USA100 --country USA --source blood --count
+# → 297
+
+# Export metadata table + accession list in one command
+saurus --lineage USA100 --country USA --source blood \
+    --format tsv,accession -o usa100_blood
+
+# Pipe straight into NCBI — no intermediate files
+saurus --lineage USA100 --country USA --source blood | \
+    datasets download genome accession \
+    --inputfile /dev/stdin --filename usa100_blood.zip
+```
+
+✅ **Same result, in the terminal, with reproducible config files.**
+
+That is the difference between a *database* and a *tool*. SAURUS is both.
+
+---
+
+## 💻 SAURUS-CLI — Bioinformatician-First Retrieval
+
+**SAURUS-CLI** is a companion command-line interface that ships the **entire SAURUS dataset bundled inside the installable artifact**. After installation, queries run locally — no downloads, no API keys, no network access.
+
+### 📦 Three install paths, one artifact
+
+| Ecosystem | Command | Data lands at |
+|---|---|---|
+| **pip** | `pip install saurus-cli` | `<venv>/share/saurus/data/` |
+| **conda** | `conda install -c bioconda saurus-cli` | `${CONDA_PREFIX}/share/saurus/data/` |
+| **Docker** | `docker run --rm ghcr.io/bbeckley-hub/saurus-cli --version` | `/usr/local/share/saurus/data/` |
+
+### ⚡ Why it matters
+
+- **Zero network calls.** The full 134,299-genome dataset (~18 MB gzipped) is baked into the wheel, conda package, and Docker image.
+- **Lineage signatures.** Query `--lineage USA300` instead of typing 5 flags. Override any component: `--lineage USA300 --country Japan`.
+- **Multi-format in one run.** `--format tsv,json,accession -o results` writes three files from one query.
+- **Reproducible queries.** Save your query as JSON: `saurus --config my_query.json` — byte-for-byte reproducible across institutions.
+- **Debug mode.** `--debug` prints a row-count trace after every filter, so you can see exactly where a query collapsed to 0.
+- **Pipeline-native.** Pipes cleanly into `datasets`, Snakemake, Nextflow, and shell scripts.
+
+### 📚 Documentation
+
+- **Full CLI manual:** [saurus-db.org/manual.html](https://saurus-db.org/manual.html)
+- **Example gallery:** `saurus --examples` (in your terminal)
+- **Author + citation:** `saurus --about`
+- **Source code:** [github.com/bbeckley-hub/saurus-cli](https://github.com/bbeckley-hub/saurus-cli)
+
+### 🏷️ Lineage Signatures at a Glance
+
+```bash
+saurus --lineage USA100     # ST5, t002, SCCmec II, agr II, capsule 5
+saurus --lineage USA300     # ST8, t008, SCCmec IV, agr I, capsule 5
+saurus --lineage EMRSA-15   # ST22, t032, SCCmec IV, agr I, capsule 5
+saurus --lineage EMRSA-16   # ST36, t018, SCCmec II, agr III, capsule 8
+saurus --lineage "Bengal Bay"  # ST772, t657, SCCmec V, agr II, capsule 5
+saurus --lineage ST152      # ST152, SCCmec V, agr III, capsule 5
+```
+
+One flag. Six components. Zero typos.
 
 ---
 
@@ -88,25 +187,27 @@ That is the difference between a *database* and a *tool*. SAURUS is the tool.
 | **Unique spa types** | **3,932** |
 | **Curated clonal complexes** | **~50** |
 
-These are not toy numbers. This is the largest unified *S. aureus* genomic typing resource built by a single team — and every genome, every annotation, and every metadata field is available **for free**, without login, and will remain available as long as the internet hosts static HTML.
+These are not toy numbers. This is the largest unified *S. aureus* genomic typing resource built by a single team — and every genome, every annotation, and every metadata field is available **for free**, without login, and will remain available as long as the internet hosts static HTML and the PyPI registry.
 
 ---
 
 ## 👁️ Part of the ARGUS Family
 
-SAURUS is the **flagship build** of **ARGUS** — *Antimicrobial Resistance Genomic Unified Surveillance* — a family of independent, open genomic surveillance sites, each dedicated to one of the WHO priority ESKAPE pathogens. Every resource shares the same architecture: accession-first, metadata-integrated, no login, no install, MIT-licensed. Each has its own name, its own DOI, and its own community.
+SAURUS is the **flagship build** of **ARGUS** — *Antimicrobial Resistance Genomic Unified Surveillance* — a family of independent, open genomic surveillance sites, each dedicated to one of the WHO priority ESKAPE pathogens.
 
 Named for **Argus Panoptes** — the hundred-eyed giant of Greek myth who never slept — the umbrella is a bet that AMR surveillance has to be *unified* to be useful, and that the pathogens driving the crisis deserve the same treatment.
 
-| Resource | Pathogen | Status |
-|---|---|---|
-| 🦖 **SAURUS** | *Staphylococcus aureus* | **This repo** — [live](https://bbeckley-hub.github.io/saurus/) |
-| 🌑 **ECLIPSE** | *Escherichia coli* | [Live](https://bbeckley-hub.github.io/eclipse) |
-| 🌊 **ABYSS** | *Acinetobacter baumannii* | Planned |
-| 🏆 **KLEOS** | *Klebsiella pneumoniae* | Planned |
-| 💧 **PSEUDA** | *Pseudomonas aeruginosa* | Planned |
-| 👑 **EMPIRE** | *Enterococcus faecium* | Planned |
-| 🌀 **ENTROPY** | *Enterobacter* spp. | Planned |
+**🏛️ ARGUS umbrella:** [**argus-db.org**](https://argus-db.org/)
+
+| Resource | Pathogen | Live URL | Status |
+|---|---|---|---|
+| 🦖 **SAURUS** | *Staphylococcus aureus* | [**saurus-db.org**](https://saurus-db.org/) | ✅ **live** |
+| 🌑 **ECLIPSE** | *Escherichia coli* | [bbeckley-hub.github.io/eclipse](https://bbeckley-hub.github.io/eclipse) | 🚧 in progress |
+| 🌊 **ABYSS** | *Acinetobacter baumannii* | — | 📋 planned |
+| 🏆 **KLEOS** | *Klebsiella pneumoniae* | — | 📋 planned |
+| 💧 **PSEUDA** | *Pseudomonas aeruginosa* | — | 📋 planned |
+| 👑 **EMPIRE** | *Enterococcus faecium* | — | 📋 planned |
+| 🌀 **ENTROPY** | *Enterobacter* spp. | — | 📋 planned |
 
 Every sibling is built on the same architecture — a static site, accession-first design, with a shared generator template. Once one resource works, the next ships in weeks rather than months, and every resource benefits from improvements made in any other.
 
@@ -146,18 +247,29 @@ SAURUS is being built incrementally toward a single milestone: **the complete an
 </td>
 <td width="50%" valign="top">
 
+### 💻 SAURUS-CLI
+
+- **`pip install saurus-cli`** — full dataset bundled
+- **Lineage signatures** — `--lineage USA300` instead of 5 flags
+- **Multi-format output** — `--format tsv,json,accession` in one run
+- **Reproducible configs** — `saurus --config query.json`
+- **Debug mode** — `--debug` traces row counts per filter
+- **Pipeline-native** — pipes into `datasets`, Snakemake, Nextflow
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
 ### 🌍 Geography &amp; Metadata
 
-- **26,349 BioSample records** across **105 countries**
-- **250 source categories** — clinical, food, environmental, animal
+- **139 countries** · **~30 source categories**
 - **4 interactive charts** — countries, sources, timeline, hosts
 - **5 filters** — country · source · host · year · assembly level
 - **Full provenance** — raw submitter strings preserved
 - Combined queries: *`ST5` + `MRSA` + `United States` + `blood`*
 
 </td>
-</tr>
-<tr>
 <td valign="top">
 
 ### 🧬 Gene retrieval pages
@@ -170,6 +282,8 @@ SAURUS is being built incrementally toward a single milestone: **the complete an
 - **Frequency table** — sortable, filterable
 
 </td>
+</tr>
+<tr>
 <td valign="top">
 
 ### 📚 Lineage catalogue
@@ -181,8 +295,6 @@ SAURUS is being built incrementally toward a single milestone: **the complete an
 - Geographic + clinical + virulence context per CC
 
 </td>
-</tr>
-<tr>
 <td valign="top">
 
 ### 📊 Statistics page
@@ -195,6 +307,8 @@ SAURUS is being built incrementally toward a single milestone: **the complete an
 - Capsule by CC stacked bars
 
 </td>
+</tr>
+<tr>
 <td valign="top">
 
 ### 📥 Bulk downloads
@@ -206,6 +320,16 @@ SAURUS is being built incrementally toward a single milestone: **the complete an
 - One-file-per-module layout
 
 </td>
+<td valign="top">
+
+### 📚 Documentation
+
+- **Web manual** — [saurus-db.org/manual.html](https://saurus-db.org/manual.html)
+- **CLI examples** — `saurus --examples`
+- **Author + citation** — `saurus --about`
+- **About page** — [saurus-db.org/about.html](https://saurus-db.org/about.html)
+
+</td>
 </tr>
 </table>
 
@@ -213,27 +337,48 @@ SAURUS is being built incrementally toward a single milestone: **the complete an
 
 ## 🚀 Quick Start
 
-**Just visit the live site:**
+### 🌐 Web (nothing to install)
 
-### 👉 **https://bbeckley-hub.github.io/saurus/**
+**👉 [https://saurus-db.org/](https://saurus-db.org/)**
+
+### 💻 CLI (installs in 5 seconds)
+
+```bash
+pip install saurus-cli
+saurus --examples        # see the full gallery
+saurus --lineage USA300 --count
+# → 8,657
+```
+
+### 🐳 Docker (zero install, data baked in)
+
+```bash
+docker run --rm ghcr.io/bbeckley-hub/saurus-cli:latest \
+    --lineage USA300 --country USA --source blood --count
+```
+
+---
 
 ### Example workflow — get all ST5 MRSA blood isolates from the United States
 
-1. Open [**MRSA**](https://bbeckley-hub.github.io/saurus/pages/mrsa.html) → filter:
+**Via web:**
+
+1. Open [**saurus-db.org/pages/mrsa.html**](https://saurus-db.org/pages/mrsa.html) → filter:
    - `MRSA Status = MRSA`
    - `MLST = ST5`
    - `Country = United States`
    - `Source = blood`
 2. Click **🧬 Accessions** → save the `.txt` file
-3. Feed it to NCBI:
+3. Feed it to NCBI: `datasets download genome accession --inputfile accessions.txt`
 
-   ```bash
-   datasets download genome accession --inputfile accessions.txt
-   ```
+**Via CLI (single command):**
 
-4. ✅ You have the exact genomes you want, filtered by genotype *and* geography
+```bash
+saurus --st 5 --mrsa --country USA --source blood | \
+    datasets download genome accession --inputfile /dev/stdin --filename st5_blood.zip
+```
 
-Or start from the [**Geography page**](https://bbeckley-hub.github.io/saurus/geography.html) to browse the collection by country, source, host, or year.
+Both produce the same result. Pick the interface that fits your workflow.
 
 ---
 
@@ -254,7 +399,7 @@ Or start from the [**Geography page**](https://bbeckley-hub.github.io/saurus/geo
 </details>
 
 <details>
-<summary><b>v0.2 — Epidemiological metadata</b> ✅ live</summary>
+<summary><b>v0.2 — Epidemiological metadata + CLI</b> ✅ live</summary>
 
 - [x] Country + isolation source + host + collection year from NCBI BioSample
 - [x] Free-text sources normalized into ~30 categories
@@ -262,6 +407,9 @@ Or start from the [**Geography page**](https://bbeckley-hub.github.io/saurus/geo
 - [x] **Country × MRSA** and **Source × MRSA** cross-tabs
 - [x] New **Geography** page — 4 charts, 5 filters, full metadata browser
 - [x] `metadata.tsv.gz` added to downloads
+- [x] **SAURUS-CLI** released on PyPI, Bioconda, and GHCR
+- [x] **Custom domains live** — `saurus-db.org` + `argus-db.org`
+- [x] **CLI manual** at [saurus-db.org/manual.html](https://saurus-db.org/manual.html)
 
 </details>
 
@@ -281,6 +429,7 @@ Or start from the [**Geography page**](https://bbeckley-hub.github.io/saurus/geo
 - [ ] Per-batch provenance — users see which genomes came from which release
 - [ ] Merge with existing GCF collection into a unified master table
 - [ ] Handle GCA ↔ GCF paired accessions
+- [ ] Refresh SAURUS-CLI bundled data to include new genomes
 
 </details>
 
@@ -311,7 +460,7 @@ Or start from the [**Geography page**](https://bbeckley-hub.github.io/saurus/geo
 | Layer | Source | Coverage |
 |---|---|---|
 | **Typing** | [StaphScope v2.0.0](https://github.com/bbeckley-hub/staphscope-typing-tool) on RefSeq genomes | 26,197 GCF → 134K |
-| **Country / source / host / year** | [NCBI BioSample](https://www.ncbi.nlm.nih.gov/biosample/) via `datasets summary genome` | 26,349 records · 92% country · 74% source |
+| **Country / source / host / year** | [NCBI BioSample](https://www.ncbi.nlm.nih.gov/biosample/) via `datasets summary genome` | 92% country · 74% source |
 | **AMR genes** | [Shelenkov et al. 2025](https://doi.org/10.1186/s12863-025-01363-w) | 86,318 GCA |
 | **Virulence (VFDB)** | Shelenkov et al. 2025 | 98,950 GCA |
 | **Plasmid replicons** | Shelenkov et al. 2025 | 86,318 GCA |
@@ -330,9 +479,11 @@ saurus/
 ├── images/
 │   └── saurus_banner.png
 └── docs/                          ← GitHub Pages site (source: main /docs)
+    ├── CNAME                      ← "saurus-db.org"
     ├── .nojekyll
     ├── index.html                 ← landing page
     ├── about.html                 ← project + team + methods
+    ├── manual.html                ← SAURUS-CLI user manual
     ├── statistics.html            ← 9+ charts (ST+MRSA, CC×SCCmec, alluvial)
     ├── geography.html             ← metadata browser + 4 charts
     ├── lineages.html              ← curated CC catalogue
@@ -413,6 +564,7 @@ python3 generate_statistics.py  --dir . -o ../docs/statistics.html
 python3 generate_geography.py           -o ../docs/geography.html
 python3 generate_index.py       --dir . -o ../docs/index.html
 python3 generate_about.py               -o ../docs/about.html
+python3 generate_manual.py              -o ../docs/manual.html
 python3 generate_lineages.py            -o ../docs/lineages.html
 python3 generate_downloads.py   --dir . -o ../docs/downloads.html
 
@@ -433,11 +585,22 @@ We welcome:
 
 Please keep pages **self-contained** (one script per page) and preserve the shared visual style.
 
+For SAURUS-CLI contributions, see [github.com/bbeckley-hub/saurus-cli](https://github.com/bbeckley-hub/saurus-cli).
+
 ---
 
 ## 📚 Citation
 
-If you use SAURUS in your research, please cite the pipeline and the source gene dataset.
+If you use SAURUS in your research, please cite the web resource, the CLI, the pipeline, and the source gene dataset.
+
+### SAURUS web resource
+
+> **Beckley B, Olalekan A, Afeke I, Amarh V.** SAURUS: an interactive web resource for typing-based genome retrieval in *Staphylococcus aureus*. *BMC Genom Data* [under review]. 2026.
+
+### SAURUS-CLI
+
+> **Beckley B** SAURUS-CLI: a reproducible command-line interface for typing-based genome retrieval in *Staphylococcus aureus*. *BMC Bioinformatics* [under review]. 2026.
+> [github.com/bbeckley-hub/saurus-cli](https://github.com/bbeckley-hub/saurus-cli)
 
 ### Typing pipeline
 
@@ -452,11 +615,6 @@ If you use SAURUS in your research, please cite the pipeline and the source gene
 ### Metadata source
 
 > **NCBI BioSample** — country, isolation source, host, and collection date attributes attached to each RefSeq assembly.
-
-### Cite SAURUS itself
-
-> **Beckley B.** SAURUS: *Staphylococcus aureus* Unified Resource for Universal Surveillance. 2026.
-> [github.com/bbeckley-hub/saurus](https://github.com/bbeckley-hub/saurus)
 
 ---
 
@@ -488,6 +646,10 @@ See [LICENSE](LICENSE) for details.
 **Built with 🧬 at the University of Ghana Medical School**
 
 *Turning fragmented genomic data into coherent biological narratives.*
+
+[**🌐 saurus-db.org**](https://saurus-db.org/) ·
+[**👁️ argus-db.org**](https://argus-db.org/) ·
+[**💻 saurus-cli on PyPI**](https://pypi.org/project/saurus-cli/)
 
 **[⭐ Star this repo](https://github.com/bbeckley-hub/saurus)** if you find it useful.
 
