@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SAURUS — Staphylococcus aureus Unified Resource for Universal Surveillance</title>
-<meta name="description" content="A comprehensive genomic resource for Staphylococcus aureus — MLST, spa, SCCmec, capsule, agr typing, gene retrieval, and full BioSample metadata (country, isolation source, host, collection year) across 98,138 genomes.">
+<meta name="description" content="A comprehensive genomic resource for Staphylococcus aureus — MLST, spa, SCCmec, capsule, agr typing, gene retrieval, and full BioSample metadata (country, isolation source, host, collection year) across 134,160 genomes.">
 <style>
 
 :root {
@@ -599,6 +599,167 @@ a.argus-mini { cursor: pointer; }
     font-style: italic;
 }
 
+/* ---------- SAURUS-CLI hero button ---------- */
+.btn-cli {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 10px;
+    font-size: 1em; font-weight: 700;
+    text-decoration: none; transition: all 0.15s;
+    font-family: inherit; border: none; cursor: pointer;
+    background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+    color: white;
+    box-shadow: 0 8px 24px rgba(46,160,67,0.35);
+}
+.btn-cli:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(46,160,67,0.5);
+    background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
+}
+
+/* ---------- SAURUS-CLI featured section ---------- */
+.cli-featured {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #1f2937 100%);
+    color: #e6edf3;
+    border-radius: 18px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    border: 1px solid rgba(63,185,80,0.3);
+    position: relative;
+}
+.cli-featured::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(63,185,80,0.04) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(63,185,80,0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+}
+.cli-head {
+    display: flex; align-items: center; gap: 16px;
+    padding: 18px 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative; z-index: 1;
+    background: rgba(0,0,0,0.2);
+}
+.cli-head .cli-dots { display: flex; gap: 6px; flex-shrink: 0; }
+.cli-head .cli-dots span {
+    width: 12px; height: 12px; border-radius: 50%;
+}
+.cli-head .cli-dots .red    { background: #ff5f56; }
+.cli-head .cli-dots .yellow { background: #ffbd2e; }
+.cli-head .cli-dots .green  { background: #27c93f; }
+.cli-head .cli-title {
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 0.95em; font-weight: 700;
+    color: #7ee787; letter-spacing: 0.5px;
+}
+.cli-head .cli-badge {
+    margin-left: auto;
+    padding: 3px 12px;
+    background: rgba(63,185,80,0.15);
+    color: #7ee787;
+    border: 1px solid rgba(63,185,80,0.4);
+    border-radius: 12px;
+    font-size: 0.72em; font-weight: 800; letter-spacing: 1px;
+}
+.cli-body {
+    padding: 28px 32px;
+    position: relative; z-index: 1;
+}
+.cli-body h3 {
+    font-size: 1.5em; font-weight: 800;
+    color: #7ee787;
+    margin-bottom: 8px;
+    font-family: 'SF Mono', Monaco, monospace;
+}
+.cli-body .cli-tagline {
+    color: #8b949e;
+    font-size: 0.95em; line-height: 1.65;
+    margin-bottom: 22px;
+    max-width: 780px;
+}
+.cli-body .cli-tagline strong { color: #e6edf3; }
+
+.cli-terminal {
+    background: #010409;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+    font-size: 0.88em; line-height: 1.8;
+    overflow-x: auto;
+}
+.cli-line { display: block; white-space: pre; }
+.cli-prompt  { color: #7ee787; font-weight: 700; }
+.cli-cmd     { color: #e6edf3; }
+.cli-out     { color: #8b949e; }
+.cli-comment { color: #6e7681; font-style: italic; }
+
+.cli-installs {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 22px;
+}
+.cli-install {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 0.85em; color: #e6edf3;
+    text-decoration: none;
+    transition: all 0.15s;
+}
+.cli-install:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(63,185,80,0.5);
+    transform: translateY(-2px);
+}
+.cli-install .cli-install-label {
+    color: #7ee787;
+    font-weight: 800; font-size: 0.75em;
+    letter-spacing: 1px; text-transform: uppercase;
+}
+.cli-install .cli-install-cmd { color: #c9d1d9; }
+
+.cli-ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+.cli-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700; font-size: 0.9em;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+}
+.cli-cta.primary {
+    background: #238636; color: white;
+    border-color: #2ea043;
+}
+.cli-cta.primary:hover {
+    background: #2ea043;
+    transform: translateY(-1px);
+}
+.cli-cta.secondary {
+    background: rgba(255,255,255,0.05);
+    color: #e6edf3;
+    border-color: rgba(255,255,255,0.15);
+}
+.cli-cta.secondary:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.3);
+}
+
+@media (max-width: 700px) {
+    .cli-head { padding: 14px 18px; }
+    .cli-body { padding: 20px 18px; }
+    .cli-terminal { padding: 14px 16px; font-size: 0.75em; line-height: 1.7; }
+    .cli-install { flex: 1 1 100%; }
+    .cli-cta { flex: 1 1 100%; justify-content: center; }
+}
+
 /* ---------- Cite section ---------- */
 .cite-block {
     background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
@@ -693,9 +854,9 @@ a.argus-mini { cursor: pointer; }
         <a href="pages/vfdb.html">Virulence</a>
         <a href="pages/plasmid.html">Plasmid</a>
         <a href="statistics.html">Statistics</a>
+        <a href="geography.html">Geography</a>
         <a href="trends.html">Trends</a>
         <a href="compare.html">Compare</a>
-        <a href="geography.html">Geography</a>
         <a href="lineages.html">Lineages</a>
         <a href="downloads.html">Downloads</a>
         <a href="about.html">About</a>
@@ -708,7 +869,7 @@ a.argus-mini { cursor: pointer; }
         <p class="hero-sub">Staphylococcus aureus Unified Resource for Universal Surveillance</p>
         <p class="hero-desc">
             Typing, gene annotations, and epidemiological metadata for
-            <strong>98,138 public <em>S. aureus</em> genomes</strong> —
+            <strong>134,160 public <em>S. aureus</em> genomes</strong> —
             MLST, spa, SCCmec, capsule, agr, AMR, virulence, plasmid, plus
             <strong>country, source, host, and collection year</strong>.
             Filter. Verify. Download your accession list.
@@ -716,6 +877,8 @@ a.argus-mini { cursor: pointer; }
         <div class="hero-cta">
             <a class="btn-primary" href="#modules">🧬 Explore Modules</a>
             <a class="btn-geo" href="geography.html">🌍 Geography &amp; Metadata</a>
+            <a class="btn-secondary" href="downloads.html">📥 Download data</a>
+        <a class="btn-cli" href="#cli">⚡ SAURUS-CLI</a>
             <a class="btn-secondary" href="https://github.com/bbeckley-hub/saurus" target="_blank">⭐ Star us on GitHub</a>
         </div>
     </div>
@@ -733,7 +896,7 @@ a.argus-mini { cursor: pointer; }
 
 <section class="stats-strip">
     <div class="stats-grid">
-        <div class="stat"><span class="num">98,138</span><span class="lbl">Genomes</span></div><div class="stat geo-stat"><span class="num">139</span><span class="lbl">Countries</span></div><div class="stat"><span class="num">2,117</span><span class="lbl">MLST STs</span></div><div class="stat"><span class="num">6,270</span><span class="lbl">spa Types</span></div><div class="stat"><span class="num">59.2%</span><span class="lbl">MRSA Rate</span></div><div class="stat"><span class="num">15</span><span class="lbl">SCCmec Types</span></div><div class="stat geo-stat"><span class="num">1,000</span><span class="lbl">Source Categories</span></div><div class="stat geo-stat"><span class="num">1900–2026</span><span class="lbl">Collection Years</span></div><div class="stat"><span class="num">223</span><span class="lbl">AMR Genes</span></div><div class="stat"><span class="num">142</span><span class="lbl">Virulence Genes</span></div>
+        <div class="stat"><span class="num">134,160</span><span class="lbl">Genomes</span></div><div class="stat geo-stat"><span class="num">139</span><span class="lbl">Countries</span></div><div class="stat"><span class="num">2,739</span><span class="lbl">MLST STs</span></div><div class="stat"><span class="num">7,648</span><span class="lbl">spa Types</span></div><div class="stat"><span class="num">59.8%</span><span class="lbl">MRSA Rate</span></div><div class="stat"><span class="num">15</span><span class="lbl">SCCmec Types</span></div><div class="stat geo-stat"><span class="num">1,000</span><span class="lbl">Source Categories</span></div><div class="stat geo-stat"><span class="num">1900–2026</span><span class="lbl">Collection Years</span></div><div class="stat"><span class="num">223</span><span class="lbl">AMR Genes</span></div><div class="stat"><span class="num">142</span><span class="lbl">Virulence Genes</span></div>
     </div>
     <div style="max-width:1400px;margin:20px auto 0;text-align:center;color:#94a3b8;font-size:0.82em;
                 letter-spacing:0.3px;display:flex;flex-wrap:wrap;justify-content:center;gap:24px;">
@@ -747,10 +910,10 @@ a.argus-mini { cursor: pointer; }
 <!-- ============ FEATURED GEOGRAPHY CARD ============ -->
 <section class="featured-section">
     <div class="featured-card">
-        <div class="fc-badge">Now · v0.3</div>
+        <div class="fc-badge">v0.8 · LIVE</div>
         <div class="fc-icon">🌍</div>
         <div class="fc-body">
-            <h3>Geography &amp; Metadata — live in v0.3</h3>
+            <h3>Geography &amp; Metadata</h3>
             <p>
                 Every genome is now linked to its <strong>country of origin</strong>,
                 <strong>isolation source</strong>, <strong>host species</strong>,
@@ -790,7 +953,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">Sequence types (STs) and clonal complexes — the gold-standard for global S. aureus epidemiology.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">2,117</span>
+                <span class="mc-stat-num">2,739</span>
                 <span class="mc-stat-lbl">unique STs</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -805,7 +968,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">High-resolution outbreak tracking via the hypervariable spa repeat region.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">6,270</span>
+                <span class="mc-stat-num">7,648</span>
                 <span class="mc-stat-lbl">spa types</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -865,7 +1028,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">Consensus MRSA/MSSA call with cross-tabs against CC, ST, spa, SCCmec, agr, capsule — plus country and intake source.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">58,063</span>
+                <span class="mc-stat-num">80,220</span>
                 <span class="mc-stat-lbl">MRSA isolates</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -962,6 +1125,72 @@ a.argus-mini { cursor: pointer; }
     </div>
 </section>
 
+<!-- ============ SAURUS-CLI ============ -->
+<section class="section" id="cli" style="background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+    <h2 class="section-title">⚡ SAURUS-CLI — for terminal users &amp; pipelines</h2>
+    <p class="section-sub">
+        Same dataset, same filters — in your terminal. The complete database
+        ships inside the pip, conda, and Docker install. No downloads, no API keys,
+        no network access after install.
+    </p>
+    <div class="cli-featured">
+        <div class="cli-head">
+            <div class="cli-dots">
+                <span class="red"></span>
+                <span class="yellow"></span>
+                <span class="green"></span>
+            </div>
+            <span class="cli-title">saurus-cli v0.1.0</span>
+            <span class="cli-badge">NEW</span>
+        </div>
+        <div class="cli-body">
+            <h3>One command. One accession list. One pipeline step.</h3>
+            <p class="cli-tagline">
+                <strong>Lineage signatures, JSON config, multi-format output</strong>
+                — everything you need to embed SAURUS queries in Nextflow,
+                Snakemake, or a public health lab's quarterly reporting script.
+                The full 134,160-genome dataset is bundled at install time.
+            </p>
+
+            <div class="cli-terminal">
+                <span class="cli-line"><span class="cli-prompt">$</span> <span class="cli-cmd">pip install saurus-cli</span></span>
+                <span class="cli-line"><span class="cli-prompt">$</span> <span class="cli-cmd">saurus --lineage USA300 --country USA --source blood --count</span></span>
+                <span class="cli-line"><span class="cli-out">907 matching genomes</span></span>
+                <span class="cli-line"> </span>
+                <span class="cli-line"><span class="cli-comment"># Pipe directly into NCBI datasets</span></span>
+                <span class="cli-line"><span class="cli-prompt">$</span> <span class="cli-cmd">saurus --lineage USA300 | datasets download genome accession --inputfile /dev/stdin</span></span>
+            </div>
+
+            <div class="cli-installs">
+                <a class="cli-install" href="https://pypi.org/project/saurus-cli/" target="_blank" rel="noopener">
+                    <span class="cli-install-label">pip</span>
+                    <span class="cli-install-cmd">pip install saurus-cli</span>
+                </a>
+                <a class="cli-install" href="https://anaconda.org/bioconda/saurus-cli" target="_blank" rel="noopener">
+                    <span class="cli-install-label">conda</span>
+                    <span class="cli-install-cmd">conda install -c bioconda saurus-cli</span>
+                </a>
+                <a class="cli-install" href="https://hub.docker.com/r/bbeckleyhub/saurus-cli" target="_blank" rel="noopener">
+                    <span class="cli-install-label">docker</span>
+                    <span class="cli-install-cmd">docker run bbeckleyhub/saurus-cli</span>
+                </a>
+            </div>
+
+            <div class="cli-ctas">
+                <a class="cli-cta primary" href="https://github.com/bbeckley-hub/saurus-cli" target="_blank" rel="noopener">
+                    🐙 View on GitHub
+                </a>
+                <a class="cli-cta secondary" href="https://github.com/bbeckley-hub/saurus-cli#readme" target="_blank" rel="noopener">
+                    📖 Documentation
+                </a>
+                <a class="cli-cta secondary" href="https://github.com/bbeckley-hub/saurus-cli/issues" target="_blank" rel="noopener">
+                    🐛 Report issue
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ============ ARGUS FAMILY ============ -->
 <section class="argus-strip-section">
     <div class="argus-strip-inner">
@@ -1022,7 +1251,7 @@ a.argus-mini { cursor: pointer; }
     <div class="footer-line">
         <a href="https://github.com/bbeckley-hub/saurus">⭐ Star on GitHub</a> ·
         <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Data updated 2026-10-29 16:01:11
+        Data updated 2026-11-02 18:50:03
     </div>
 </footer>
 

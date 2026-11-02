@@ -809,7 +809,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     <div class="about-hero-inner">
         <h1>About SAURUS</h1>
         <p class="hero-sub">A free, open, integrated genomic resource for <em>Staphylococcus aureus</em> surveillance</p>
-        <span class="hero-tag">OPEN ACCESS · NO LOGIN · NO TRACKING · MIT LICENSE</span>
+        <span class="hero-tag">v0.8 · 134,160 GENOMES · OPEN ACCESS · MIT LICENSE</span>
         <div style="margin-top:22px;">
             <a href="https://github.com/bbeckley-hub/saurus" target="_blank"
                style="display:inline-flex;align-items:center;gap:10px;padding:12px 26px;
@@ -894,7 +894,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
 <div class="pathogen-card" style="--pc: #475569;"><div class="pc-top"><span class="pc-emoji">🌀</span><span class="pc-name">ENTROPY</span></div><div class="pc-pathogen">Enterobacter spp.</div><span class="pc-status planned">PLANNED</span></div>
         </div>
         <p class="argus-footnote">
-            Status as of 2026-10-29. SAURUS launched first (<em>S. aureus</em>) and
+            Status as of 2026-11-02. SAURUS launched first (<em>S. aureus</em>) and
             remains the flagship build; ECLIPSE is the second resource. The remaining
             pathogens are on the roadmap and will ship as their pipelines are built
             and validated.
@@ -1026,23 +1026,24 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
                 resolved. Expanded RefSeq typing coverage and processed batches of
                 GenBank genomes to bring total de novo typing to 98,138.
             </li>
-            <li class="current">
+            <li class="done">
                 <strong>v0.7 — GenBank Merge &amp; Serverless Architecture</strong>
-                <span class="badge">CURRENT</span><br>
+                <span class="badge">LIVE</span><br>
                 134,299 unique genomes indexed · 98,138 de novo typed · 139 countries
                 · 11 interactive modules. Static, serverless GitHub Pages deployment
                 (zero maintenance, no APIs). Dual SCCmec callers (CGE + RPet).
                 Integrated BioSample metadata on every page.
             </li>
-            <li>
-                <strong>v0.8 — Full GenBank typing (remaining ~36K)</strong><br>
+            <li class="current">
+                <strong>v0.8 — Full typing complete</strong>
+                <span class="badge">CURRENT</span><br>
                 Process the remaining GenBank batches to bring all 134,299 genomes
                 to fully typed status. Complete Shelenkov et al. gene annotations
                 carried forward.
             </li>
             <li>
                 <strong>v1.0 — Full resource</strong><br>
-                All 134,299 genomes typed · cross-module filter UI · citable
+                All remaining NCBI accessions typed · cross-module filter UI · citable
                 Zenodo DOI · frozen, versioned release · Database (Oxford)
                 manuscript
             </li>
@@ -1050,7 +1051,53 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
 
     </section>
 
-    <!-- ============ DATA SOURCES ============ -->
+        <!-- ============ METHODS ============ -->
+    <section class="about-section">
+        <h2>📋 Methods</h2>
+        <p class="lead">
+            Every number, chart, and accession on this site is traceable to a
+            documented workflow. This section explains exactly how the SAURUS
+            dataset was built.
+        </p>
+
+        <h3>1. Data sources</h3>
+        <ul>
+            <li><strong>Genomes</strong> — 134,160 <em>Staphylococcus aureus</em>
+                assemblies from NCBI (RefSeq GCF + GenBank GCA after deduplication).</li>
+            <li><strong>Metadata</strong> — NCBI BioSample attributes: country,
+                source, host, year, BioProject, BioSample, assembly level.</li>
+            <li><strong>Gene annotations</strong> — Shelenkov et al. 2025,
+                <em>BMC Genomic Data</em>.</li>
+        </ul>
+
+        <h3>2. Typing pipeline</h3>
+        <ul class="method-list">
+            <li><strong>MLST</strong> — <span class="tool">mlst</span> + PubMLST 7-locus scheme</li>
+            <li><strong>spa typing</strong> — <span class="tool">spaTyper</span> + Ridom repeat nomenclature</li>
+            <li><strong>SCCmec</strong> — dual callers: <span class="tool">SCCmecFinder</span> (CGE) + <span class="tool">sccmec</span> (RPet). Disagreements surfaced, not silently resolved.</li>
+            <li><strong>Capsule typing</strong> — cap5/cap8 BLAST</li>
+            <li><strong>agr typing</strong> — <span class="tool">agrVATE</span></li>
+            <li><strong>Orchestration</strong> — <span class="tool">StaphScope 2.1.0</span></li>
+        </ul>
+
+        <h3>3. Deduplication strategy</h3>
+        <ol>
+            <li><strong>Cross-prefix (GCF vs GCA):</strong> GCF kept, GCA dropped. <em>115 pairs resolved.</em></li>
+            <li><strong>Version drift:</strong> highest version kept. <em>12 pairs resolved.</em></li>
+            <li><strong>Cross-batch duplicates:</strong> first result kept. <em>9,996 rows removed.</em></li>
+        </ol>
+
+        <h3>4. Reproducibility</h3>
+        <p>Pipeline versions: StaphScope 2.1.0 · mlst · SCCmecFinder · sccmec (RPet) · agrVATE · ABRicate + databases · AMRFinderPlus · NCBI Assembly snapshot · Shelenkov et al. 2025.</p>
+
+        <h3>5. Data access</h3>
+        <p>Every TSV available at the <a href="downloads.html">Downloads</a> page. Every accession traceable to its NCBI Assembly record.</p>
+
+        <h3>6. Corrections</h3>
+        <p>Report errors to <a href="mailto:brownbeckley94@gmail.com">brownbeckley94@gmail.com</a> or <a href="https://github.com/bbeckley-hub/saurus/issues" target="_blank">open a GitHub issue</a>.</p>
+    </section>
+
+<!-- ============ DATA SOURCES ============ -->
     <section class="about-section">
         <h2>📦 Data sources</h2>
         <p>
@@ -1481,7 +1528,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     <div class="footer-line">
         <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
         <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Updated 2026-10-29
+        Updated 2026-11-02
     </div>
 </footer>
 
