@@ -619,7 +619,8 @@ If you use SAURUS in your research, please cite the web resource, the CLI, the p
 
 ### SAURUS web resource
 
-> **Beckley B, Olalekan A, Afeke I, Amarh V.** SAURUS: an interactive web resource for typing-based genome retrieval in *Staphylococcus aureus*. *BMC Genom Data* [under review]. 2026. https://doi.org/10.5281/zenodo.23264894
+> **Beckley B, Olalekan A, Afeke I, Amarh V.** SAURUS: an interactive web resource for typing-based genome retrieval in *Staphylococcus aureus*. *BMC Genom Data* [under review]. 2026.
+
 > **Beckley B, Olalekan A, Afeke I, Amarh V.** SAURUS: an interactive web resource for typing-based genome retrieval in *Staphylococcus aureus*. *Zenodo*. 2026. https://doi.org/10.5281/zenodo.23264894
 
 ### SAURUS-CLI
