@@ -18,6 +18,7 @@
 [![Modules](https://img.shields.io/badge/Modules-11-purple?style=for-the-badge)](https://saurus-db.org/)
 [![Countries](https://img.shields.io/badge/Countries-~150-0ea5e9?style=for-the-badge)](https://saurus-db.org/geography.html)
 [![Part of ARGUS](https://img.shields.io/badge/Part%20of-ARGUS-0a1628?style=for-the-badge)](https://argus-db.org/)
+[![DOI](https://zenodo.org/badge/1055583691.svg)](https://doi.org/10.5281/zenodo.23264894)
 
 [**🏠 Home**](https://saurus-db.org/) ·
 [**🌍 Geography**](https://saurus-db.org/geography.html) ·
@@ -618,7 +619,8 @@ If you use SAURUS in your research, please cite the web resource, the CLI, the p
 
 ### SAURUS web resource
 
-> **Beckley B, Olalekan A, Afeke I, Amarh V.** SAURUS: an interactive web resource for typing-based genome retrieval in *Staphylococcus aureus*. *BMC Genom Data* [under review]. 2026.
+> **Beckley B, Olalekan A, Afeke I, Amarh V.** SAURUS: an interactive web resource for typing-based genome retrieval in *Staphylococcus aureus*. *BMC Genom Data* [under review]. 2026. https://doi.org/10.5281/zenodo.23264894
+> **Beckley B, Olalekan A, Afeke I, Amarh V.** SAURUS: an interactive web resource for typing-based genome retrieval in *Staphylococcus aureus*. *Zenodo*. 2026. https://doi.org/10.5281/zenodo.23264894
 
 ### SAURUS-CLI
 
