@@ -854,9 +854,9 @@ a.argus-mini { cursor: pointer; }
         <a href="pages/vfdb.html">Virulence</a>
         <a href="pages/plasmid.html">Plasmid</a>
         <a href="statistics.html">Statistics</a>
-        <a href="geography.html">Geography</a>
         <a href="trends.html">Trends</a>
         <a href="compare.html">Compare</a>
+        <a href="geography.html">Geography</a>
         <a href="lineages.html">Lineages</a>
         <a href="downloads.html">Downloads</a>
         <a href="about.html">About</a>
@@ -872,7 +872,8 @@ a.argus-mini { cursor: pointer; }
             <strong>134,160 public <em>S. aureus</em> genomes</strong> —
             MLST, spa, SCCmec, capsule, agr, AMR, virulence, plasmid, plus
             <strong>country, source, host, and collection year</strong>.
-            Filter. Verify. Download your accession list.
+            Filter. Verify. Download your accession list — or go straight to
+            <strong>22,322 genomes with retrievable raw reads</strong>.
         </p>
         <div class="hero-cta">
             <a class="btn-primary" href="#modules">🧬 Explore Modules</a>
@@ -910,7 +911,7 @@ a.argus-mini { cursor: pointer; }
 <!-- ============ FEATURED GEOGRAPHY CARD ============ -->
 <section class="featured-section">
     <div class="featured-card">
-        <div class="fc-badge">v0.8 · LIVE</div>
+        <div class="fc-badge">v0.8.1 · LIVE</div>
         <div class="fc-icon">🌍</div>
         <div class="fc-body">
             <h3>Geography &amp; Metadata</h3>
@@ -1125,6 +1126,46 @@ a.argus-mini { cursor: pointer; }
     </div>
 </section>
 
+<!-- ============ RAW SEQUENCING READS ============ -->
+<section class="section" id="raw-reads" style="background: linear-gradient(180deg, #ecfeff 0%, #f0f9ff 100%);">
+    <h2 class="section-title">📥 Raw Sequencing Reads</h2>
+    <p class="section-sub">
+        <strong>22,322 genomes (16.6%)</strong>
+        have direct pointers to raw FASTQ files in the global SRA consortium
+        (NCBI SRA, ENA, DDBJ). Export Run, Sample, or Project accessions from
+        any typing page and download with <code>fastq-dl</code> or the NCBI
+        SRA Toolkit. Coverage reflects what's actually deposited — many
+        assembled genomes have no associated raw reads.
+    </p>
+
+    <div class="howto-grid">
+        <div class="howto-card">
+            <h4>🧪 BioSamples (recommended)</h4>
+            <p>One BioSample per matched genome. Precise — only SAURUS genomes. <code>fastq-dl</code> resolves each sample to its runs automatically.</p>
+        </div>
+        <div class="howto-card">
+            <h4>📥 SRA Runs</h4>
+            <p>One SRR/ERR/DRR per line. Most precise — exact run accessions. Some BioSamples have multiple runs (reference strains can have 10–100+).</p>
+        </div>
+        <div class="howto-card">
+            <h4>📦 BioProjects (bulk)</h4>
+            <p>One BioProject per matched project. May include non-<em>S. aureus</em> runs from mixed-species studies — verify before bulk download.</p>
+        </div>
+    </div>
+
+    <div style="margin-top: 24px; padding: 22px 26px; background: white; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <h4 style="color: var(--navy); margin-bottom: 12px; font-size: 1.05em;">🛠️ Retrieval tools</h4>
+        <p style="margin-bottom: 10px; color: #475569; font-size: 0.95em;">Feed your export file to one of these:</p>
+        <ul style="margin-left: 22px; color: #475569; font-size: 0.94em; line-height: 1.8;">
+            <li><strong><a href="https://github.com/rpetit3/fastq-dl" target="_blank" style="color: #1e40af;">fastq-dl</a></strong> — One command per accession. <code>.fastq.gz</code> output.</li>
+            <li><strong><a href="https://github.com/ncbi/sra-tools" target="_blank" style="color: #1e40af;">NCBI SRA Toolkit</a></strong> — Official <code>prefetch</code> + <code>fasterq-dump</code> workflow with MD5 integrity checks.</li>
+        </ul>
+        <p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.88em; color: #64748b;">
+            Example: <code>fastq-dl --accession SRR12282488 --provider sra --outdir ./fastqs</code>
+        </p>
+    </div>
+</section>
+
 <!-- ============ SAURUS-CLI ============ -->
 <section class="section" id="cli" style="background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
     <h2 class="section-title">⚡ SAURUS-CLI — for terminal users &amp; pipelines</h2>
@@ -1140,8 +1181,9 @@ a.argus-mini { cursor: pointer; }
                 <span class="yellow"></span>
                 <span class="green"></span>
             </div>
-            <span class="cli-title">saurus-cli v0.1.0</span>
+            <span class="cli-title">saurus-cli v0.3.0</span>
             <span class="cli-badge">NEW</span>
+            <span style="margin-left:10px;padding:3px 12px;background:rgba(56,189,248,0.15);color:#7dd3fc;border:1px solid rgba(56,189,248,0.4);border-radius:12px;font-size:0.72em;font-weight:800;letter-spacing:0.8px;">+ SRA EXPORT</span>
         </div>
         <div class="cli-body">
             <h3>One command. One accession list. One pipeline step.</h3>
@@ -1149,7 +1191,9 @@ a.argus-mini { cursor: pointer; }
                 <strong>Lineage signatures, JSON config, multi-format output</strong>
                 — everything you need to embed SAURUS queries in Nextflow,
                 Snakemake, or a public health lab's quarterly reporting script.
-                The full 134,160-genome dataset is bundled at install time.
+                The full 134,160-genome dataset is bundled at install time — and
+                <strong>22,277 genomes export SRA Run / BioSample / BioProject accessions</strong>
+                ready for <code>fastq-dl</code> and the SRA Toolkit.
             </p>
 
             <div class="cli-terminal">
@@ -1157,8 +1201,16 @@ a.argus-mini { cursor: pointer; }
                 <span class="cli-line"><span class="cli-prompt">$</span> <span class="cli-cmd">saurus --lineage USA300 --country USA --source blood --count</span></span>
                 <span class="cli-line"><span class="cli-out">907 matching genomes</span></span>
                 <span class="cli-line"> </span>
-                <span class="cli-line"><span class="cli-comment"># Pipe directly into NCBI datasets</span></span>
+                <span class="cli-line"><span class="cli-comment"># Assembly accessions → NCBI datasets</span></span>
                 <span class="cli-line"><span class="cli-prompt">$</span> <span class="cli-cmd">saurus --lineage USA300 | datasets download genome accession --inputfile /dev/stdin</span></span>
+                <span class="cli-line"> </span>
+                <span class="cli-line"><span class="cli-comment"># NEW: raw-read accessions → fastq-dl / prefetch</span></span>
+                <span class="cli-line"><span class="cli-prompt">$</span> <span class="cli-cmd">saurus --lineage USA300 --format sra -o usa300_runs</span></span>
+                <span class="cli-line"><span class="cli-out">→ 3,847 SRR/ERR/DRR accessions</span></span>
+                <span class="cli-line"> </span>
+                <span class="cli-line"><span class="cli-comment"># NEW: BioSample / BioProject exports</span></span>
+                <span class="cli-line"><span class="cli-prompt">$</span> <span class="cli-cmd">saurus --lineage USA100 --format biosample -o usa100_samples</span></span>
+                <span class="cli-line"><span class="cli-prompt">$</span> <span class="cli-cmd">saurus --lineage USA100 --format bioproject -o usa100_projects</span></span>
             </div>
 
             <div class="cli-installs">
@@ -1251,7 +1303,7 @@ a.argus-mini { cursor: pointer; }
     <div class="footer-line">
         <a href="https://github.com/bbeckley-hub/saurus">⭐ Star on GitHub</a> ·
         <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Data updated 2026-11-02 18:50:03
+        Data updated 2026-11-07 18:08:36
     </div>
 </footer>
 

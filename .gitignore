@@ -23,6 +23,7 @@ Thumbs.db
 *.fna
 *.fasta
 *.fa
+*.docx
 
 batch_manifest.tsv 
 PROJECT_STATE.md

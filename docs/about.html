@@ -809,7 +809,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     <div class="about-hero-inner">
         <h1>About SAURUS</h1>
         <p class="hero-sub">A free, open, integrated genomic resource for <em>Staphylococcus aureus</em> surveillance</p>
-        <span class="hero-tag">v0.8 · 134,160 GENOMES · OPEN ACCESS · MIT LICENSE</span>
+        <span class="hero-tag">v0.8.1 · 134,160 GENOMES · 22K WITH RAW READS · OPEN ACCESS · MIT LICENSE</span>
         <div style="margin-top:22px;">
             <a href="https://github.com/bbeckley-hub/saurus" target="_blank"
                style="display:inline-flex;align-items:center;gap:10px;padding:12px 26px;
@@ -858,6 +858,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
             <div class="s"><span class="s-num">~150</span><span class="s-lbl">Countries</span></div>
             <div class="s"><span class="s-num">~300</span><span class="s-lbl">Source Categories</span></div>
             <div class="s"><span class="s-num">700+</span><span class="s-lbl">Gene Determinants</span></div>
+            <div class="s"><span class="s-num">22K</span><span class="s-lbl">With Raw Reads</span></div>
             <div class="s"><span class="s-num">100%</span><span class="s-lbl">Open Access</span></div>
         </div>
     </section>
@@ -894,7 +895,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
 <div class="pathogen-card" style="--pc: #475569;"><div class="pc-top"><span class="pc-emoji">🌀</span><span class="pc-name">ENTROPY</span></div><div class="pc-pathogen">Enterobacter spp.</div><span class="pc-status planned">PLANNED</span></div>
         </div>
         <p class="argus-footnote">
-            Status as of 2026-11-02. SAURUS launched first (<em>S. aureus</em>) and
+            Status as of 2026-11-07. SAURUS launched first (<em>S. aureus</em>) and
             remains the flagship build; ECLIPSE is the second resource. The remaining
             pathogens are on the roadmap and will ship as their pipelines are built
             and validated.
@@ -945,7 +946,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
             SAURUS places <strong>accession retrieval at the centre of the interface.</strong>
             Filter by genotype, geography, or gene content — combine any criteria — and
             download a plain-text list ready for
-            <code>datasets download genome accession --inputfile list.txt</code>.
+            <code>datasets download genome accession --inputfile list.txt</code>. For 22,277 genomes, the same export also provides the <strong>SRA Run, BioSample, and BioProject accessions</strong> ready for <code>fastq-dl</code> and the SRA Toolkit.
             One click. No scripting. No install. No account.
         </p>
 
@@ -1041,6 +1042,16 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
                 to fully typed status. Complete Shelenkov et al. gene annotations
                 carried forward.
             </li>
+            <li class="done">
+                <strong>v0.8.1 — SRA raw-read integration</strong>
+                <span class="badge">LIVE</span><br>
+                Resolved NCBI SRA raw-read accessions for <strong>22,277 of 134,130
+                genomes (16.6%)</strong> across <strong>6,223 BioProjects</strong>.
+                Three export formats (SRA Runs, BioSamples, BioProjects) on every
+                typing page, ready for <code>fastq-dl</code> and the SRA Toolkit.
+                Coverage reflects NCBI SRA deposition — many assembled genomes have
+                no associated raw reads.
+            </li>
             <li>
                 <strong>v1.0 — Full resource</strong><br>
                 All remaining NCBI accessions typed · cross-module filter UI · citable
@@ -1068,6 +1079,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
                 source, host, year, BioProject, BioSample, assembly level.</li>
             <li><strong>Gene annotations</strong> — Shelenkov et al. 2025,
                 <em>BMC Genomic Data</em>.</li>
+            <li><strong>Raw reads</strong> — NCBI SRA accessions for 22,277 genomes (SRR / ERR / DRR), retrieved via BioProject-batched queries against the global SRA consortium.</li>
         </ul>
 
         <h3>2. Typing pipeline</h3>
@@ -1121,7 +1133,18 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
             retrieval in SAURUS.
         </p>
 
-        <h3>3. Epidemiological metadata (NCBI BioSample)</h3>
+        <h3>3. SRA raw-read accessions (NCBI SRA)</h3>
+        <p>
+            For <strong>22,277 of 134,130 genomes (16.6%)</strong>, SAURUS exports
+            NCBI SRA Run accessions retrieved by querying the global SRA consortium
+            (BioProject-batched, BioSample-validated). Coverage reflects the
+            underlying NCBI data — many assembled <em>S. aureus</em> genomes have no
+            associated raw reads, and some runs are flagged as contaminated or lack
+            BioSample linkage. Exports include SRR (NCBI), ERR (ENA), and DRR (DDBJ)
+            accessions, all retrievable via <code>fastq-dl</code> and the SRA Toolkit.
+        </p>
+
+        <h3>4. Epidemiological metadata (NCBI BioSample)</h3>
         <p>
             Country of origin, isolation source, host species, and collection year were
             extracted from <strong>NCBI BioSample</strong> records attached to each
@@ -1139,6 +1162,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
             <li>Interactive gene retrieval — pick up to 5 genes, match ANY or ALL</li>
             <li>Cross-module querying — combine typing filters with gene filters</li>
             <li>One-click accession export — plain text, TSV, CSV, or JSON</li>
+            <li>One-click raw-read accessions — <strong>SRA Runs</strong>, <strong>BioSamples</strong>, and <strong>BioProjects</strong> ready for <code>fastq-dl</code> and the SRA Toolkit</li>
             <li>MRSA consensus call — resolves CGE / RPet disagreements</li>
             <li>Clonal complex (CC) column across all typing views</li>
             <li>Prevalence &amp; co-occurrence views — statistical context for every gene</li>
@@ -1175,11 +1199,31 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     <section class="about-section">
         <h2>🔧 Downstream tools &amp; pipelines</h2>
         <p>
-            SAURUS provides the accession list and the typing context. The next step —
+            SAURUS provides the accession list and the typing context. For 22,277 of 134,130 genomes, it also exports <strong>direct pointers to raw sequencing reads</strong> in the global SRA consortium. The next step —
             phylogenetics, outbreak investigation, pangenome analysis — is done with
             the tools below. Each entry is a well-validated, open-source solution that
             complements SAURUS in a standard <em>S. aureus</em> workflow.
         </p>
+
+        <h3>📥 Raw read retrieval</h3>
+        <p style="color:#64748b;font-size:0.92em;margin-top:-4px;">
+            These tools accept the accession lists exported by the SAURUS
+            <strong>📥 SRA Runs</strong>, <strong>🧪 BioSamples</strong>, and
+            <strong>📦 BioProjects</strong> buttons. All three accept SRR (NCBI),
+            ERR (ENA), and DRR (DDBJ) accessions.
+        </p>
+        <div class="tool-grid">
+            <a class="tool-card" href="https://github.com/rpetit3/fastq-dl" target="_blank" rel="noopener">
+                <div class="tool-name">fastq-dl</div>
+                <div class="tool-desc">One-command FASTQ download from ENA or SRA. Accepts Run, Experiment, Sample, or Study accessions — exactly the formats SAURUS exports. Writes <code>.fastq.gz</code> directly, no intermediate <code>.sra</code>.</div>
+                <div class="tool-meta">Python · Robert Petit III · accepts SRR / ERR / DRR</div>
+            </a>
+            <a class="tool-card" href="https://github.com/ncbi/sra-tools" target="_blank" rel="noopener">
+                <div class="tool-name">SRA Toolkit</div>
+                <div class="tool-desc">NCBI's official toolkit. Two-step workflow — <code>prefetch</code> then <code>fasterq-dump</code> — ideal for reproducible batch pipelines. Ships <code>vdb-validate</code> for MD5 integrity checks on every download.</div>
+                <div class="tool-meta">C++ · NCBI · prefetch + fasterq-dump + vdb-validate</div>
+            </a>
+        </div>
 
         <h3>🔬 Integrated pipelines</h3>
         <div class="tool-grid">
@@ -1241,7 +1285,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
                 <div class="tool-desc">Removes recombination from whole-genome alignments before phylogenetic inference — critical for S. aureus.</div>
                 <div class="tool-meta">Python · Nick Croucher</div>
             </a>
-            <a class="tool-card" href="https://github.com/kloetzl/ClonalFrameML" target="_blank" rel="noopener">
+            <a class="tool-card" href="https://github.com/xavierdidelot/ClonalFrameML" target="_blank" rel="noopener">
                 <div class="tool-name">ClonalFrameML</div>
                 <div class="tool-desc">Maps recombination events onto a clonal genealogy. Accurate for high-recombination species.</div>
                 <div class="tool-meta">C++ · Didelot &amp; Wilson</div>
@@ -1528,7 +1572,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     <div class="footer-line">
         <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
         <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Updated 2026-11-02
+        Updated 2026-11-07
     </div>
 </footer>
 
