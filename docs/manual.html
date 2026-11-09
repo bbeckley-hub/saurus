@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLI Manual — SAURUS</title>
+<meta name="description" content="Complete user manual for the SAURUS command-line interface — query 134,160 S. aureus genomes from your terminal.">
+<style>
+
+:root {
+    --gold: #d4af37;
+    --gold-dark: #b8941f;
+    --navy: #0a1628;
+    --navy-2: #1e293b;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --code-bg: #0f172a;
+    --code-fg: #e2e8f0;
+    --accent: #3b82f6;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+.saurus-nav {
+    background: var(--navy);
+    color: white;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.saurus-nav .brand {
+    display: flex; align-items: center; gap: 20px;
+    text-decoration: none; flex-shrink: 0;
+}
+.saurus-nav .brand-emoji { font-size: 5.6em; line-height: 1; flex-shrink: 0; }
+.saurus-nav .brand-text { display: flex; flex-direction: column; gap: 3px; }
+.saurus-nav .brand-name {
+    font-weight: 800; font-size: 3.45em; letter-spacing: 1px;
+    color: var(--gold); line-height: 1;
+}
+.saurus-nav .brand-tagline {
+    font-size: 1.0em; font-weight: 400;
+    color: #94a3b8; line-height: 1.15; max-width: 520px;
+}
+.saurus-nav .links {
+    display: flex; gap: 2px; align-items: center; flex-wrap: wrap;
+}
+.saurus-nav .links a {
+    color: #cbd5e1; text-decoration: none;
+    padding: 6px 10px; border-radius: 6px;
+    font-size: 0.85em; font-weight: 500;
+    transition: all 0.15s; white-space: nowrap;
+}
+.saurus-nav .links a:hover { background: rgba(255,255,255,0.08); color: white; }
+.saurus-nav .links a.active { background: var(--gold); color: var(--navy); font-weight: 600; }
+.manual-hero {
+    background:
+        radial-gradient(circle at 25% 30%, rgba(212, 175, 55, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 75% 70%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+        linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: white;
+    padding: 70px 32px 55px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.manual-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(212,175,55,0.15) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+    pointer-events: none;
+}
+.manual-hero-inner { position: relative; max-width: 900px; margin: 0 auto; z-index: 1; }
+.manual-hero h1 {
+    font-size: 2.8em; font-weight: 900;
+    color: var(--gold); letter-spacing: 2px;
+    margin-bottom: 12px;
+    text-shadow: 0 4px 24px rgba(212,175,55,0.25);
+}
+.manual-hero .hero-sub {
+    font-size: 1.15em; color: #cbd5e1;
+    margin-bottom: 14px; font-weight: 500;
+}
+.manual-hero .hero-tag {
+    display: inline-block;
+    background: rgba(212,175,55,0.15);
+    color: var(--gold);
+    padding: 6px 18px; border-radius: 20px;
+    font-size: 0.85em; font-weight: 700;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(212,175,55,0.3);
+}
+.manual-hero .hero-cta {
+    margin-top: 26px;
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+}
+.manual-hero .hero-cta a {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 800; font-size: 0.95em;
+    transition: all 0.18s;
+    letter-spacing: 0.3px;
+}
+.manual-hero .hero-cta a.primary {
+    background: var(--gold); color: var(--navy);
+}
+.manual-hero .hero-cta a.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212,175,55,0.35);
+}
+.manual-hero .hero-cta a.secondary {
+    background: rgba(212,175,55,0.15);
+    color: var(--gold);
+    border: 2px solid rgba(212,175,55,0.4);
+}
+.manual-hero .hero-cta a.secondary:hover {
+    background: rgba(212,175,55,0.25);
+    transform: translateY(-2px);
+}
+.manual-layout {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 32px 60px;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 40px;
+    align-items: start;
+}
+.toc {
+    position: sticky;
+    top: 100px;
+    background: var(--card);
+    border-radius: 12px;
+    padding: 22px 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+}
+.toc .toc-title {
+    font-size: 0.78em;
+    font-weight: 800;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--gold);
+}
+.toc ul { list-style: none; }
+.toc li { margin-bottom: 4px; }
+.toc a {
+    display: block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #475569;
+    font-size: 0.88em;
+    font-weight: 500;
+    transition: all 0.12s;
+}
+.toc a:hover { background: #f1f5f9; color: var(--navy); }
+.toc a.section-h {
+    font-weight: 700;
+    color: var(--navy);
+    margin-top: 8px;
+}
+.toc a.section-h:hover { background: rgba(212,175,55,0.1); }
+.toc .toc-sub { margin-left: 12px; font-size: 0.84em; }
+.manual-content { min-width: 0; }
+.manual-section {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 34px 40px;
+    margin-bottom: 26px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    scroll-margin-top: 100px;
+}
+.manual-section h2 {
+    font-size: 1.6em;
+    color: var(--navy);
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 14px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--gold);
+    font-weight: 800;
+}
+.manual-section h3 {
+    font-size: 1.15em;
+    color: #334155;
+    margin: 26px 0 12px;
+    font-weight: 700;
+}
+.manual-section p {
+    color: #475569;
+    margin-bottom: 14px;
+    font-size: 1.0em;
+    line-height: 1.7;
+}
+.manual-section ul, .manual-section ol {
+    margin: 8px 0 16px 24px;
+    color: #475569;
+}
+.manual-section li {
+    margin-bottom: 8px;
+    line-height: 1.65;
+}
+.manual-section code {
+    background: #f1f5f9;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 0.88em;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+}
+.manual-section a {
+    color: #1e40af;
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px dotted #1e40af;
+}
+.manual-section a:hover { color: var(--gold-dark); border-bottom-color: var(--gold-dark); }
+.lead {
+    font-size: 1.08em;
+    color: #334155;
+    line-height: 1.75;
+    margin-bottom: 20px;
+}
+.code-block {
+    position: relative;
+    margin: 14px 0 10px;
+}
+.code-block pre {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    padding: 18px 60px 18px 22px;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+    font-size: 0.92em;
+    line-height: 1.6;
+    margin: 0;
+    border-left: 4px solid var(--gold);
+}
+.code-block pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+}
+.code-block .prompt { color: #64748b; user-select: none; }
+.code-block .cmd    { color: #fbbf24; }
+.code-block .comment { color: #64748b; font-style: italic; }
+.copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255,255,255,0.08);
+    color: #e2e8f0;
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.78em;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+}
+.copy-btn:hover {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+}
+.copy-btn.copied {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+.example-list { display: flex; flex-direction: column; gap: 22px; }
+.example-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 22px 24px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+}
+.example-item .ex-title {
+    font-size: 1.05em;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 6px;
+}
+.example-item .ex-desc {
+    font-size: 0.92em;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.55;
+}
+.example-item .ex-note {
+    margin-top: 8px;
+    font-size: 0.85em;
+    color: #92400e;
+    background: #fffbeb;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-block;
+    border-left: 3px solid #f59e0b;
+}
+.flag-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 20px;
+    font-size: 0.92em;
+}
+.flag-table th {
+    background: var(--navy);
+    color: var(--gold);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.82em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+}
+.flag-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+.flag-table tr:hover td { background: #f8fafc; }
+.flag-table td code {
+    background: var(--navy);
+    color: var(--gold);
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 0.88em;
+    border: none;
+}
+.flag-table td.flag-ex code {
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 500;
+}
+.flag-group-title {
+    font-size: 0.78em;
+    font-weight: 800;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 22px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+}
+.lineage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+}
+.lineage-card {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 16px 18px;
+    border-left: 5px solid var(--lc, var(--gold));
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.15s;
+}
+.lineage-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+.lineage-card .lc-name {
+    font-size: 1.05em;
+    font-weight: 900;
+    color: var(--lc, var(--gold-dark));
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+}
+.lineage-card .lc-sig {
+    font-size: 0.82em;
+    color: #475569;
+    font-family: 'SF Mono', Monaco, monospace;
+    line-height: 1.5;
+}
+.callout {
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin: 16px 0;
+    font-size: 0.95em;
+    line-height: 1.65;
+}
+.callout.info    { background: #eff6ff; border-left: 4px solid #3b82f6; color: #1e3a8a; }
+.callout.success { background: #f0fdf4; border-left: 4px solid #10b981; color: #065f46; }
+.callout.warn    { background: #fffbeb; border-left: 4px solid #f59e0b; color: #78350f; }
+.callout.danger  { background: #fef2f2; border-left: 4px solid #dc2626; color: #991b1b; }
+.callout strong { font-weight: 800; }
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+}
+.feature-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px 18px;
+    border: 1px solid var(--border);
+    transition: all 0.18s;
+}
+.feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    border-color: var(--gold);
+}
+.feature-card .f-icon {
+    font-size: 1.8em;
+    display: block;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+.feature-card h4 {
+    color: var(--navy);
+    font-size: 1em;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+.feature-card p {
+    color: var(--muted);
+    font-size: 0.88em;
+    margin: 0;
+    line-height: 1.55;
+}
+.saurus-footer {
+    background: var(--navy);
+    color: #94a3b8;
+    padding: 40px 32px;
+    text-align: center;
+    font-size: 0.88em;
+    margin-top: 40px;
+}
+.saurus-footer .footer-line { margin: 8px 0; }
+.saurus-footer a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+}
+.saurus-footer a:hover { text-decoration: underline; }
+.saurus-footer .full-name {
+    color: #cbd5e1;
+    font-size: 1em;
+    letter-spacing: 0.2px;
+    margin-bottom: 14px;
+}
+@media (max-width: 1000px) {
+    .manual-layout {
+        grid-template-columns: 1fr;
+        padding: 24px 20px 50px;
+    }
+    .toc { position: static; max-height: none; }
+    .saurus-nav { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .saurus-nav .brand-tagline { max-width: 100%; }
+    .saurus-nav .brand-emoji { font-size: 3.6em; }
+    .saurus-nav .brand-name { font-size: 2.2em; }
+    .manual-hero { padding: 50px 20px 40px; }
+    .manual-hero h1 { font-size: 2.1em; }
+    .manual-section { padding: 26px 22px; }
+    .manual-section h2 { font-size: 1.3em; }
+}
+@media (max-width: 600px) {
+    .saurus-nav { padding: 14px 16px; }
+    .manual-hero .hero-cta { flex-direction: column; align-items: stretch; }
+    .manual-hero .hero-cta a { justify-content: center; }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="saurus-nav">
+    <a class="brand" href="index.html">
+        <span class="brand-emoji">🦖</span>
+        <span class="brand-text">
+            <span class="brand-name">SAURUS</span>
+            <span class="brand-tagline">Staphylococcus aureus Unified Resource for Universal Surveillance</span>
+        </span>
+    </a>
+    <div class="links"><a href="index.html">Home</a><a href="pages/mlst.html">MLST</a><a href="pages/spa.html">spa</a><a href="pages/sccmec.html">SCCmec</a><a href="pages/capsule.html">Capsule</a><a href="pages/agr.html">agr</a><a href="pages/mrsa.html">MRSA</a><a href="pages/amr.html">AMR</a><a href="pages/vfdb.html">Virulence</a><a href="pages/plasmid.html">Plasmid</a><a href="statistics.html">Statistics</a><a href="trends.html">Trends</a><a href="compare.html">Compare</a><a href="geography.html">Geography</a><a href="lineages.html">Lineages</a><a href="downloads.html">Downloads</a><a href="manual.html" class='active'>CLI Manual</a><a href="about.html">About</a></div>
+</nav>
+
+<header class="manual-hero">
+    <div class="manual-hero-inner">
+        <h1>SAURUS CLI Manual</h1>
+        <p class="hero-sub">Query 134,160 <em>S. aureus</em> genomes from your terminal.</p>
+        <span class="hero-tag">v0.3.0  ·  MIT License  ·  No installation required for the web UI</span>
+        <div class="hero-cta">
+            <a class="primary" href="#quickstart">🚀 Get Started</a>
+            <a class="secondary" href="https://pypi.org/project/saurus-cli/" target="_blank">🐍 Install from PyPI</a>
+            <a class="secondary" href="#examples">📚 Browse examples</a>
+        </div>
+    </div>
+</header>
+
+<div class="manual-layout">
+    <nav class="toc"><div class="toc-title">On This Page</div><ul><li><a class="section-h" href="#quickstart">🚀  Quick Start</a></li><li><a class="section-h" href="#install">📦  Installation</a></li><li><a class="section-h" href="#first-query">🎯  Your First Query</a></li><li><a class="section-h" href="#flags">🧾  Core Flags</a></li><li><a class="section-h" href="#lineages">🏷️  Lineage Signatures</a></li><li><a class="section-h" href="#examples">📚  Example Queries</a></li><li><a class="section-h" href="#multi-format">📤  Multi-Format Output</a></li><li><a class="section-h" href="#config">🔁  Reproducible Configs</a></li><li><a class="section-h" href="#pipeline">⚙️  Pipeline Integration</a></li><li><a class="section-h" href="#diagnostics">🐞  Troubleshooting</a></li><li><a class="section-h" href="#cli-commands">💻  CLI Commands</a></li></ul></nav>
+    <div class="manual-content">
+
+        <!-- ============ QUICK START ============ -->
+        <section class="manual-section" id="quickstart">
+            <h2>🚀 Quick Start</h2>
+            <p class="lead">
+                The most common workflow is <strong>filter → verify → export</strong>. Here's the
+                whole thing in four commands:
+            </p>
+
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --count</span>
+<span class="comment"># Step 1: how many USA300 genomes exist globally?</span></code></pre></div>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --country USA --source blood --count</span>
+<span class="comment"># Step 2: narrow to USA bloodstream isolates</span></code></pre></div>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --country USA --source blood -o usa300_blood.txt</span>
+<span class="comment"># Step 3: export the accession list</span></code></pre></div>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">datasets download genome accession --inputfile usa300_blood.txt --filename usa300_blood.zip</span>
+<span class="comment"># Step 4: download the genomes from NCBI</span></code></pre></div>
+
+            <div class="callout success">
+                <strong>That's it.</strong> Four commands, four steps — from "I want USA300 bloodstream
+                isolates from the USA" to "I have the genome files on my laptop." No scripting, no
+                intermediate files, no pipeline.
+            </div>
+        </section>
+
+        <!-- ============ INSTALL ============ -->
+        <section class="manual-section" id="install">
+            <h2>📦 Installation</h2>
+            <p>
+                SAURUS CLI is a lightweight Python package. It requires <strong>Python 3.8+</strong>
+                and <code>pandas</code>. No other dependencies. No root access.
+                The full <strong>134,160-genome dataset is bundled inside every distribution</strong>,
+                so queries run locally with no downloads, no API keys, and no network access after install.
+            </p>
+
+            <p>
+                Choose whichever method fits your workflow. All five methods deliver the same CLI
+                and the same bundled data.
+            </p>
+
+            <h3>pip (standard)</h3>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">pip install saurus-cli</span></code></pre></div>
+
+            <h3>uv (fastest)</h3>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">uv tool install saurus-cli</span></code></pre></div>
+
+            <h3>pipx (isolated environment)</h3>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">pipx install saurus-cli</span></code></pre></div>
+
+            <h3>conda (Bioconda)</h3>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">conda install -c bioconda saurus-cli</span></code></pre></div>
+
+            <h3>Docker</h3>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">docker pull bbeckleyhub/saurus-cli:latest</span></code></pre></div>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">docker run --rm bbeckleyhub/saurus-cli:latest --version</span></code></pre></div>
+
+            <h3>Verify the install</h3>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --version</span></code></pre></div>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --count</span></code></pre></div>
+
+            <div class="callout info">
+                <strong>Data files:</strong> The full SAURUS dataset ships bundled inside the pip
+                distribution. You only need to run <code>saurus init</code> if you want to manually
+                refresh the data bundle to the latest release. If you installed via Docker, the data
+                is already baked into the image.
+            </div>
+        </section>
+
+        <!-- ============ FIRST QUERY ============ -->
+        <section class="manual-section" id="first-query">
+            <h2>🎯 Your First Query</h2>
+            <p>
+                Once installed, run the banner — it shows your version, affiliation, and a quick-start
+                reference:
+            </p>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --examples</span>
+<span class="comment"># Show the full example gallery</span></code></pre></div>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --about</span>
+<span class="comment"># Show author, affiliation, citations, and links</span></code></pre></div>
+
+            <p>Now try your first real query — count USA300 genomes:</p>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --count</span></code></pre></div>
+
+            <p>You should see a number like <code>10,448</code>. That's the number of USA300
+            genomes in the SAURUS database right now.</p>
+        </section>
+
+        <!-- ============ CORE FLAGS ============ -->
+        <section class="manual-section" id="flags">
+            <h2>🧾 Core Flags</h2>
+            <p class="lead">
+                Every flag can be combined with every other flag. The CLI applies them
+                sequentially — each filter narrows the result set further.
+            </p>
+            <div class="flag-group-title">Typing filters</div><table class="flag-table"><thead><tr><th>Flag</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>--st</code></td><td>MLST Sequence Type</td><td class="flag-ex"><code>--st 5 or --st ST5</code></td></tr><tr><td><code>--cc</code></td><td>Clonal Complex</td><td class="flag-ex"><code>--cc 398 or --cc CC398</code></td></tr><tr><td><code>--spa</code></td><td>spa Type</td><td class="flag-ex"><code>--spa t002</code></td></tr><tr><td><code>--sccmec</code></td><td>SCCmec Type</td><td class="flag-ex"><code>--sccmec II</code></td></tr><tr><td><code>--agr</code></td><td>agr Type</td><td class="flag-ex"><code>--agr I or II</code></td></tr><tr><td><code>--capsule</code></td><td>Capsule Serotype</td><td class="flag-ex"><code>--capsule 5 or 8</code></td></tr></tbody></table><div class="flag-group-title">Phenotype</div><table class="flag-table"><thead><tr><th>Flag</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>--mrsa</code></td><td>Only MRSA isolates</td><td class="flag-ex"><code>--mrsa</code></td></tr><tr><td><code>--mssa</code></td><td>Only MSSA isolates</td><td class="flag-ex"><code>--mssa</code></td></tr><tr><td><code>--has-sra</code></td><td>Only genomes with SRA reads</td><td class="flag-ex"><code>--has-sra</code></td></tr></tbody></table><div class="flag-group-title">Epidemiological metadata</div><table class="flag-table"><thead><tr><th>Flag</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>--country</code></td><td>Country of origin</td><td class="flag-ex"><code>--country USA</code></td></tr><tr><td><code>--source</code></td><td>Isolation source</td><td class="flag-ex"><code>--source blood</code></td></tr><tr><td><code>--host</code></td><td>Host species</td><td class="flag-ex"><code>--host &quot;Homo sapiens&quot;</code></td></tr><tr><td><code>--year</code></td><td>Collection year or range</td><td class="flag-ex"><code>--year 2019  or  2015-2023</code></td></tr></tbody></table><div class="flag-group-title">Gene content</div><table class="flag-table"><thead><tr><th>Flag</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>--amr</code></td><td>AMR gene(s), comma-separated</td><td class="flag-ex"><code>--amr mecA,tetM</code></td></tr><tr><td><code>--vfdb</code></td><td>Virulence gene(s)</td><td class="flag-ex"><code>--vfdb lukS-PV</code></td></tr><tr><td><code>--plasmid</code></td><td>Plasmid replicon(s)</td><td class="flag-ex"><code>--plasmid rep5a</code></td></tr><tr><td><code>--any</code></td><td>Match ANY gene (default ALL)</td><td class="flag-ex"><code>--amr mecA,tetM --any</code></td></tr></tbody></table><div class="flag-group-title">Output</div><table class="flag-table"><thead><tr><th>Flag</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>--format</code></td><td>One or more formats (tsv, csv, json, accession, sra, biosample, bioproject)</td><td class="flag-ex"><code>--format tsv,accession,sra</code></td></tr><tr><td><code>--output</code></td><td>Output base path</td><td class="flag-ex"><code>-o usa300_results</code></td></tr><tr><td><code>--count</code></td><td>Print count only</td><td class="flag-ex"><code>--count</code></td></tr><tr><td><code>--quiet</code></td><td>Suppress footer (scripts)</td><td class="flag-ex"><code>-q</code></td></tr><tr><td><code>--debug</code></td><td>Show row counts per filter</td><td class="flag-ex"><code>--debug</code></td></tr></tbody></table><div class="flag-group-title">Shortcuts</div><table class="flag-table"><thead><tr><th>Flag</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>--lineage</code></td><td>Pre-defined signature</td><td class="flag-ex"><code>--lineage USA300</code></td></tr><tr><td><code>--config</code></td><td>JSON config file</td><td class="flag-ex"><code>--config query.json</code></td></tr><tr><td><code>--examples</code></td><td>Show example gallery</td><td class="flag-ex"><code>--examples</code></td></tr><tr><td><code>--about</code></td><td>Author and citation info</td><td class="flag-ex"><code>--about</code></td></tr><tr><td><code>--version</code></td><td>Version number</td><td class="flag-ex"><code>--version</code></td></tr></tbody></table>
+        </section>
+
+        <!-- ============ LINEAGE SIGNATURES ============ -->
+        <section class="manual-section" id="lineages">
+            <h2>🏷️ Lineage Signatures</h2>
+            <p class="lead">
+                Typing an entire clone's genotype by hand is tedious. Use <code>--lineage</code> to
+                apply a curated signature in one flag. Any flag you pass <em>alongside</em>
+                <code>--lineage</code> will override the corresponding component.
+            </p>
+            <div class="lineage-grid"><div class="lineage-card" style="--lc: #dc2626;"><div class="lc-name">USA100</div><div class="lc-sig">ST5 · t002 · SCCmec II · agr II · capsule 5</div></div><div class="lineage-card" style="--lc: #ea580c;"><div class="lc-name">USA300</div><div class="lc-sig">ST8 · t008 · SCCmec IV · agr I · capsule 5</div></div><div class="lineage-card" style="--lc: #f59e0b;"><div class="lc-name">USA400</div><div class="lc-sig">ST1 · t128 · SCCmec IV · agr III · capsule 8</div></div><div class="lineage-card" style="--lc: #ca8a04;"><div class="lc-name">USA500</div><div class="lc-sig">ST8 · t064 · SCCmec IV · agr I · capsule 5</div></div><div class="lineage-card" style="--lc: #65a30d;"><div class="lc-name">USA700</div><div class="lc-sig">ST72 · t324 · SCCmec IV · agr I · capsule 5</div></div><div class="lineage-card" style="--lc: #16a34a;"><div class="lc-name">USA800</div><div class="lc-sig">ST5 · t688 · SCCmec IV · agr II · capsule 5</div></div><div class="lineage-card" style="--lc: #0d9488;"><div class="lc-name">EMRSA-15</div><div class="lc-sig">ST22 · t032 · SCCmec IV · agr I · capsule 5</div></div><div class="lineage-card" style="--lc: #0891b2;"><div class="lc-name">EMRSA-16</div><div class="lc-sig">ST36 · t018 · SCCmec II · agr III · capsule 8</div></div><div class="lineage-card" style="--lc: #7c3aed;"><div class="lc-name">Bengal Bay</div><div class="lc-sig">ST772 · t657 · SCCmec V · agr II · capsule 5</div></div><div class="lineage-card" style="--lc: #db2777;"><div class="lc-name">ST152</div><div class="lc-sig">ST152 · t355 · SCCmec V · agr I · capsule 5</div></div></div>
+
+            <h3>Override a component</h3>
+            <p>
+                For example, USA300 is globally distributed. Restrict it to Japan:
+            </p>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --country Japan --count</span></code></pre></div>
+
+            <p>
+                The USA300 signature supplies ST8, t008, SCCmec IV, agr I, capsule 5. Your
+                <code>--country Japan</code> flag overrides nothing — it just adds a filter on top.
+                But if you also passed <code>--spa t437</code>, that would override the signature's t008.
+            </p>
+        </section>
+
+        <!-- ============ EXAMPLES GALLERY ============ -->
+        <section class="manual-section" id="examples">
+            <h2>📚 Example Queries</h2>
+            <p class="lead">
+                Copy-paste any of these commands. Each is a real query that returns real data.
+                The full list is also available in the terminal with <code>saurus --examples</code>.
+            </p>
+            <h3 id="ex-counting">📊 Counting Genomes</h3><p>Get a number fast — perfect for checking how much data exists before you commit to downloading.</p><div class="example-list"><div class="example-item"><div class="ex-title">USA300 globally</div><div class="ex-desc">The world's most sequenced community-acquired MRSA clone.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --count</span></code></pre></div><div class="ex-note">💡 Returns 10,448 genomes.</div></div><div class="example-item"><div class="ex-title">USA100 bloodstream isolates in the USA</div><div class="ex-desc">The New York/Japan clone — dominant hospital MRSA in the US.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA100 --country USA --source blood --count</span></code></pre></div><div class="ex-note">💡 Returns 341 genomes.</div></div><div class="example-item"><div class="ex-title">ST5 MRSA with SCCmec II and agr II</div><div class="ex-desc">The full genotype you'd expect for a USA100 hospital isolate.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 5 --sccmec II --agr II --mrsa --count</span></code></pre></div><div class="ex-note">💡 Returns 7,133 genomes.</div></div><div class="example-item"><div class="ex-title">Livestock-associated MRSA in Denmark</div><div class="ex-desc">CC398 in Denmark — a classic LA-MRSA surveillance query.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --cc 398 --mrsa --country Denmark --count</span></code></pre></div></div><div class="example-item"><div class="ex-title">All MRSA from Ghana</div><div class="ex-desc">Demonstrates African surveillance coverage.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --mrsa --country Ghana --count</span></code></pre></div><div class="ex-note">💡 Returns 102 genomes — the African data gap in action.</div></div></div><h3 id="ex-export">📤 Exporting Accessions</h3><p>Every query exports a clean accession list. You can also export metadata tables, SRA runs, BioSamples, and BioProjects in one command.</p><div class="example-list"><div class="example-item"><div class="ex-title">Plain-text accession list</div><div class="ex-desc">The format 95% of downstream pipelines actually consume.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 -o usa300.txt</span></code></pre></div><div class="ex-note">💡 Exports 10,448 accessions.</div></div><div class="example-item"><div class="ex-title">Metadata table AND accession list together</div><div class="ex-desc">One command → two files. Verify the rows, then feed the list downstream.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --format tsv,accession -o usa300_results</span></code></pre></div><div class="ex-note">💡 Produces usa300_results.tsv and usa300_results.txt.</div></div><div class="example-item"><div class="ex-title">Everything, all at once</div><div class="ex-desc">TSV + JSON + accession list — three files, one command.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage EMRSA-15 --format tsv,json,accession -o emrsa15_results</span></code></pre></div></div></div><h3 id="ex-sra">📥 SRA Raw Reads</h3><p>Export SRA run accessions directly for fastq-dl. 22,322 genomes in the database have retrievable raw reads.</p><div class="example-list"><div class="example-item"><div class="ex-title">Count genomes with raw reads</div><div class="ex-desc">Filter only genomes that have a retrievable SRA run.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --has-sra --count</span></code></pre></div><div class="ex-note">💡 Returns 22,322 genomes.</div></div><div class="example-item"><div class="ex-title">Export SRA runs</div><div class="ex-desc">Get a clean list of SRR/ERR/DRR accessions for fastq-dl.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --format sra -o usa300_runs</span></code></pre></div><div class="ex-note">💡 Exports 1,821 unique SRA runs for USA300.</div></div><div class="example-item"><div class="ex-title">Export BioSamples and BioProjects</div><div class="ex-desc">For sample-level metadata or study-level tracking.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --format biosample,bioproject -o usa300_meta</span></code></pre></div><div class="ex-note">💡 Produces usa300_meta_biosamples.txt and usa300_meta_bioprojects.txt.</div></div></div><h3 id="ex-genotype">🧬 Genotype Queries</h3><p>Filter by gene content across the AMR, virulence, and plasmid modules. Match ALL (default) or ANY with --any.</p><div class="example-list"><div class="example-item"><div class="ex-title">PVL-positive ST8</div><div class="ex-desc">lukS-PV is the toxin marker that made USA300 famous.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 8 --vfdb lukS-PV --count</span></code></pre></div><div class="ex-note">💡 Returns 258 genomes.</div></div><div class="example-item"><div class="ex-title">MRSA with mecA and tetM</div><div class="ex-desc">Match ALL genes — the default AND logic.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --amr mecA,tetM --count</span></code></pre></div><div class="ex-note">💡 Returns genomes containing both genes.</div></div><div class="example-item"><div class="ex-title">Multi-drug resistant (match ANY)</div><div class="ex-desc">mecA OR tetM — the OR logic. Returns a massive set.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --amr mecA,tetM --any --count</span></code></pre></div><div class="ex-note">💡 Returns 134,273 genomes.</div></div><div class="example-item"><div class="ex-title">Plasmid replicon filter</div><div class="ex-desc">Find genomes carrying a specific plasmid replicon — useful for horizontal-gene-transfer studies.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --plasmid rep5a --count</span></code></pre></div><div class="ex-note">💡 Returns 21,619 genomes.</div></div></div><h3 id="ex-metadata">🌍 Metadata Queries</h3><p>Combine genotype with country, source, host, and year — the core of surveillance.</p><div class="example-list"><div class="example-item"><div class="ex-title">USA300 bloodstream infections, USA, 2005–2015</div><div class="ex-desc">The decade USA300 exploded across US hospitals.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --source blood --year 2005-2015 -o usa300_2005_2015.txt</span></code></pre></div><div class="ex-note">💡 Exports 482 genomes.</div></div><div class="example-item"><div class="ex-title">EMRSA-15 in the UK</div><div class="ex-desc">The UK's dominant hospital-acquired MRSA clone.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage EMRSA-15 --country &quot;United Kingdom&quot; --count</span></code></pre></div><div class="ex-note">💡 Returns 681 genomes.</div></div><div class="example-item"><div class="ex-title">Bengal Bay clone in India</div><div class="ex-desc">ST772 — a regional clone with global spread.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage &quot;Bengal Bay&quot; --country India --count</span></code></pre></div><div class="ex-note">💡 Returns 36 genomes.</div></div><div class="example-item"><div class="ex-title">Recent EMRSA-16 in the UK</div><div class="ex-desc">Combines lineage and geography.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage EMRSA-16 --country &quot;United Kingdom&quot; --count</span></code></pre></div><div class="ex-note">💡 Older historical records dominate; the 2020-2025 filter returns 0.</div></div></div><h3 id="ex-diagnostics">🐞 Diagnostics</h3><p>When a query returns 0 genomes, --debug shows you exactly where the count dropped. The #1 time saver.</p><div class="example-list"><div class="example-item"><div class="ex-title">Debug an impossible genotype</div><div class="ex-desc">ST5 is never agr I / capsule 8 — the USA100 genotype is agr II / capsule 5.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 5 --agr I --capsule 8 --debug --count</span></code></pre></div><div class="ex-note">💡 Shows the exact step where it drops to 0.</div></div><div class="example-item"><div class="ex-title">Quiet mode for pipelines</div><div class="ex-desc">Suppresses banner, footer, and quote — clean stdout for scripting.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 -q | head -5</span></code></pre></div><div class="ex-note">💡 Exits silently when piped — no BrokenPipeError.</div></div></div><h3 id="ex-lineages">🏷️ Lineage Signatures</h3><p>Use --lineage to apply a curated genotype signature in one flag. Override any component by passing the specific flag yourself.</p><div class="example-list"><div class="example-item"><div class="ex-title">USA300 override</div><div class="ex-desc">USA300 signature, but restricted to Japan instead of global.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --country Japan --count</span></code></pre></div><div class="ex-note">💡 Returns 145 genomes.</div></div><div class="example-item"><div class="ex-title">ST152 (African clone) in Ghana</div><div class="ex-desc">ST152 is prominent in West Africa and typically carries SCCmec V.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 152 --country Ghana --count</span></code></pre></div><div class="ex-note">💡 Use --st 152 instead of --lineage ST152 for broader coverage.</div></div><div class="example-item"><div class="ex-title">List available signatures</div><div class="ex-desc">An unknown lineage shows the full list of options.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage XYZ</span></code></pre></div><div class="ex-note">💡 Prints all available shortcuts and exits.</div></div></div>
+        </section>
+
+        <!-- ============ MULTI-FORMAT ============ -->
+        <section class="manual-section" id="multi-format">
+            <h2>📤 Multi-Format Output</h2>
+            <p class="lead">
+                Need both the metadata table <em>and</em> the accession list? Request both in one run.
+                You can also export SRA runs, BioSamples, and BioProjects directly.
+            </p>
+
+            <h3>Two files, one command</h3>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --format tsv,accession -o usa300_results</span>
+<span class="comment"># produces usa300_results.tsv + usa300_results.txt</span></code></pre></div>
+
+            <h3>Three formats at once</h3>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage EMRSA-15 --format tsv,json,accession -o emrsa15_results</span>
+<span class="comment"># produces usa300_results.tsv, .json, and .txt</span></code></pre></div>
+
+            <h3>Which format should I use?</h3>
+            <table class="flag-table">
+                <thead>
+                    <tr><th>Format</th><th>Best for</th><th>Extension</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>accession</code></td>
+                        <td>Downstream NCBI datasets downloads, pipeline integration</td>
+                        <td><code>.txt</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>sra</code></td>
+                        <td>Raw reads — pipe directly to <code>fastq-dl</code> or <code>prefetch</code></td>
+                        <td><code>_sra_runs.txt</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>biosample</code></td>
+                        <td>Sample metadata or <code>fastq-dl --group-by-sample</code></td>
+                        <td><code>_biosamples.txt</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>bioproject</code></td>
+                        <td>Study-level bulk downloading</td>
+                        <td><code>_bioprojects.txt</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>tsv</code></td>
+                        <td>Excel, R, pandas, Spotfire — tab-separated for easy parsing</td>
+                        <td><code>.tsv</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>csv</code></td>
+                        <td>Sharing with collaborators who prefer CSV, or MS Access</td>
+                        <td><code>.csv</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>json</code></td>
+                        <td>Web apps, jq, JavaScript, reproducible archival</td>
+                        <td><code>.json</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout info">
+                <strong>Tip:</strong> If you pass <code>--output</code> without a recognized extension,
+                SAURUS appends the correct one for each format. So
+                <code>-o usa300_results</code> works — you don't have to add <code>.tsv</code>.
+            </div>
+        </section>
+
+        <!-- ============ CONFIG FILES ============ -->
+        <section class="manual-section" id="config">
+            <h2>🔁 Reproducible Configs</h2>
+            <p class="lead">
+                For recurring surveillance tasks, save your query as a JSON config file and
+                share it with collaborators. Anyone with the same dataset will reproduce your
+                exact result set.
+            </p>
+
+            <h3>Create <code>usa100_surveillance.json</code></h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                <pre><code>{
+  "lineage": "USA100",
+  "country": "United States",
+  "source": "blood",
+  "mrsa": true,
+  "year": "2020-2025",
+  "format": "tsv,accession",
+  "output": "usa100_surveillance_2020_2025"
+}</code></pre>
+            </div>
+
+            <h3>Run it</h3>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --config usa100_surveillance.json</span></code></pre></div>
+
+            <div class="callout success">
+                <strong>Reproducibility guarantee:</strong> When you email that JSON file to a
+                collaborator, they run the same command and get identical results — byte-for-byte,
+                assuming the same SAURUS data release. This is exactly the reproducibility model
+                that journals and funders are asking for.
+            </div>
+
+            <h3>Override a config value from the command line</h3>
+            <p>
+                Config values are defaults. Any command-line flag overrides the corresponding
+                config field:
+            </p>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --config usa100_surveillance.json --country Japan</span>
+<span class="comment"># runs the same query but for Japan instead of the United States</span></code></pre></div>
+        </section>
+
+        <!-- ============ PIPELINE ============ -->
+        <section class="manual-section" id="pipeline">
+            <h2>⚙️ Pipeline Integration</h2>
+            <p class="lead">
+                SAURUS CLI is designed to fit into existing pipelines. It reads from
+                <code>./data/</code>, writes to stdout, and exits silently when piped.
+            </p>
+
+            <h3>Pipe accessions directly into NCBI datasets</h3>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 | datasets download genome accession --inputfile /dev/stdin --filename usa300.zip</span>
+<span class="comment"># No intermediate file needed</span></code></pre></div>
+
+            <h3>Chain with other tools</h3>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 -q | wc -l</span>
+<span class="comment"># Count how many genomes match (quiet mode, no banner)</span></code></pre></div>
+
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 -q &gt; accessions.txt &amp;&amp; datasets download genome accession --inputfile accessions.txt --filename usa300.zip</span>
+<span class="comment"># Shell pipeline — download immediately</span></code></pre></div>
+
+            <h3>Use in a Snakemake or Nextflow rule</h3>
+            <p>Because <code>saurus</code> exits silently when piped and accepts <code>--quiet</code>,
+            it can be called directly from any pipeline tool:</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                <pre><code><span class="comment"># Snakemake rule</span>
+rule download_usa300:
+    output: "data/usa300_accessions.txt"
+    shell:
+        "saurus --lineage USA300 --country USA -q -o "</code></pre>
+            </div>
+
+            <div class="callout warn">
+                <strong>Quiet mode matters:</strong> always pass <code>-q</code> when calling
+                <code>saurus</code> from a pipeline or script. It suppresses the banner, quote,
+                and marketing footer — so the only thing that reaches your stdout is the data.
+            </div>
+        </section>
+
+        <!-- ============ TROUBLESHOOTING ============ -->
+        <section class="manual-section" id="diagnostics">
+            <h2>🐞 Troubleshooting</h2>
+
+            <h3>Zero matches — but the query should work?</h3>
+            <p>
+                The most common reason a query returns 0 is that the genotype you're asking
+                for <em>doesn't exist in nature</em>. For example, ST5 + agr I + capsule 8 is
+                impossible — USA100 is agr II + capsule 5. Run with <code>--debug</code> to see
+                exactly where the count drops:
+            </p>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 5 --agr I --capsule 8 --debug --count</span>
+<span class="comment"># shows which filter is the culprit</span></code></pre></div>
+
+            <p>You'll see something like:</p>
+            <div class="code-block">
+                <pre><code><span class="comment">  [debug] Initial load: 134,160 rows</span>
+<span class="comment">  [debug] --st 5: 14,930 rows</span>
+<span class="comment">  [debug] --agr I: 0 rows       ← the culprit</span></code></pre>
+            </div>
+
+            <h3>Master file not found</h3>
+            <p>
+                The CLI needs a master TSV at <code>data/mrsa/mrsa_all.tsv</code>. If it's missing,
+                regenerate it:
+            </p>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">python scripts/build_master_tsv.py</span></code></pre></div>
+
+            <h3>BrokenPipeError when piping to head / less</h3>
+            <p>
+                This is <em>not a bug</em> — it's Python's default behavior. SAURUS CLI suppresses
+                it automatically since v0.2. If you're on an older version, upgrade:
+            </p>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">pip install --upgrade saurus-cli</span></code></pre></div>
+
+            <h3>Command not found: saurus</h3>
+            <p>The package wasn't installed correctly. Try reinstalling with the dash:</p>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">pip install saurus-cli</span>
+<span class="comment"># note: if using dev mode, it is &quot;-e .&quot;, not &quot;e .&quot; — the dash matters!</span></code></pre></div>
+
+            <h3>Still stuck?</h3>
+            <p>
+                Open an issue at
+                <a href="https://github.com/bbeckley-hub/saurus/issues" target="_blank">github.com/bbeckley-hub/saurus/issues</a>
+                — include your terminal command and the <code>--debug</code> output.
+            </p>
+        </section>
+
+        <!-- ============ CLI COMMANDS ============ -->
+        <section class="manual-section" id="cli-commands">
+            <h2>💻 Built-in CLI Commands</h2>
+            <p class="lead">
+                The CLI documents itself. You don't have to remember the manual.
+            </p>
+
+            <table class="flag-table">
+                <thead>
+                    <tr><th>Command</th><th>What it does</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>saurus</code></td>
+                        <td>Bare invocation — shows banner, help, and a quick-start hint</td>
+                    </tr>
+                    <tr>
+                        <td><code>saurus init</code></td>
+                        <td>Download or refresh the data bundle (optional; data is bundled)</td>
+                    </tr>
+                    <tr>
+                        <td><code>saurus --examples</code></td>
+                        <td>Full gallery of example queries (same as this manual's gallery)</td>
+                    </tr>
+                    <tr>
+                        <td><code>saurus --about</code></td>
+                        <td>Author, affiliation, citations, and links</td>
+                    </tr>
+                    <tr>
+                        <td><code>saurus --help</code></td>
+                        <td>Formal argparse help — full flag reference</td>
+                    </tr>
+                    <tr>
+                        <td><code>saurus --version</code></td>
+                        <td>Version number</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout info">
+                <strong>Pro tip:</strong> Try <code>saurus --examples</code> right now — it prints
+                the same gallery you see on this page, with rotating science quotes at the bottom.
+            </div>
+        </section>
+
+        <!-- ============ SUPPORT ============ -->
+        <section class="manual-section" style="background: linear-gradient(135deg, #0a1628 0%, #1e293b 100%); color: white; border-left: 6px solid var(--gold);">
+            <h2 style="color: var(--gold); border-bottom-color: rgba(212,175,55,0.3);">⭐ Support the Project</h2>
+            <p style="color: #cbd5e1; font-size: 1.05em; line-height: 1.75;">
+                SAURUS CLI is developed and maintained by
+                <strong style="color:#f8fafc;">Brown Beckley</strong>
+                (University of Ghana Medical School, Accra, Ghana) as an independent, unfunded project.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 20px;">
+                <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 18px 20px;">
+                    <div style="font-size: 1.8em; margin-bottom: 8px;">⭐</div>
+                    <div style="font-weight: 800; font-size: 1em; margin-bottom: 6px; color: var(--gold);">Star the repo</div>
+                    <div style="font-size: 0.88em; color: #cbd5e1; line-height: 1.5; margin-bottom: 12px;">
+                        A GitHub star helps other researchers discover SAURUS.
+                    </div>
+                    <a href="https://github.com/bbeckley-hub/saurus" target="_blank"
+                       style="display:inline-block;padding:8px 16px;background:var(--gold);color:var(--navy);border-radius:8px;text-decoration:none;font-weight:800;font-size:0.85em;">
+                        ⭐ Star on GitHub
+                    </a>
+                </div>
+                <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 18px 20px;">
+                    <div style="font-size: 1.8em; margin-bottom: 8px;">🐛</div>
+                    <div style="font-weight: 800; font-size: 1em; margin-bottom: 6px; color: var(--gold);">Report bugs</div>
+                    <div style="font-size: 0.88em; color: #cbd5e1; line-height: 1.5; margin-bottom: 12px;">
+                        Found an error? Open an issue — every report improves the resource.
+                    </div>
+                    <a href="https://github.com/bbeckley-hub/saurus/issues" target="_blank"
+                       style="display:inline-block;padding:8px 16px;background:rgba(255,255,255,0.08);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;text-decoration:none;font-weight:700;font-size:0.85em;">
+                        🐛 Open an issue
+                    </a>
+                </div>
+                <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 18px 20px;">
+                    <div style="font-size: 1.8em; margin-bottom: 8px;">📚</div>
+                    <div style="font-weight: 800; font-size: 1em; margin-bottom: 6px; color: var(--gold);">Cite us</div>
+                    <div style="font-size: 0.88em; color: #cbd5e1; line-height: 1.5; margin-bottom: 12px;">
+                        Citations are the strongest signal that open tools deserve funding.
+                    </div>
+                    <a href="about.html#citation"
+                       style="display:inline-block;padding:8px 16px;background:rgba(255,255,255,0.08);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;text-decoration:none;font-weight:700;font-size:0.85em;">
+                        📚 See citation
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<footer class="saurus-footer">
+    <div class="footer-line full-name">
+        <strong style="color:#d4af37;">SAURUS</strong> — Staphylococcus aureus Unified Resource for Universal Surveillance
+    </div>
+    <div class="footer-line">
+        CLI v0.3.0 · University of Ghana Medical School, Accra, Ghana · MIT License
+    </div>
+    <div class="footer-line">
+        <a href="https://github.com/bbeckley-hub/saurus-cli">CLI Repo</a> ·
+        <a href="https://github.com/bbeckley-hub/saurus">Web Repo</a> ·
+        <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
+        Updated 2026-11-09
+    </div>
+</footer>
+
+<script>
+function copyCode(btn) {
+    const pre = btn.nextElementSibling;
+    const text = pre.innerText.replace(/^\$ /gm, '').replace(/^# .*$/gm, '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+        const original = btn.textContent;
+        btn.textContent = '✓ Copied';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = original;
+            btn.classList.remove('copied');
+        }, 1500);
+    });
+}
+const sections = document.querySelectorAll('.manual-section');
+const tocLinks = document.querySelectorAll('.toc a');
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const id = entry.target.id;
+            tocLinks.forEach(a => {
+                a.style.background = a.getAttribute('href') === '#' + id ? 'rgba(212,175,55,0.15)' : '';
+                a.style.color = a.getAttribute('href') === '#' + id ? 'var(--navy)' : '';
+                a.style.fontWeight = a.getAttribute('href') === '#' + id ? '700' : '';
+            });
+        }
+    });
+}, { rootMargin: '-100px 0px -80% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
