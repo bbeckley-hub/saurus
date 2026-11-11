@@ -30,7 +30,6 @@
 
 </div>
 
-## 🚨 LOOKS LIKE I FOUND A TRICK, I'LL TELL YOU LATER!! STILL EXPERIMENTING......
 
 ---
 
