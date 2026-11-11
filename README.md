@@ -30,6 +30,8 @@
 
 </div>
 
+## 🚨 LOOKS LIKE I FOUND A TRICK, I'LL TELL YOU LATER!! STILL EXPERIMENTING......
+
 ---
 
 ## 🚨 The Problem: Genomic Data Is Public, but Genomic Retrieval Is Still Manual
