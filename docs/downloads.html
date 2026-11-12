@@ -174,9 +174,9 @@ main { max-width: 1400px; margin: 0 auto; padding: 28px 32px 60px; }
     <h1>📥 Downloads</h1>
     <div class="subtitle">Bulk data — every typing module and gene database, as plain TSV</div>
     <div class="stat-row">
-        <div class="stat-card"><div class="value">15</div><div class="label">Files available</div></div>
-        <div class="stat-card"><div class="value">14.2 MB</div><div class="label">Uncompressed size</div></div>
-        <div class="stat-card"><div class="value">2,584,391</div><div class="label">Total rows</div></div>
+        <div class="stat-card"><div class="value">16</div><div class="label">Files available</div></div>
+        <div class="stat-card"><div class="value">16.2 MB</div><div class="label">Uncompressed size</div></div>
+        <div class="stat-card"><div class="value">2,718,664</div><div class="label">Total rows</div></div>
         <div class="stat-card"><div class="value">TSV(.gz)</div><div class="label">Format</div></div>
     </div>
 </header>
@@ -187,10 +187,10 @@ main { max-width: 1400px; margin: 0 auto; padding: 28px 32px 60px; }
     <div class="bulk-bar">
         <div class="bulk-info">
             <h3>📦 Download the entire dataset</h3>
-            <p>All 15 files, gzipped and packaged as a single archive (13.8 MB).</p>
+            <p>All 16 files, gzipped and packaged as a single archive (15.9 MB).</p>
         </div>
         <div class="bulk-actions">
-            <a class="bulk-btn primary" href="data/saurus_data_all.zip" download>📦 Download all (13.8 MB)</a>
+            <a class="bulk-btn primary" href="data/saurus_data_all.zip" download>📦 Download all (15.9 MB)</a>
             <a class="bulk-btn secondary" href="#files">⬇ Pick individual files</a>
         </div>
     </div>
@@ -208,6 +208,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 28px 32px 60px; }
             </tr>
         </thead>
         <tbody>
+<tr><td class="dl-fname">mrsa_all.tsv</td><td><span class="dl-module">Master</span></td><td class="dl-desc">All seven typing and metadata modules joined by accession into one wide-format table (134,273 rows × 20 columns) — the table served by saurus://master</td><td class="dl-rows">134,273</td><td class="dl-size">2.0 MB</td><td><a class="dl-btn" href="data/mrsa_all.tsv.gz" download>⬇ Download</a></td></tr>
 <tr><td class="dl-fname">mlst_all.tsv</td><td><span class="dl-module">MLST</span></td><td class="dl-desc">One row per sample: ST, status, identity, coverage, allele profile</td><td class="dl-rows">134,160</td><td class="dl-size">761.4 KB</td><td><a class="dl-btn" href="data/mlst_all.tsv.gz" download>⬇ Download</a></td></tr>
 <tr><td class="dl-fname">spa_all.tsv</td><td><span class="dl-module">spa</span></td><td class="dl-desc">spa type, repeat pattern, count, confidence, status</td><td class="dl-rows">134,160</td><td class="dl-size">826.0 KB</td><td><a class="dl-btn" href="data/spa_all.tsv.gz" download>⬇ Download</a></td></tr>
 <tr><td class="dl-fname">sccmec_cge_all.tsv</td><td><span class="dl-module">SCCmec</span></td><td class="dl-desc">SCCmecFinder output — type, MRSA status, confidence, evidence</td><td class="dl-rows">134,160</td><td class="dl-size">1.2 MB</td><td><a class="dl-btn" href="data/sccmec_cge_all.tsv.gz" download>⬇ Download</a></td></tr>
@@ -236,6 +237,20 @@ head -5 mlst_all.tsv</pre>
             <li><code>pd.read_csv('mlst_all.tsv.gz', sep='\t')</code> — pandas (auto-decompresses)</li>
             <li><code>read.delim('mlst_all.tsv.gz', sep='\t')</code> — R</li>
         </ul>
+    <h3>📎 Master table vs. module files</h3>
+    <p>
+        <code>mrsa_all.tsv</code> is a wide-format join of all seven typing
+        and metadata modules, one row per genome. Start from it when you
+        need any combination of fields in a single DataFrame.
+        Start from the individual module files when you only need one typing
+        scheme and want a smaller download.
+    </p>
+    <p>
+        The master table is also available through the
+        <a href="https://pypi.org/project/saurus-fsspec/">saurus-fsspec</a>
+        Python package as <code>pd.read_csv("saurus://master")</code>,
+        with no local download required.
+    </p>
 
         <h3>🧬 Long-format gene files</h3>
         <p><code>amr_all.tsv</code>, <code>vfdb_all.tsv</code>, <code>plasmid_all.tsv</code> are long format — one row per present (sample, gene). To pivot to wide:</p>
@@ -256,7 +271,7 @@ head -5 mlst_all.tsv</pre>
         <strong style="color:#d4af37;">SAURUS</strong> — Staphylococcus aureus Unified Resource for Universal Surveillance
     </div>
     <div class="footer-line">
-        University of Ghana Medical School · MIT License · Last generated 2026-11-09
+        University of Ghana Medical School · MIT License · Last generated 2026-11-12
     </div>
     <div class="footer-line">
         <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
