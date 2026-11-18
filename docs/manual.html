@@ -478,6 +478,20 @@ body {
     letter-spacing: 0.2px;
     margin-bottom: 14px;
 }
+.to-top {
+    position: fixed; bottom: 28px; right: 28px;
+    width: 48px; height: 48px; border-radius: 50%;
+    border: none; background: var(--gold); color: var(--navy);
+    font-size: 1.3em; font-weight: 900; line-height: 1; cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    opacity: 0; visibility: hidden; transform: translateY(12px);
+    transition: all 0.25s ease; z-index: 9999;
+}
+.to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+.to-top:hover { background: #e0bc47; transform: translateY(-3px); }
+@media (max-width: 600px) {
+    .to-top { bottom: 18px; right: 18px; width: 42px; height: 42px; }
+}
 @media (max-width: 1000px) {
     .manual-layout {
         grid-template-columns: 1fr;
@@ -978,9 +992,11 @@ rule download_usa300:
         <a href="https://github.com/bbeckley-hub/saurus-cli">CLI Repo</a> ·
         <a href="https://github.com/bbeckley-hub/saurus">Web Repo</a> ·
         <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Updated 2026-11-09
+        Updated 2026-11-18
     </div>
 </footer>
+
+<button class="to-top" id="to-top" aria-label="Back to top" title="Back to top">↑</button>
 
 <script>
 function copyCode(btn) {
@@ -1011,6 +1027,12 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, { rootMargin: '-100px 0px -80% 0px' });
 sections.forEach(s => observer.observe(s));
+
+const toTopBtn = document.getElementById('to-top');
+const toggleToTop = () => toTopBtn.classList.toggle('visible', window.scrollY > 600);
+window.addEventListener('scroll', toggleToTop, { passive: true });
+toggleToTop();
+toTopBtn.addEventListener('click', () => window.scrollTo(0, 0));
 </script>
 
 </body>
