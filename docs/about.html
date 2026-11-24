@@ -67,7 +67,6 @@ body {
 }
 .saurus-nav .links a:hover { background: rgba(255,255,255,0.08); color: white; }
 .saurus-nav .links a.active { background: var(--gold); color: var(--navy); font-weight: 600; }
-
 /* ---------- Hero ---------- */
 .about-hero {
     background:
@@ -202,7 +201,7 @@ body {
 }
 
 /* ---------- Main ---------- */
-main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
+main { max-width: 1200px; margin: 0 auto; padding: 50px 32px 60px; }
 
 .about-section {
     background: var(--card);
@@ -731,7 +730,6 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     .quote-banner .quote-text { font-size: 1.05em; }
     .quote-banner .quote-inner { min-height: 130px; }
 }
-
 /* ---------- Tool cards (downstream tools) ---------- */
 .tool-grid {
     display: grid;
@@ -786,6 +784,80 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     border-top: 1px solid var(--border);
 }
 
+/* ---------- On this page (TOC sidebar) ---------- */
+.about-layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 30px;
+    align-items: start;
+}
+.about-content { min-width: 0; }
+.about-toc {
+    position: sticky;
+    top: 140px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--gold);
+    border-radius: 12px;
+    padding: 16px 14px;
+    max-height: calc(100vh - 170px);
+    overflow-y: auto;
+}
+.about-toc .toc-title {
+    font-size: 0.72em;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 2px 6px 10px;
+}
+.about-toc .toc-links { display: flex; flex-direction: column; }
+.about-toc .toc-links a {
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.84em;
+    font-weight: 500;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.35;
+    margin-bottom: 1px;
+}
+.about-toc .toc-links a:hover { background: rgba(212,175,55,0.12); color: var(--navy); }
+.about-toc .toc-links a.active {
+    background: rgba(212,175,55,0.14);
+    color: var(--navy);
+    font-weight: 700;
+    border-left-color: var(--gold);
+}
+.about-section, .argus-panel { scroll-margin-top: 110px; }
+
+@media (max-width: 1000px) {
+    .about-layout { grid-template-columns: 1fr; gap: 18px; }
+    .about-toc {
+        position: static;
+        max-height: none;
+        border-radius: 10px;
+    }
+    .about-toc .toc-links {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .about-toc .toc-links a {
+        border-left: none;
+        background: #f1f5f9;
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-size: 0.8em;
+    }
+    .about-toc .toc-links a.active {
+        background: var(--gold);
+        color: var(--navy);
+    }
+}
+
 </style>
 </head>
 <body>
@@ -824,7 +896,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     <div class="about-hero-inner">
         <h1>About SAURUS</h1>
         <p class="hero-sub">A free, open, integrated genomic resource for <em>Staphylococcus aureus</em> surveillance</p>
-        <span class="hero-tag">v0.8.1 · 134,160 GENOMES · 22K WITH RAW READS · OPEN ACCESS · MIT LICENSE</span>
+        <span class="hero-tag">v0.8.2 · 134,160 GENOMES · 22K WITH RAW READS · OPEN ACCESS · MIT LICENSE</span>
         <div style="margin-top:22px;">
             <a href="https://github.com/bbeckley-hub/saurus" target="_blank"
                style="display:inline-flex;align-items:center;gap:10px;padding:12px 26px;
@@ -849,9 +921,29 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
 </section>
 
 <main>
+<div class="about-layout">
+<aside class="about-toc" id="about-toc" aria-label="On this page">
+            <div class="toc-title">On this page</div>
+            <nav class="toc-links">
+<a href="#what-is">🔬 What is SAURUS</a>
+<a href="#argus">👁️ ARGUS Family</a>
+<a href="#why">🎯 Why SAURUS</a>
+<a href="#roadmap">🗺️ Roadmap</a>
+<a href="#methods">📋 Methods</a>
+<a href="#data-sources">📦 Data Sources</a>
+<a href="#methods-tools">⚙️ Methods & Tools</a>
+<a href="#downstream">🔧 Downstream Tools</a>
+<a href="#team">👥 Team</a>
+<a href="#support">⭐ Support</a>
+<a href="#citation">📚 Citation</a>
+<a href="#acknowledgements">🙏 Acknowledgements</a>
+<a href="#contact">📬 Contact</a>
+</nav>
+        </aside>
+<div class="about-content">
 
     <!-- ============ WHAT IS SAURUS ============ -->
-    <section class="about-section">
+    <section class="about-section" id="what-is">
         <h2>🔬 What is SAURUS?</h2>
         <p class="lead">
             <strong>SAURUS</strong> (Staphylococcus aureus Unified Resource for Universal Surveillance)
@@ -870,16 +962,16 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
         <div class="stat-callout">
             <div class="s"><span class="s-num">134K</span><span class="s-lbl">Genomes Indexed</span></div>
             <div class="s"><span class="s-num">11</span><span class="s-lbl">Integrated Modules</span></div>
-            <div class="s"><span class="s-num">~150</span><span class="s-lbl">Countries</span></div>
-            <div class="s"><span class="s-num">~300</span><span class="s-lbl">Source Categories</span></div>
-            <div class="s"><span class="s-num">700+</span><span class="s-lbl">Gene Determinants</span></div>
+            <div class="s"><span class="s-num">133+</span><span class="s-lbl">Countries</span></div>
+            <div class="s"><span class="s-num">~1,000</span><span class="s-lbl">Source Categories</span></div>
+            <div class="s"><span class="s-num">579</span><span class="s-lbl">Gene Determinants</span></div>
             <div class="s"><span class="s-num">22K</span><span class="s-lbl">With Raw Reads</span></div>
             <div class="s"><span class="s-num">100%</span><span class="s-lbl">Open Access</span></div>
         </div>
     </section>
 
     <!-- ============ ARGUS FAMILY ============ -->
-    <div class="argus-panel">
+    <div class="argus-panel" id="argus">
         <div class="argus-header">
             <span class="argus-eye">&#128065;&#65039;</span>
             <div class="argus-title-block">
@@ -910,7 +1002,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
 <div class="pathogen-card" style="--pc: #475569;"><div class="pc-top"><span class="pc-emoji">🌀</span><span class="pc-name">ENTROPY</span></div><div class="pc-pathogen">Enterobacter spp.</div><span class="pc-status planned">PLANNED</span></div>
         </div>
         <p class="argus-footnote">
-            Status as of 2026-11-18. SAURUS launched first (<em>S. aureus</em>) and
+            Status as of 2026-11-24. SAURUS launched first (<em>S. aureus</em>) and
             remains the flagship build; ECLIPSE is the second resource. The remaining
             pathogens are on the roadmap and will ship as their pipelines are built
             and validated.
@@ -918,7 +1010,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     </div>
 
     <!-- ============ WHY ============ -->
-    <section class="about-section">
+    <section class="about-section" id="why">
         <h2>🎯 Why SAURUS?</h2>
         <p>
             <em>Staphylococcus aureus</em>, and particularly methicillin-resistant
@@ -1009,10 +1101,9 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
             not just to labs with clusters and bioinformaticians on staff. SAURUS exists
             to close that gap — one accession list at a time.
         </p>
-
-
+    </section>
     <!-- ============ ROADMAP ============ -->
-    <section class="about-section">
+    <section class="about-section" id="roadmap">
         <h2>🗺️ Roadmap — toward complete public <em>S. aureus</em> annotation</h2>
         <p>
             SAURUS is built incrementally toward a single milestone:
@@ -1037,35 +1128,42 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
             <li class="done">
                 <strong>v0.3–0.6 — Metadata &amp; typing at scale</strong>
                 <span class="badge">LIVE</span><br>
-                26K → 134,299 unique genomes indexed. Deduplicated at the numeric-stem
-                level: 7,481 GCF/GCA paired twins removed, 12 GCA version conflicts
+                26K → 134,160 unique genomes indexed. Deduplicated at the numeric-stem
+                level: 115 GCF/GCA paired genomes removed, 12 GCA version conflicts
                 resolved. Expanded RefSeq typing coverage and processed batches of
                 GenBank genomes to bring total de novo typing to 98,138.
             </li>
             <li class="done">
                 <strong>v0.7 — GenBank Merge &amp; Serverless Architecture</strong>
                 <span class="badge">LIVE</span><br>
-                134,299 unique genomes indexed · 98,138 de novo typed · 139 countries
+                134,160 unique genomes indexed · 98,138 de novo typed · 139 countries
                 · 11 interactive modules. Static, serverless GitHub Pages deployment
                 (zero maintenance, no APIs). Dual SCCmec callers (CGE + RPet).
                 Integrated BioSample metadata on every page.
             </li>
-            <li class="current">
-                <strong>v0.8 — Full typing complete</strong>
-                <span class="badge">CURRENT</span><br>
-                Process the remaining GenBank batches to bring all 134,299 genomes
-                to fully typed status. Complete Shelenkov et al. gene annotations
-                carried forward.
-            </li>
             <li class="done">
                 <strong>v0.8.1 — SRA raw-read integration</strong>
                 <span class="badge">LIVE</span><br>
-                Resolved NCBI SRA raw-read accessions for <strong>22,277 of 134,130
+                Resolved NCBI SRA raw-read accessions for <strong>22,277 of 134,160
                 genomes (16.6%)</strong> across <strong>6,223 BioProjects</strong>.
                 Three export formats (SRA Runs, BioSamples, BioProjects) on every
                 typing page, ready for <code>fastq-dl</code> and the SRA Toolkit.
                 Coverage reflects NCBI SRA deposition — many assembled genomes have
                 no associated raw reads.
+            </li>
+            <li class="done">
+                <strong>v0.8.2 — Counting integrity &amp; navigation</strong>
+                <span class="badge">LIVE</span><br>
+                Genome total harmonised to 134,160 across every page and module.
+                spa typing coverage, CLI Manual page, About page navigation
+               , and consistency fixes throughout.
+            </li>
+            <li class="current">
+                <strong>v0.8 — Full typing complete</strong>
+                <span class="badge">CURRENT</span><br>
+                Process the remaining GenBank batches to bring all 134,160 genomes
+                to fully typed status. Complete Shelenkov et al. gene annotations
+                carried forward.
             </li>
             <li>
                 <strong>v1.0 — Full resource</strong><br>
@@ -1077,8 +1175,8 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
 
     </section>
 
-        <!-- ============ METHODS ============ -->
-    <section class="about-section">
+    <!-- ============ METHODS ============ -->
+    <section class="about-section" id="methods">
         <h2>📋 Methods</h2>
         <p class="lead">
             Every number, chart, and accession on this site is traceable to a
@@ -1125,10 +1223,10 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     </section>
 
 <!-- ============ DATA SOURCES ============ -->
-    <section class="about-section">
+    <section class="about-section" id="data-sources">
         <h2>📦 Data sources</h2>
         <p>
-            SAURUS combines two publicly available resources into a single integrated view:
+            SAURUS combines four publicly available resources into a single integrated view:
         </p>
 
         <h3>1. Typing annotations (this project)</h3>
@@ -1150,7 +1248,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
 
         <h3>3. SRA raw-read accessions (NCBI SRA)</h3>
         <p>
-            For <strong>22,277 of 134,130 genomes (16.6%)</strong>, SAURUS exports
+            For <strong>22,277 of 134,160 genomes (16.6%)</strong>, SAURUS exports
             NCBI SRA Run accessions retrieved by querying the global SRA consortium
             (BioProject-batched, BioSample-validated). Coverage reflects the
             underlying NCBI data — many assembled <em>S. aureus</em> genomes have no
@@ -1184,8 +1282,8 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
         </ul>
     </section>
 
-    <!-- ============ METHODS ============ -->
-    <section class="about-section">
+    <!-- ============ METHODS TOOLS ============ -->
+    <section class="about-section" id="methods-tools">
         <h2>⚙️ Methods &amp; tools</h2>
         <p>
             Every typing module in SAURUS is built on a well-validated, community-standard tool:
@@ -1209,12 +1307,11 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
             <a href="https://github.com/bbeckley-hub/saurus" target="_blank">GitHub</a>.
         </p>
     </section>
-
     <!-- ============ DOWNSTREAM TOOLS ============ -->
-    <section class="about-section">
+    <section class="about-section" id="downstream">
         <h2>🔧 Downstream tools &amp; pipelines</h2>
         <p>
-            SAURUS provides the accession list and the typing context. For 22,277 of 134,130 genomes, it also exports <strong>direct pointers to raw sequencing reads</strong> in the global SRA consortium. The next step —
+            SAURUS provides the accession list and the typing context. For 22,277 of 134,160 genomes, it also exports <strong>direct pointers to raw sequencing reads</strong> in the global SRA consortium. The next step —
             phylogenetics, outbreak investigation, pangenome analysis — is done with
             the tools below. Each entry is a well-validated, open-source solution that
             complements SAURUS in a standard <em>S. aureus</em> workflow.
@@ -1260,7 +1357,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
             <a class="tool-card" href="https://github.com/riccabolla/StaphSCAN" target="_blank" rel="noopener">
                 <div class="tool-name">StaphSCAN</div>
                 <div class="tool-desc">S. aureus-specific typing pipeline. MLST, spa, SCCmec, agr, capsule.</div>
-                <div class="tool-meta">Python · Riccado Bollini</div>
+                <div class="tool-meta">Python · Riccardo Bollini</div>
             </a>
             <a class="tool-card" href="https://allthebacteria.org/" target="_blank" rel="noopener">
                 <div class="tool-name">AllTheBacteria</div>
@@ -1333,7 +1430,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
                 <div class="tool-desc">Pangenome analysis with graph-based error correction — better than Roary for clonal species.</div>
                 <div class="tool-meta">Python · Tonkin-Hill et al.</div>
             </a>
-            <a class="tool-card" href="https://github.com/henskensm/roary" target="_blank" rel="noopener">
+            <a class="tool-card" href="https://github.com/sanger-pathogens/Roary" target="_blank" rel="noopener">
                 <div class="tool-name">Roary</div>
                 <div class="tool-desc">Classic bacterial pangenome tool. Quick ortholog clustering and core/accessory gene partitioning.</div>
                 <div class="tool-meta">Perl · Page et al.</div>
@@ -1386,10 +1483,10 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
                 <div class="tool-desc">Interactive Tree Of Life — annotation and display of phylogenetic trees with rich metadata layers.</div>
                 <div class="tool-meta">Web · Letunic &amp; Bork</div>
             </a>
-            <a class="tool-card" href="https://github.com/evolbioinfo/phyD3" target="_blank" rel="noopener">
+            <a class="tool-card" href="https://github.com/jameshadfield/phandango" target="_blank" rel="noopener">
                 <div class="tool-name">Phandango</div>
                 <div class="tool-desc">Interactive visualization of bacterial genome phylogenies with associated metadata (AMR, virulence, lineage).</div>
-                <div class="tool-meta">JavaScript · Hadfield et al.</div>
+                <div class="tool-meta">JavaScript · Hadfield &amp; Harris · Sanger Institute</div>
             </a>
         </div>
 
@@ -1399,7 +1496,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     </section>
 
     <!-- ============ WHO ============ -->
-    <section class="about-section">
+    <section class="about-section" id="team">
         <h2>👥 The team</h2>
         <div class="team-grid">
             <div class="team-card">
@@ -1433,10 +1530,8 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
             We welcome collaborations, bug reports, and feature suggestions.
         </p>
     </section>
-
-
     <!-- ============ SUPPORT / STAR ============ -->
-    <section class="about-section" style="background: linear-gradient(135deg, #0a1628 0%, #1e293b 100%); color: white; border-left: 6px solid var(--gold);">
+    <section class="about-section" id="support" style="background: linear-gradient(135deg, #0a1628 0%, #1e293b 100%); color: white; border-left: 6px solid var(--gold);">
         <h2 style="color: var(--gold); border-bottom-color: rgba(212,175,55,0.3);">⭐ Support SAURUS</h2>
         <p style="color: #cbd5e1; font-size: 1.05em; line-height: 1.75;">
             SAURUS is an <strong style="color: #f8fafc;">independent, unfunded project</strong>
@@ -1490,8 +1585,8 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     </section>
 
     <!-- ============ CITATIONS ============ -->
-    <section class="about-section">
-        <h2 id="citation">📚 Citation</h2>
+    <section class="about-section" id="citation">
+        <h2>📚 Citation</h2>
         <p>
             If you use SAURUS in your research, please cite both the underlying pipeline and
             the source gene dataset:
@@ -1531,7 +1626,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     </section>
 
     <!-- ============ ACKNOWLEDGEMENTS ============ -->
-    <section class="about-section" style="padding:0;border:none;box-shadow:none;background:transparent;">
+    <section class="about-section" id="acknowledgements" style="padding:0;border:none;box-shadow:none;background:transparent;">
         <div class="ack-block">
             <h3>🙏 Acknowledgements</h3>
             <p>
@@ -1552,7 +1647,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     </section>
 
     <!-- ============ CONTACT ============ -->
-    <section class="about-section">
+    <section class="about-section" id="contact">
         <h2>📬 Contact &amp; contribute</h2>
         <p>
             Found a bug? Have a feature suggestion? Want to collaborate?
@@ -1575,6 +1670,8 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
         </p>
     </section>
 
+</div>
+</div>
 </main>
 
 <footer class="saurus-footer">
@@ -1587,7 +1684,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
     <div class="footer-line">
         <a href="https://github.com/bbeckley-hub/saurus">GitHub</a> ·
         <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Updated 2026-11-18
+        Updated 2026-11-24
     </div>
 </footer>
 
@@ -1595,7 +1692,7 @@ main { max-width: 980px; margin: 0 auto; padding: 50px 32px 60px; }
 
 <script>
 (function() {
-    const QUOTES = [{"text": "Imagination is more important than knowledge.", "author": "Albert Einstein"}, {"text": "The important thing is not to stop questioning. Curiosity has its own reason for existing.", "author": "Albert Einstein"}, {"text": "Nothing in life is to be feared, it is only to be understood.", "author": "Marie Curie"}, {"text": "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.", "author": "Marie Curie"}, {"text": "Somewhere, something incredible is waiting to be known.", "author": "Carl Sagan"}, {"text": "We are made of star-stuff.", "author": "Carl Sagan"}, {"text": "Extraordinary claims require extraordinary evidence.", "author": "Carl Sagan"}, {"text": "The universe is not required to be in perfect harmony with human ambition.", "author": "Carl Sagan"}, {"text": "The good thing about science is that it's true whether or not you believe in it.", "author": "Neil deGrasse Tyson"}, {"text": "The first principle is that you must not fool yourself — and you are the easiest person to fool.", "author": "Richard Feynman"}, {"text": "I would rather have questions that can't be answered than answers that can't be questioned.", "author": "Richard Feynman"}, {"text": "In science, there are no shortcuts to truth.", "author": "Karl Popper"}, {"text": "Science cannot solve the ultimate mystery of nature because we ourselves are a part of the mystery we are trying to solve.", "author": "Max Planck"}, {"text": "If I have seen further, it is by standing on the shoulders of giants.", "author": "Isaac Newton"}, {"text": "Science is not only a disciple of reason but also one of romance and passion.", "author": "Stephen Hawking"}, {"text": "Look up at the stars and not down at your feet.", "author": "Stephen Hawking"}, {"text": "Science and everyday life cannot and should not be separated.", "author": "Rosalind Franklin"}, {"text": "If you know you're on the right track, if you have this inner knowledge, then nobody can turn you off.", "author": "Barbara McClintock"}, {"text": "The reward for work well done is the opportunity to do more.", "author": "Jonas Salk"}, {"text": "The more clearly we can focus our attention on the wonders of the universe about us, the less taste we shall have for destruction.", "author": "Rachel Carson"}, {"text": "Equipped with his five senses, man explores the universe around him and calls the adventure Science.", "author": "Edwin Hubble"}, {"text": "The saddest aspect of life right now is that science gathers knowledge faster than society gathers wisdom.", "author": "Isaac Asimov"}, {"text": "Chance favors the prepared mind.", "author": "Louis Pasteur"}, {"text": "Science knows no country, because knowledge belongs to humanity.", "author": "Louis Pasteur"}, {"text": "The microbe is nothing; the terrain is everything.", "author": "Louis Pasteur"}, {"text": "Gentlemen, it is the microbes who will have the last word.", "author": "Louis Pasteur"}, {"text": "The pure culture is the foundation for all research on infectious disease.", "author": "Robert Koch"}, {"text": "One sometimes finds what one is not looking for.", "author": "Alexander Fleming"}, {"text": "The single biggest threat to man's continued dominance on the planet is the virus.", "author": "Joshua Lederberg"}, {"text": "We shall have to learn to aim our therapeutic missiles chemically.", "author": "Paul Ehrlich"}, {"text": "Medicine is a science of uncertainty and an art of probability.", "author": "William Osler"}, {"text": "The very first requirement in a hospital is that it should do the sick no harm.", "author": "Florence Nightingale"}, {"text": "It is not the strongest of the species that survives, but the one most responsive to change.", "author": "Charles Darwin"}, {"text": "It is not enough to have a good mind; the main thing is to use it well.", "author": "René Descartes"}, {"text": "Somewhere in the world there is a gene that will change how we see disease.", "author": "Siddhartha Mukherjee"}, {"text": "Better is possible. It does not take genius. It takes diligence, moral clarity, and ingenuity.", "author": "Atul Gawande"}, {"text": "Every genome is a story. SAURUS helps you read the chapters on resistance, virulence, and lineage.", "author": "Brown Beckley"}, {"text": "StaphScope turns raw sequence into structured, decision-ready typing information.", "author": "Brown Beckley"}, {"text": "Open data saves lives. Surveillance belongs to everyone.", "author": "Brown Beckley"}, {"text": "Behind every ST, every spa type, every SCCmec cassette, there is an epidemiological story worth telling.", "author": "Brown Beckley"}, {"text": "Argus Panoptes never slept. Neither should surveillance.", "author": "Brown Beckley"}, {"text": "One pathogen at a time is how surveillance fails. Seven at once is how it works.", "author": "Brown Beckley"}];
+    const QUOTES = [{"text": "Imagination is more important than knowledge.", "author": "Albert Einstein"}, {"text": "The important thing is not to stop questioning. Curiosity has its own reason for existing.", "author": "Albert Einstein"}, {"text": "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.", "author": "Marie Curie"}, {"text": "Somewhere, something incredible is waiting to be known.", "author": "Carl Sagan"}, {"text": "We are made of star-stuff.", "author": "Carl Sagan"}, {"text": "Extraordinary claims require extraordinary evidence.", "author": "Carl Sagan"}, {"text": "The universe is not required to be in perfect harmony with human ambition.", "author": "Carl Sagan"}, {"text": "The good thing about science is that it's true whether or not you believe in it.", "author": "Neil deGrasse Tyson"}, {"text": "The first principle is that you must not fool yourself — and you are the easiest person to fool.", "author": "Richard Feynman"}, {"text": "I would rather have questions that can't be answered than answers that can't be questioned.", "author": "Richard Feynman"}, {"text": "In science, there are no shortcuts to truth.", "author": "Karl Popper"}, {"text": "Science cannot solve the ultimate mystery of nature because we ourselves are a part of the mystery we are trying to solve.", "author": "Max Planck"}, {"text": "If I have seen further, it is by standing on the shoulders of giants.", "author": "Isaac Newton"}, {"text": "Science is not only a disciple of reason but also one of romance and passion.", "author": "Stephen Hawking"}, {"text": "Look up at the stars and not down at your feet.", "author": "Stephen Hawking"}, {"text": "Science and everyday life cannot and should not be separated.", "author": "Rosalind Franklin"}, {"text": "If you know you're on the right track, if you have this inner knowledge, then nobody can turn you off.", "author": "Barbara McClintock"}, {"text": "The reward for work well done is the opportunity to do more.", "author": "Jonas Salk"}, {"text": "The more clearly we can focus our attention on the wonders of the universe about us, the less taste we shall have for destruction.", "author": "Rachel Carson"}, {"text": "Equipped with his five senses, man explores the universe around him and calls the adventure Science.", "author": "Edwin Hubble"}, {"text": "The saddest aspect of life right now is that science gathers knowledge faster than society gathers wisdom.", "author": "Isaac Asimov"}, {"text": "Chance favors the prepared mind.", "author": "Louis Pasteur"}, {"text": "Science knows no country, because knowledge belongs to humanity.", "author": "Louis Pasteur"}, {"text": "The microbe is nothing; the terrain is everything.", "author": "Louis Pasteur"}, {"text": "Gentlemen, it is the microbes who will have the last word.", "author": "Louis Pasteur"}, {"text": "The pure culture is the foundation for all research on infectious disease.", "author": "Robert Koch"}, {"text": "One sometimes finds what one is not looking for.", "author": "Alexander Fleming"}, {"text": "The single biggest threat to man's continued dominance on the planet is the virus.", "author": "Joshua Lederberg"}, {"text": "We shall have to learn to aim our therapeutic missiles chemically.", "author": "Paul Ehrlich"}, {"text": "Medicine is a science of uncertainty and an art of probability.", "author": "William Osler"}, {"text": "The very first requirement in a hospital is that it should do the sick no harm.", "author": "Florence Nightingale"}, {"text": "It is not the strongest of the species that survives, but the one most responsive to change.", "author": "Charles Darwin"}, {"text": "It is not enough to have a good mind; the main thing is to use it well.", "author": "René Descartes"}, {"text": "Somewhere in the world there is a gene that will change how we see disease.", "author": "Siddhartha Mukherjee"}, {"text": "Better is possible. It does not take genius. It takes diligence, moral clarity, and ingenuity.", "author": "Atul Gawande"}, {"text": "Every genome is a story. SAURUS helps you read the chapters on resistance, virulence, and lineage.", "author": "Brown Beckley"}, {"text": "StaphScope turns raw sequence into structured, decision-ready typing information.", "author": "Brown Beckley"}, {"text": "Open data saves lives. Surveillance belongs to everyone.", "author": "Brown Beckley"}, {"text": "Behind every ST, every spa type, every SCCmec cassette, there is an epidemiological story worth telling.", "author": "Brown Beckley"}, {"text": "Argus Panoptes never slept. Neither should surveillance.", "author": "Brown Beckley"}, {"text": "One pathogen at a time is how surveillance fails. Seven at once is how it works.", "author": "Brown Beckley"}];
     const ROTATE_MS = 10000;
 
     const banner   = document.getElementById('quote-banner');
@@ -1633,6 +1730,27 @@ const toggleToTop = () => toTopBtn.classList.toggle('visible', window.scrollY > 
 window.addEventListener('scroll', toggleToTop, { passive: true });
 toggleToTop();
 toTopBtn.addEventListener('click', () => window.scrollTo(0, 0));
+
+/* ---------- TOC scroll-spy ---------- */
+(function() {
+    const tocLinks = Array.from(document.querySelectorAll('.about-toc .toc-links a'));
+    if (!tocLinks.length) return;
+    const ids = tocLinks.map(a => a.getAttribute('href').slice(1));
+    const setActive = function(id) {
+        tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+    };
+    setActive(ids[0]);
+    if (!('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+            if (e.isIntersecting) setActive(e.target.id);
+        });
+    }, { rootMargin: '-15% 0px -70% 0px' });
+    ids.forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+    });
+})();
 </script>
 
 </body>

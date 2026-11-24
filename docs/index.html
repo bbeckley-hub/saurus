@@ -612,6 +612,8 @@ body {
     background: #f1f5f9; padding: 2px 6px; border-radius: 4px;
     font-family: 'SF Mono', Monaco, monospace; font-size: 0.85em; color: #334155;
 }
+.howto-card a { color: #1e40af; }
+.howto-card a:hover { text-decoration: underline; }
 
 /* =========== ARGUS strip =========== */
 .argus-strip-section {
@@ -792,7 +794,7 @@ a.argus-mini { cursor: pointer; }
 
 /* =========== Footer =========== */
 .saurus-footer {
-    background: var(--navy); color: #94a3b8; padding: 40px 32px;
+    background: var(--navy); color: #94a3b8; padding: 40px 32px 30px;
     text-align: center; font-size: 0.88em; margin-top: 40px;
 }
 .saurus-footer .footer-line { margin: 8px 0; }
@@ -916,7 +918,7 @@ a.argus-mini { cursor: pointer; }
 
 <section class="stats-strip">
     <div class="stats-grid">
-        <div class="stat"><span class="num">134,160</span><span class="lbl">Genomes</span></div><div class="stat geo-stat"><span class="num">139</span><span class="lbl">Countries</span></div><div class="stat"><span class="num">2,739</span><span class="lbl">MLST STs</span></div><div class="stat"><span class="num">7,648</span><span class="lbl">spa Types</span></div><div class="stat"><span class="num">59.8%</span><span class="lbl">MRSA Rate</span></div><div class="stat"><span class="num">15</span><span class="lbl">SCCmec Types</span></div><div class="stat geo-stat"><span class="num">1,000</span><span class="lbl">Source Categories</span></div><div class="stat geo-stat"><span class="num">1900–2026</span><span class="lbl">Collection Years</span></div><div class="stat"><span class="num">223</span><span class="lbl">AMR Genes</span></div><div class="stat"><span class="num">142</span><span class="lbl">Virulence Genes</span></div>
+        <div class="stat"><span class="num">134,160</span><span class="lbl">Genomes</span></div><div class="stat geo-stat"><span class="num">139</span><span class="lbl">Countries</span></div><div class="stat"><span class="num">2,738</span><span class="lbl">MLST STs</span></div><div class="stat"><span class="num">4,873</span><span class="lbl">spa Types</span></div><div class="stat"><span class="num">59.8%</span><span class="lbl">MRSA Rate</span></div><div class="stat"><span class="num">15</span><span class="lbl">SCCmec Types</span></div><div class="stat geo-stat"><span class="num">1,000</span><span class="lbl">Source Categories</span></div><div class="stat geo-stat"><span class="num">1900–2026</span><span class="lbl">Collection Years</span></div><div class="stat"><span class="num">223</span><span class="lbl">AMR Genes</span></div><div class="stat"><span class="num">142</span><span class="lbl">Virulence Genes</span></div>
     </div>
     <div style="max-width:1400px;margin:20px auto 0;text-align:center;color:#94a3b8;font-size:0.82em;
                 letter-spacing:0.3px;display:flex;flex-wrap:wrap;justify-content:center;gap:24px;">
@@ -930,7 +932,7 @@ a.argus-mini { cursor: pointer; }
 <!-- ============ FEATURED GEOGRAPHY CARD ============ -->
 <section class="featured-section">
     <div class="featured-card">
-        <div class="fc-badge">v0.8.1 · LIVE</div>
+        <div class="fc-badge">v0.8.2 · LIVE</div>
         <div class="fc-icon">🌍</div>
         <div class="fc-body">
             <h3>Geography &amp; Metadata</h3>
@@ -1084,7 +1086,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">Sequence types (STs) and clonal complexes — the gold-standard for global S. aureus epidemiology.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">2,739</span>
+                <span class="mc-stat-num">2,738</span>
                 <span class="mc-stat-lbl">unique STs</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -1099,7 +1101,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">High-resolution outbreak tracking via the hypervariable spa repeat region.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">7,648</span>
+                <span class="mc-stat-num">4,873</span>
                 <span class="mc-stat-lbl">spa types</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -1281,6 +1283,15 @@ a.argus-mini { cursor: pointer; }
             <h4>📦 BioProjects (bulk)</h4>
             <p>One BioProject per matched project. May include non-<em>S. aureus</em> runs from mixed-species studies — verify before bulk download.</p>
         </div>
+        <div class="howto-card">
+            <h4>🌍 Assemblies: AllTheBacteria</h4>
+            <p>Don't need FASTQs? <strong><a href="https://allthebacteria.org/" target="_blank" rel="noopener">AllTheBacteria</a></strong>
+            provides <em>uniformly processed</em> assemblies — plus raw-read provenance and metadata —
+            for millions of public bacterial genomes, including the bulk of the <em>S. aureus</em>
+            accessions in SAURUS. Quality-controlled with one consistent pipeline and
+            <code>CC0</code>-licensed: a great alternative when you want plug-and-play FASTAs
+            for the same genomes without downloading raw reads.</p>
+        </div>
     </div>
 
     <div style="margin-top: 24px; padding: 22px 26px; background: white; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
@@ -1292,6 +1303,10 @@ a.argus-mini { cursor: pointer; }
         </ul>
         <p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.88em; color: #64748b;">
             Example: <code>fastq-dl --accession SRR12282488 --provider sra --outdir ./fastqs</code>
+        </p>
+        <p style="margin-top: 8px; font-size: 0.88em; color: #64748b;">
+            Alternative for uniformly processed assemblies (not raw reads):
+            <strong><a href="https://allthebacteria.org/" target="_blank" rel="noopener" style="color:#1e40af;">allthebacteria.org</a></strong>
         </p>
     </div>
 </section>
@@ -1419,8 +1434,24 @@ a.argus-mini { cursor: pointer; }
     <div class="footer-line">
         <a href="https://github.com/bbeckley-hub/saurus">⭐ Star on GitHub</a> ·
         <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Data updated 2026-11-18 19:58:20
+        Data updated 2026-11-24 00:10:20
     </div>
+    <div class="footer-line saurus-footer-argus" style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(212,175,55,0.15);">
+        <span style="color:#fbbf24;font-weight:800;letter-spacing:1.2px;">👁️ PART OF THE ARGUS FAMILY</span><br>
+        <span style="font-size:0.82em;">Antimicrobial Resistance Genomic Unified Surveillance — one eye, seven ESKAPE pathogens</span>
+    </div>
+    <div class="footer-line" style="font-size:0.82em;line-height:2;max-width:1100px;margin-left:auto;margin-right:auto;">
+        <a href="https://github.com/bbeckley-hub/saurus" title="Visit SAURUS"><span class="af-emoji">🦖</span> SAURUS <em>(S. aureus · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/eclipse" title="Visit ECLIPSE"><span class="af-emoji">🌑</span> ECLIPSE <em>(E. coli · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/abyss" title="Visit ABYSS"><span class="af-emoji">🌊</span> ABYSS <em>(A. baumannii · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/kleos" title="Visit KLEOS"><span class="af-emoji">🏆</span> KLEOS <em>(K. pneumoniae · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/pseuda" title="Visit PSEUDA"><span class="af-emoji">💧</span> PSEUDA <em>(P. aeruginosa · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/empire" title="Visit EMPIRE"><span class="af-emoji">👑</span> EMPIRE <em>(E. faecium · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/entropy" title="Visit ENTROPY"><span class="af-emoji">🌀</span> ENTROPY <em>(Enterobacter · <strong>LIVE</strong>)</em></a>
+    </div>
+    <style>
+        .saurus-footer .af-emoji { font-size: 1.1em; }
+        .saurus-footer .af-planned { color: #64748b; }
+        .saurus-footer .af-planned em { color: #64748b; }
+        @media (max-width: 700px) {
+            .saurus-footer .saurus-footer-argus + .footer-line span a,
+            .saurus-footer .saurus-footer-argus + .footer-line span { display: inline-block; margin: 2px 4px; }
+        }
+    </style>
 </footer>
 
 <button class="to-top" id="to-top" aria-label="Back to top" title="Back to top">↑</button>
