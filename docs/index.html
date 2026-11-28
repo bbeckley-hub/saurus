@@ -918,7 +918,7 @@ a.argus-mini { cursor: pointer; }
 
 <section class="stats-strip">
     <div class="stats-grid">
-        <div class="stat"><span class="num">134,160</span><span class="lbl">Genomes</span></div><div class="stat geo-stat"><span class="num">139</span><span class="lbl">Countries</span></div><div class="stat"><span class="num">2,738</span><span class="lbl">MLST STs</span></div><div class="stat"><span class="num">4,873</span><span class="lbl">spa Types</span></div><div class="stat"><span class="num">59.8%</span><span class="lbl">MRSA Rate</span></div><div class="stat"><span class="num">15</span><span class="lbl">SCCmec Types</span></div><div class="stat geo-stat"><span class="num">1,000</span><span class="lbl">Source Categories</span></div><div class="stat geo-stat"><span class="num">1900–2026</span><span class="lbl">Collection Years</span></div><div class="stat"><span class="num">223</span><span class="lbl">AMR Genes</span></div><div class="stat"><span class="num">142</span><span class="lbl">Virulence Genes</span></div>
+        <div class="stat"><span class="num">134,160</span><span class="lbl">Genomes</span></div><div class="stat geo-stat"><span class="num">139</span><span class="lbl">Countries</span></div><div class="stat"><span class="num">2,738</span><span class="lbl">MLST STs</span></div><div class="stat"><span class="num">4,873</span><span class="lbl">spa Types</span></div><div class="stat"><span class="num">59.8%</span><span class="lbl">MRSA Rate</span></div><div class="stat"><span class="num">15</span><span class="lbl">SCCmec Types</span></div><div class="stat geo-stat"><span class="num">1,000</span><span class="lbl">Source Categories</span></div><div class="stat geo-stat"><span class="num">1900–2026</span><span class="lbl">Collection Years</span></div><div class="stat"><span class="num">174</span><span class="lbl">AMR Genes</span></div><div class="stat"><span class="num">26</span><span class="lbl">Virulence Genes</span></div>
     </div>
     <div style="max-width:1400px;margin:20px auto 0;text-align:center;color:#94a3b8;font-size:0.82em;
                 letter-spacing:0.3px;display:flex;flex-wrap:wrap;justify-content:center;gap:24px;">
@@ -1189,7 +1189,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">Search and retrieve genomes by resistance determinants. Pick up to 5 genes, export accessions.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">223</span>
+                <span class="mc-stat-num">174</span>
                 <span class="mc-stat-lbl">AMR genes</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -1204,7 +1204,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">Retrieve genomes by PVL, TSST-1, enterotoxins, adhesins, and immune-evasion factors.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">142</span>
+                <span class="mc-stat-num">26</span>
                 <span class="mc-stat-lbl">virulence genes</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -1219,7 +1219,7 @@ a.argus-mini { cursor: pointer; }
             </div>
             <div class="mc-desc">Filter genomes by plasmid replicon content — the vehicles of horizontal gene transfer.</div>
             <div class="mc-stat">
-                <span class="mc-stat-num">214</span>
+                <span class="mc-stat-num">177</span>
                 <span class="mc-stat-lbl">replicon types</span>
                 <span class="mc-arrow">→</span>
             </div>
@@ -1324,7 +1324,7 @@ a.argus-mini { cursor: pointer; }
             <div class="cli-dots">
                 <span class="red"></span><span class="yellow"></span><span class="green"></span>
             </div>
-            <span class="cli-title">saurus-cli v0.3.0</span>
+            <span class="cli-title">saurus-cli v0.4.0</span>
             <span class="cli-badge">NEW</span>
             <span style="margin-left:10px;padding:3px 12px;background:rgba(56,189,248,0.15);color:#7dd3fc;border:1px solid rgba(56,189,248,0.4);border-radius:12px;font-size:0.72em;font-weight:800;letter-spacing:0.8px;">+ SRA EXPORT</span>
         </div>
@@ -1424,34 +1424,89 @@ a.argus-mini { cursor: pointer; }
     </div>
 </section>
 
+<style>
+
+.saurus-footer{background:var(--navy);color:#94a3b8;margin-top:40px;padding:0;text-align:left;font-size:0.88em;line-height:1.6;}
+.sf-wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+.sf-grid{display:grid;grid-template-columns:1.35fr 1fr 1.1fr 1fr;gap:32px;padding:46px 0 38px;}
+.sf-logo{font-size:1.55em;font-weight:900;color:var(--gold);letter-spacing:1.5px;margin-bottom:10px;}
+.sf-fullname{color:#cbd5e1;font-weight:600;line-height:1.5;margin-bottom:12px;}
+.sf-mission{color:#94a3b8;margin-bottom:12px;}
+.sf-affil{color:#64748b;font-size:0.92em;margin-bottom:14px;}
+.sf-star{display:inline-block;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.35);color:var(--gold);padding:7px 14px;border-radius:8px;text-decoration:none;font-weight:700;font-size:0.9em;transition:background 0.15s;}
+.sf-star:hover{background:rgba(212,175,55,0.25);}
+.sf-head{color:var(--gold);font-weight:800;font-size:0.78em;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:13px;padding-bottom:8px;border-bottom:1px solid rgba(212,175,55,0.2);}
+.sf-col ul{list-style:none;margin:0;padding:0;}
+.sf-col li{margin-bottom:9px;}
+.sf-col a{color:#cbd5e1;text-decoration:none;font-weight:500;border-bottom:1px dotted rgba(203,213,225,0.3);transition:color 0.15s;}
+.sf-col a:hover{color:var(--gold);border-bottom-color:var(--gold);}
+.sf-emoji{display:inline-block;width:1.6em;text-align:center;}
+.sf-note{color:#64748b;font-size:0.88em;margin-top:10px;}
+.sf-band{background:rgba(255,255,255,0.03);border-top:1px solid rgba(212,175,55,0.12);padding:15px 0;}
+.sf-band strong{color:var(--gold);font-weight:800;}
+.sf-band a{color:var(--gold);text-decoration:none;font-weight:600;}
+.sf-band a:hover{text-decoration:underline;}
+.sf-bottom{border-top:1px solid rgba(212,175,55,0.15);margin-top:2px;padding:18px 0 26px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;align-items:baseline;}
+.sf-legal{color:#64748b;font-size:0.9em;}
+.sf-legal a{color:#94a3b8;text-decoration:none;}
+.sf-legal a:hover{color:var(--gold);}
+@media (max-width: 900px){.sf-grid{grid-template-columns:1fr 1fr;}}
+@media (max-width: 600px){.sf-grid{grid-template-columns:1fr;}.sf-bottom{flex-direction:column;text-align:center;}}
+
+</style>
 <footer class="saurus-footer">
-    <div class="footer-line full-name">
-        <strong style="color:#d4af37;">SAURUS</strong> — Staphylococcus aureus Unified Resource for Universal Surveillance
+  <div class="sf-wrap">
+    <div class="sf-grid">
+      <div class="sf-col">
+        <div class="sf-logo">SAURUS</div>
+        <div class="sf-fullname">Staphylococcus aureus Unified Resource for Universal Surveillance</div>
+        <p class="sf-mission">Over 134,000 publicly sequenced <em>S. aureus</em> genomes — every major typing scheme and a curated gene-annotation layer, queryable from your browser or terminal.</p>
+        <p class="sf-affil">Brown Beckley · University of Ghana Medical School<br>Department of Medical Biochemistry, Accra, Ghana</p>
+        <a class="sf-star" href="https://github.com/bbeckley-hub/saurus">⭐ Star the SAURUS repo</a>
+      </div>
+      <div class="sf-col">
+        <div class="sf-head">Tools &amp; Pipelines</div>
+        <ul>
+          <li><a href="https://saurus-db.org/">SAURUS web resource</a></li>
+          <li><a href="https://github.com/bbeckley-hub/saurus-cli">saurus-cli</a> — the command-line interface</li>
+          <li><a href="https://github.com/bbeckley-hub/staphscope-typing-tool">StaphScope</a> — HPC typing pipeline</li>
+          <li><a href="https://github.com/bbeckley-hub/argus-cli">ARGUS-CLI</a> — ESKAPEE-wide accessions</li>
+          <li><a href="https://github.com/bbeckley-hub/EcoliTyper">EcoliTyper</a> · <a href="https://github.com/bbeckley-hub/acinetoscope">AcinetoScope</a></li>
+        </ul>
+      </div>
+      <div class="sf-col">
+        <div class="sf-head">Data Sources &amp; Schema</div>
+        <ul>
+          <li><a href="https://github.com/bbeckley-hub/argus-data">argus-data</a> — data bundle v1.1.0</li>
+          <li><a href="https://github.com/bbeckley-hub/argus-code">argus-code</a> — pipeline &amp; site generators</li>
+          <li><a href="https://pubmlst.org/organisms/staphylococcus-aureus">PubMLST</a> — MLST &amp; clonal complexes</li>
+          <li><a href="https://spa.ridom.de/">SpaServer (Ridom)</a> — spa types</li>
+          <li><a href="https://cge.food.dtu.dk/services/SCCmecFinder/">CGE SCCmecFinder</a> · <a href="https://github.com/rpetit3/sccmec">RPet</a> — SCCmec</li>
+          <li><a href="https://github.com/VishnuRaghuram94/AgrVATE">AgrVATE</a> — agr typing</li>
+          <li>Gene annotations: Shelenkov et al. (2025)</li>
+        </ul>
+      </div>
+      <div class="sf-col">
+        <div class="sf-head">Cite &amp; Contact</div>
+        <ul>
+          <li><a href="https://doi.org/10.5281/zenodo.24599839">saurus-cli on Zenodo</a></li>
+          <li><a href="https://doi.org/10.5281/zenodo.24568725">Data bundle v1.1.0 on Zenodo</a></li>
+          <li><a href="mailto:brownbeckley94@gmail.com">brownbeckley94@gmail.com</a></li>
+          <li><a href="https://github.com/bbeckley-hub/saurus/issues">Report an issue</a></li>
+          <li><a href="manual.html">CLI manual</a> · <a href="about.html">About</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="footer-line">
-        University of Ghana Medical School · Department of Medical Biochemistry · MIT License
+    <div class="sf-band"><strong>Other ARGUS tools</strong> — the same query-by-accession idea across seven ESKAPEE pathogens: <a href="https://github.com/bbeckley-hub/saurus" title="Visit SAURUS"><span class="af-emoji">🦖</span> SAURUS <em>(S. aureus · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/eclipse" title="Visit ECLIPSE"><span class="af-emoji">🌑</span> ECLIPSE <em>(E. coli · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/abyss" title="Visit ABYSS"><span class="af-emoji">🌊</span> ABYSS <em>(A. baumannii · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/kleos" title="Visit KLEOS"><span class="af-emoji">🏆</span> KLEOS <em>(K. pneumoniae · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/pseuda" title="Visit PSEUDA"><span class="af-emoji">💧</span> PSEUDA <em>(P. aeruginosa · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/empire" title="Visit EMPIRE"><span class="af-emoji">👑</span> EMPIRE <em>(E. faecium · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/entropy" title="Visit ENTROPY"><span class="af-emoji">🌀</span> ENTROPY <em>(Enterobacter · <strong>LIVE</strong>)</em></a></div>
+    <style>.saurus-footer .af-emoji{font-size:1.1em;}.saurus-footer .af-planned{color:#64748b;}.saurus-footer .af-planned em{color:#64748b;}</style>
+<div class="sf-band"><strong>Acknowledgements</strong> — The authors wish to acknowledge the University of Ghana for providing the computing resource for this work. Typing was performed on the <a href="https://www.waccbip.org/research/scientific-technology-systems/high-performance-computing">WACCBIP High-Performance Computing facility (cluster Zuputo)</a>. Genome assemblies and metadata were retrieved from NCBI (GenBank/RefSeq).</div>
+    <div class="sf-band"><strong>Funding</strong> — SAURUS is an independent, unfunded project, developed and maintained by a single author.</div>
+    <div class="sf-bottom">
+      <span class="sf-legal">© 2026 Brown Beckley · <a href="https://github.com/bbeckley-hub/saurus/blob/main/LICENSE">MIT License</a></span>
+      <span class="sf-legal">Data bundle v1.1.0 · Updated Updated 2026-11-28 16:17:51</span>
+      <span class="sf-legal">Web figures may differ slightly from the shipped data bundle.</span>
     </div>
-    <div class="footer-line">
-        <a href="https://github.com/bbeckley-hub/saurus">⭐ Star on GitHub</a> ·
-        <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Data updated 2026-11-24 00:10:20
-    </div>
-    <div class="footer-line saurus-footer-argus" style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(212,175,55,0.15);">
-        <span style="color:#fbbf24;font-weight:800;letter-spacing:1.2px;">👁️ PART OF THE ARGUS FAMILY</span><br>
-        <span style="font-size:0.82em;">Antimicrobial Resistance Genomic Unified Surveillance — one eye, seven ESKAPE pathogens</span>
-    </div>
-    <div class="footer-line" style="font-size:0.82em;line-height:2;max-width:1100px;margin-left:auto;margin-right:auto;">
-        <a href="https://github.com/bbeckley-hub/saurus" title="Visit SAURUS"><span class="af-emoji">🦖</span> SAURUS <em>(S. aureus · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/eclipse" title="Visit ECLIPSE"><span class="af-emoji">🌑</span> ECLIPSE <em>(E. coli · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/abyss" title="Visit ABYSS"><span class="af-emoji">🌊</span> ABYSS <em>(A. baumannii · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/kleos" title="Visit KLEOS"><span class="af-emoji">🏆</span> KLEOS <em>(K. pneumoniae · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/pseuda" title="Visit PSEUDA"><span class="af-emoji">💧</span> PSEUDA <em>(P. aeruginosa · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/empire" title="Visit EMPIRE"><span class="af-emoji">👑</span> EMPIRE <em>(E. faecium · <strong>LIVE</strong>)</em></a> &middot; <a href="https://github.com/bbeckley-hub/entropy" title="Visit ENTROPY"><span class="af-emoji">🌀</span> ENTROPY <em>(Enterobacter · <strong>LIVE</strong>)</em></a>
-    </div>
-    <style>
-        .saurus-footer .af-emoji { font-size: 1.1em; }
-        .saurus-footer .af-planned { color: #64748b; }
-        .saurus-footer .af-planned em { color: #64748b; }
-        @media (max-width: 700px) {
-            .saurus-footer .saurus-footer-argus + .footer-line span a,
-            .saurus-footer .saurus-footer-argus + .footer-line span { display: inline-block; margin: 2px 4px; }
-        }
-    </style>
+  </div>
 </footer>
 
 <button class="to-top" id="to-top" aria-label="Back to top" title="Back to top">↑</button>

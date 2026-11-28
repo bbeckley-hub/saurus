@@ -551,7 +551,7 @@ body {
     <div class="manual-hero-inner">
         <h1>SAURUS CLI Manual</h1>
         <p class="hero-sub">Query 134,160 <em>S. aureus</em> genomes from your terminal.</p>
-        <span class="hero-tag">v0.3.0  ·  MIT License  ·  No installation required for the web UI</span>
+        <span class="hero-tag">v0.4.0  ·  data v1.1.0  ·  MIT License  ·  No installation required for the web UI</span>
         <div class="hero-cta">
             <a class="primary" href="#quickstart">🚀 Get Started</a>
             <a class="secondary" href="https://pypi.org/project/saurus-cli/" target="_blank">🐍 Install from PyPI</a>
@@ -592,7 +592,7 @@ body {
         <section class="manual-section" id="install">
             <h2>📦 Installation</h2>
             <p>
-                SAURUS CLI is a lightweight Python package. It requires <strong>Python 3.8+</strong>
+                SAURUS CLI is a lightweight Python package. It requires <strong>Python 3.9+</strong>
                 and <code>pandas</code>. No other dependencies. No root access.
                 The full <strong>134,160-genome dataset is bundled inside every distribution</strong>,
                 so queries run locally with no downloads, no API keys, and no network access after install.
@@ -619,12 +619,28 @@ body {
             <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">docker pull bbeckleyhub/saurus-cli:latest</span></code></pre></div>
             <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">docker run --rm bbeckleyhub/saurus-cli:latest --version</span></code></pre></div>
 
+            <h3>Offline install (HPC / no internet)</h3>
+            <p>
+                Download the data bundle once on any networked machine, then install
+                from the local zip on the HPC. The install is refused unless the
+                companion <code>.sha256</code> checksum file exists and matches:
+            </p>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus init --from-file saurus-data-v1.1.0.zip</span>
+<span class="comment"># requires saurus-data-v1.1.0.zip.sha256 alongside</span></code></pre></div>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus init --from-file saurus-data-v1.1.0.zip --allow-unverified</span>
+<span class="comment"># only when the sidecar is genuinely unavailable</span></code></pre></div>
+            <div class="callout warn">
+                <strong>Checksum policy:</strong> a <em>mismatch</em> is always fatal.
+                Only a <em>missing</em> sidecar can be bypassed, and only with
+                <code>--allow-unverified</code>.
+            </div>
+
             <h3>Verify the install</h3>
             <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --version</span></code></pre></div>
             <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --count</span></code></pre></div>
 
             <div class="callout info">
-                <strong>Data files:</strong> The full SAURUS dataset ships bundled inside the pip
+                <strong>Data files:</strong> The full SAURUS dataset (bundle v1.1.0: 134,160 genomes; 174 AMR / 26 VFDB / 177 plasmid curated genes) ships bundled inside the pip
                 distribution. You only need to run <code>saurus init</code> if you want to manually
                 refresh the data bundle to the latest release. If you installed via Docker, the data
                 is already baked into the image.
@@ -690,7 +706,7 @@ body {
                 Copy-paste any of these commands. Each is a real query that returns real data.
                 The full list is also available in the terminal with <code>saurus --examples</code>.
             </p>
-            <h3 id="ex-counting">📊 Counting Genomes</h3><p>Get a number fast — perfect for checking how much data exists before you commit to downloading.</p><div class="example-list"><div class="example-item"><div class="ex-title">USA300 globally</div><div class="ex-desc">The world's most sequenced community-acquired MRSA clone.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --count</span></code></pre></div><div class="ex-note">💡 Returns 10,448 genomes.</div></div><div class="example-item"><div class="ex-title">USA100 bloodstream isolates in the USA</div><div class="ex-desc">The New York/Japan clone — dominant hospital MRSA in the US.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA100 --country USA --source blood --count</span></code></pre></div><div class="ex-note">💡 Returns 341 genomes.</div></div><div class="example-item"><div class="ex-title">ST5 MRSA with SCCmec II and agr II</div><div class="ex-desc">The full genotype you'd expect for a USA100 hospital isolate.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 5 --sccmec II --agr II --mrsa --count</span></code></pre></div><div class="ex-note">💡 Returns 7,133 genomes.</div></div><div class="example-item"><div class="ex-title">Livestock-associated MRSA in Denmark</div><div class="ex-desc">CC398 in Denmark — a classic LA-MRSA surveillance query.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --cc 398 --mrsa --country Denmark --count</span></code></pre></div></div><div class="example-item"><div class="ex-title">All MRSA from Ghana</div><div class="ex-desc">Demonstrates African surveillance coverage.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --mrsa --country Ghana --count</span></code></pre></div><div class="ex-note">💡 Returns 102 genomes — the African data gap in action.</div></div></div><h3 id="ex-export">📤 Exporting Accessions</h3><p>Every query exports a clean accession list. You can also export metadata tables, SRA runs, BioSamples, and BioProjects in one command.</p><div class="example-list"><div class="example-item"><div class="ex-title">Plain-text accession list</div><div class="ex-desc">The format 95% of downstream pipelines actually consume.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 -o usa300.txt</span></code></pre></div><div class="ex-note">💡 Exports 10,448 accessions.</div></div><div class="example-item"><div class="ex-title">Metadata table AND accession list together</div><div class="ex-desc">One command → two files. Verify the rows, then feed the list downstream.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --format tsv,accession -o usa300_results</span></code></pre></div><div class="ex-note">💡 Produces usa300_results.tsv and usa300_results.txt.</div></div><div class="example-item"><div class="ex-title">Everything, all at once</div><div class="ex-desc">TSV + JSON + accession list — three files, one command.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage EMRSA-15 --format tsv,json,accession -o emrsa15_results</span></code></pre></div></div></div><h3 id="ex-sra">📥 SRA Raw Reads</h3><p>Export SRA run accessions directly for fastq-dl. 22,322 genomes in the database have retrievable raw reads.</p><div class="example-list"><div class="example-item"><div class="ex-title">Count genomes with raw reads</div><div class="ex-desc">Filter only genomes that have a retrievable SRA run.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --has-sra --count</span></code></pre></div><div class="ex-note">💡 Returns 22,322 genomes.</div></div><div class="example-item"><div class="ex-title">Export SRA runs</div><div class="ex-desc">Get a clean list of SRR/ERR/DRR accessions for fastq-dl.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --format sra -o usa300_runs</span></code></pre></div><div class="ex-note">💡 Exports 1,821 unique SRA runs for USA300.</div></div><div class="example-item"><div class="ex-title">Export BioSamples and BioProjects</div><div class="ex-desc">For sample-level metadata or study-level tracking.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --format biosample,bioproject -o usa300_meta</span></code></pre></div><div class="ex-note">💡 Produces usa300_meta_biosamples.txt and usa300_meta_bioprojects.txt.</div></div></div><h3 id="ex-genotype">🧬 Genotype Queries</h3><p>Filter by gene content across the AMR, virulence, and plasmid modules. Match ALL (default) or ANY with --any.</p><div class="example-list"><div class="example-item"><div class="ex-title">PVL-positive ST8</div><div class="ex-desc">lukS-PV is the toxin marker that made USA300 famous.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 8 --vfdb lukS-PV --count</span></code></pre></div><div class="ex-note">💡 Returns 258 genomes.</div></div><div class="example-item"><div class="ex-title">MRSA with mecA and tetM</div><div class="ex-desc">Match ALL genes — the default AND logic.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --amr mecA,tetM --count</span></code></pre></div><div class="ex-note">💡 Returns genomes containing both genes.</div></div><div class="example-item"><div class="ex-title">Multi-drug resistant (match ANY)</div><div class="ex-desc">mecA OR tetM — the OR logic. Returns a massive set.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --amr mecA,tetM --any --count</span></code></pre></div><div class="ex-note">💡 Returns 134,273 genomes.</div></div><div class="example-item"><div class="ex-title">Plasmid replicon filter</div><div class="ex-desc">Find genomes carrying a specific plasmid replicon — useful for horizontal-gene-transfer studies.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --plasmid rep5a --count</span></code></pre></div><div class="ex-note">💡 Returns 21,619 genomes.</div></div></div><h3 id="ex-metadata">🌍 Metadata Queries</h3><p>Combine genotype with country, source, host, and year — the core of surveillance.</p><div class="example-list"><div class="example-item"><div class="ex-title">USA300 bloodstream infections, USA, 2005–2015</div><div class="ex-desc">The decade USA300 exploded across US hospitals.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --source blood --year 2005-2015 -o usa300_2005_2015.txt</span></code></pre></div><div class="ex-note">💡 Exports 482 genomes.</div></div><div class="example-item"><div class="ex-title">EMRSA-15 in the UK</div><div class="ex-desc">The UK's dominant hospital-acquired MRSA clone.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage EMRSA-15 --country &quot;United Kingdom&quot; --count</span></code></pre></div><div class="ex-note">💡 Returns 681 genomes.</div></div><div class="example-item"><div class="ex-title">Bengal Bay clone in India</div><div class="ex-desc">ST772 — a regional clone with global spread.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage &quot;Bengal Bay&quot; --country India --count</span></code></pre></div><div class="ex-note">💡 Returns 36 genomes.</div></div><div class="example-item"><div class="ex-title">Recent EMRSA-16 in the UK</div><div class="ex-desc">Combines lineage and geography.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage EMRSA-16 --country &quot;United Kingdom&quot; --count</span></code></pre></div><div class="ex-note">💡 Older historical records dominate; the 2020-2025 filter returns 0.</div></div></div><h3 id="ex-diagnostics">🐞 Diagnostics</h3><p>When a query returns 0 genomes, --debug shows you exactly where the count dropped. The #1 time saver.</p><div class="example-list"><div class="example-item"><div class="ex-title">Debug an impossible genotype</div><div class="ex-desc">ST5 is never agr I / capsule 8 — the USA100 genotype is agr II / capsule 5.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 5 --agr I --capsule 8 --debug --count</span></code></pre></div><div class="ex-note">💡 Shows the exact step where it drops to 0.</div></div><div class="example-item"><div class="ex-title">Quiet mode for pipelines</div><div class="ex-desc">Suppresses banner, footer, and quote — clean stdout for scripting.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 -q | head -5</span></code></pre></div><div class="ex-note">💡 Exits silently when piped — no BrokenPipeError.</div></div></div><h3 id="ex-lineages">🏷️ Lineage Signatures</h3><p>Use --lineage to apply a curated genotype signature in one flag. Override any component by passing the specific flag yourself.</p><div class="example-list"><div class="example-item"><div class="ex-title">USA300 override</div><div class="ex-desc">USA300 signature, but restricted to Japan instead of global.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --country Japan --count</span></code></pre></div><div class="ex-note">💡 Returns 145 genomes.</div></div><div class="example-item"><div class="ex-title">ST152 (African clone) in Ghana</div><div class="ex-desc">ST152 is prominent in West Africa and typically carries SCCmec V.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 152 --country Ghana --count</span></code></pre></div><div class="ex-note">💡 Use --st 152 instead of --lineage ST152 for broader coverage.</div></div><div class="example-item"><div class="ex-title">List available signatures</div><div class="ex-desc">An unknown lineage shows the full list of options.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage XYZ</span></code></pre></div><div class="ex-note">💡 Prints all available shortcuts and exits.</div></div></div>
+            <h3 id="ex-counting">📊 Counting Genomes</h3><p>Get a number fast — perfect for checking how much data exists before you commit to downloading.</p><div class="example-list"><div class="example-item"><div class="ex-title">USA300 globally</div><div class="ex-desc">The world's most sequenced community-acquired MRSA clone.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --count</span></code></pre></div><div class="ex-note">💡 Returns 10,448 genomes.</div></div><div class="example-item"><div class="ex-title">USA100 bloodstream isolates in the USA</div><div class="ex-desc">The New York/Japan clone — dominant hospital MRSA in the US.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA100 --country USA --source blood --count</span></code></pre></div><div class="ex-note">💡 Returns 341 genomes.</div></div><div class="example-item"><div class="ex-title">ST5 MRSA with SCCmec II and agr II</div><div class="ex-desc">The full genotype you'd expect for a USA100 hospital isolate.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 5 --sccmec II --agr II --mrsa --count</span></code></pre></div><div class="ex-note">💡 Returns 7,133 genomes.</div></div><div class="example-item"><div class="ex-title">Livestock-associated MRSA in Denmark</div><div class="ex-desc">CC398 in Denmark — a classic LA-MRSA surveillance query.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --cc 398 --mrsa --country Denmark --count</span></code></pre></div></div><div class="example-item"><div class="ex-title">All MRSA from Ghana</div><div class="ex-desc">Demonstrates African surveillance coverage.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --mrsa --country Ghana --count</span></code></pre></div><div class="ex-note">💡 Returns 102 genomes — the African data gap in action.</div></div></div><h3 id="ex-export">📤 Exporting Accessions</h3><p>Every query exports a clean accession list. You can also export metadata tables, SRA runs, BioSamples, and BioProjects in one command.</p><div class="example-list"><div class="example-item"><div class="ex-title">Plain-text accession list</div><div class="ex-desc">The format 95% of downstream pipelines actually consume.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 -o usa300.txt</span></code></pre></div><div class="ex-note">💡 Exports 10,448 accessions.</div></div><div class="example-item"><div class="ex-title">Metadata table AND accession list together</div><div class="ex-desc">One command → two files. Verify the rows, then feed the list downstream.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --format tsv,accession -o usa300_results</span></code></pre></div><div class="ex-note">💡 Produces usa300_results.tsv and usa300_results.txt.</div></div><div class="example-item"><div class="ex-title">Everything, all at once</div><div class="ex-desc">TSV + JSON + accession list — three files, one command.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage EMRSA-15 --format tsv,json,accession -o emrsa15_results</span></code></pre></div></div></div><h3 id="ex-sra">📥 SRA Raw Reads</h3><p>Export SRA run accessions directly for fastq-dl. 22,322 genomes in the database have retrievable raw reads.</p><div class="example-list"><div class="example-item"><div class="ex-title">Count genomes with raw reads</div><div class="ex-desc">Filter only genomes that have a retrievable SRA run.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --has-sra --count</span></code></pre></div><div class="ex-note">💡 Returns 22,322 genomes.</div></div><div class="example-item"><div class="ex-title">Export SRA runs</div><div class="ex-desc">Get a clean list of SRR/ERR/DRR accessions for fastq-dl.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --format sra -o usa300_runs</span></code></pre></div><div class="ex-note">💡 Exports 1,821 unique SRA runs for USA300.</div></div><div class="example-item"><div class="ex-title">Export BioSamples and BioProjects</div><div class="ex-desc">For sample-level metadata or study-level tracking.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --format biosample,bioproject -o usa300_meta</span></code></pre></div><div class="ex-note">💡 Produces usa300_meta_biosamples.txt and usa300_meta_bioprojects.txt.</div></div></div><h3 id="ex-genotype">🧬 Genotype Queries</h3><p>Filter by gene content across the AMR, virulence, and plasmid modules. Match ALL (default) or ANY with --any.</p><div class="example-list"><div class="example-item"><div class="ex-title">PVL-positive ST8</div><div class="ex-desc">lukS-PV is the toxin marker that made USA300 famous.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 8 --vfdb lukS-PV --count</span></code></pre></div><div class="ex-note">💡 Returns 6,919 genomes.</div></div><div class="example-item"><div class="ex-title">MRSA with mecA and tetM</div><div class="ex-desc">Match ALL genes — the default AND logic.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --amr mecA,tetM --count</span></code></pre></div><div class="ex-note">💡 Returns genomes containing both genes.</div></div><div class="example-item"><div class="ex-title">Multi-drug resistant (match ANY)</div><div class="ex-desc">mecA OR tetM — the OR logic. Returns a massive set.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --amr mecA,tetM --any --count</span></code></pre></div><div class="ex-note">💡 Union set — every genome carrying either gene.</div></div><div class="example-item"><div class="ex-title">Plasmid replicon filter</div><div class="ex-desc">Find genomes carrying a specific plasmid replicon — useful for horizontal-gene-transfer studies.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --plasmid rep5a --count</span></code></pre></div><div class="ex-note">💡 Returns 21,619 genomes.</div></div></div><h3 id="ex-metadata">🌍 Metadata Queries</h3><p>Combine genotype with country, source, host, and year — the core of surveillance.</p><div class="example-list"><div class="example-item"><div class="ex-title">USA300 bloodstream infections, USA, 2005–2015</div><div class="ex-desc">The decade USA300 exploded across US hospitals.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --source blood --year 2005-2015 -o usa300_2005_2015.txt</span></code></pre></div><div class="ex-note">💡 Exports 483 genomes.</div></div><div class="example-item"><div class="ex-title">EMRSA-15 in the UK</div><div class="ex-desc">The UK's dominant hospital-acquired MRSA clone.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage EMRSA-15 --country &quot;United Kingdom&quot; --count</span></code></pre></div><div class="ex-note">💡 Returns 654 genomes.</div></div><div class="example-item"><div class="ex-title">Bengal Bay clone in India</div><div class="ex-desc">ST772 — a regional clone with global spread.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage &quot;Bengal Bay&quot; --country India --count</span></code></pre></div><div class="ex-note">💡 Returns 36 genomes.</div></div><div class="example-item"><div class="ex-title">Recent EMRSA-16 in the UK</div><div class="ex-desc">Combines lineage and geography.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage EMRSA-16 --country &quot;United Kingdom&quot; --count</span></code></pre></div><div class="ex-note">💡 Older historical records dominate; the 2020-2025 filter returns 0.</div></div></div><h3 id="ex-diagnostics">🐞 Diagnostics</h3><p>When a query returns 0 genomes, --debug shows you exactly where the count dropped. The #1 time saver.</p><div class="example-list"><div class="example-item"><div class="ex-title">Debug an impossible genotype</div><div class="ex-desc">ST5 is never agr I / capsule 8 — the USA100 genotype is agr II / capsule 5.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 5 --agr I --capsule 8 --debug --count</span></code></pre></div><div class="ex-note">💡 Shows the exact step where it drops to 0.</div></div><div class="example-item"><div class="ex-title">Quiet mode for pipelines</div><div class="ex-desc">Suppresses banner, footer, and quote — clean stdout for scripting.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 -q | head -5</span></code></pre></div><div class="ex-note">💡 Exits silently when piped — no BrokenPipeError.</div></div></div><h3 id="ex-lineages">🏷️ Lineage Signatures</h3><p>Use --lineage to apply a curated genotype signature in one flag. Override any component by passing the specific flag yourself.</p><div class="example-list"><div class="example-item"><div class="ex-title">USA300 override</div><div class="ex-desc">USA300 signature, but restricted to Japan instead of global.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage USA300 --country Japan --count</span></code></pre></div><div class="ex-note">💡 Returns 145 genomes.</div></div><div class="example-item"><div class="ex-title">ST152 (African clone) in Ghana</div><div class="ex-desc">ST152 is prominent in West Africa and typically carries SCCmec V.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --st 152 --country Ghana --count</span></code></pre></div><div class="ex-note">💡 Use --st 152 instead of --lineage ST152 for broader coverage.</div></div><div class="example-item"><div class="ex-title">List available signatures</div><div class="ex-desc">An unknown lineage shows the full list of options.</div><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus --lineage XYZ</span></code></pre></div><div class="ex-note">💡 Prints all available shortcuts and exits.</div></div></div>
         </section>
 
         <!-- ============ MULTI-FORMAT ============ -->
@@ -856,9 +872,10 @@ rule download_usa300:
 
             <p>You'll see something like:</p>
             <div class="code-block">
-                <pre><code><span class="comment">  [debug] Initial load: 134,160 rows</span>
-<span class="comment">  [debug] --st 5: 14,930 rows</span>
-<span class="comment">  [debug] --agr I: 0 rows       ← the culprit</span></code></pre>
+                <pre><code><span class="comment">  [debug] Initial load: 134,273 rows</span>
+<span class="comment">  [debug] --st 5: 17,773 rows</span>
+<span class="comment">  [debug] --agr I: 5 rows</span>
+<span class="comment">  [debug] --capsule Type 8: 0 rows   ← the culprit</span></code></pre>
             </div>
 
             <h3>Master file not found</h3>
@@ -866,7 +883,10 @@ rule download_usa300:
                 The CLI needs a master TSV at <code>data/mrsa/mrsa_all.tsv</code>. If it's missing,
                 regenerate it:
             </p>
-            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">python scripts/build_master_tsv.py</span></code></pre></div>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">saurus init</span>
+<span class="comment"># PyPI installs: refresh the bundled data (v1.1.0)</span></code></pre></div>
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button><pre><code><span class="prompt">$ </span><span class="cmd">python scripts/build_master_tsv.py</span>
+<span class="comment"># dev checkouts only: rebuild from the merged TSVs</span></code></pre></div>
 
             <h3>BrokenPipeError when piping to head / less</h3>
             <p>
@@ -906,7 +926,7 @@ rule download_usa300:
                     </tr>
                     <tr>
                         <td><code>saurus init</code></td>
-                        <td>Download or refresh the data bundle (optional; data is bundled)</td>
+                        <td>Download or refresh the data bundle (optional; data is bundled; add <code>--from-file ZIP</code> for offline installs)</td>
                     </tr>
                     <tr>
                         <td><code>saurus --examples</code></td>
@@ -981,19 +1001,87 @@ rule download_usa300:
     </div>
 </div>
 
+<style>
+
+.saurus-footer{background:var(--navy);color:#94a3b8;margin-top:40px;padding:0;text-align:left;font-size:0.88em;line-height:1.6;}
+.sf-wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+.sf-grid{display:grid;grid-template-columns:1.35fr 1fr 1.1fr 1fr;gap:32px;padding:46px 0 38px;}
+.sf-logo{font-size:1.55em;font-weight:900;color:var(--gold);letter-spacing:1.5px;margin-bottom:10px;}
+.sf-fullname{color:#cbd5e1;font-weight:600;line-height:1.5;margin-bottom:12px;}
+.sf-mission{color:#94a3b8;margin-bottom:12px;}
+.sf-affil{color:#64748b;font-size:0.92em;margin-bottom:14px;}
+.sf-star{display:inline-block;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.35);color:var(--gold);padding:7px 14px;border-radius:8px;text-decoration:none;font-weight:700;font-size:0.9em;transition:background 0.15s;}
+.sf-star:hover{background:rgba(212,175,55,0.25);}
+.sf-head{color:var(--gold);font-weight:800;font-size:0.78em;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:13px;padding-bottom:8px;border-bottom:1px solid rgba(212,175,55,0.2);}
+.sf-col ul{list-style:none;margin:0;padding:0;}
+.sf-col li{margin-bottom:9px;}
+.sf-col a{color:#cbd5e1;text-decoration:none;font-weight:500;border-bottom:1px dotted rgba(203,213,225,0.3);transition:color 0.15s;}
+.sf-col a:hover{color:var(--gold);border-bottom-color:var(--gold);}
+.sf-emoji{display:inline-block;width:1.6em;text-align:center;}
+.sf-note{color:#64748b;font-size:0.88em;margin-top:10px;}
+.sf-band{background:rgba(255,255,255,0.03);border-top:1px solid rgba(212,175,55,0.12);padding:15px 0;}
+.sf-band strong{color:var(--gold);font-weight:800;}
+.sf-band a{color:var(--gold);text-decoration:none;font-weight:600;}
+.sf-band a:hover{text-decoration:underline;}
+.sf-bottom{border-top:1px solid rgba(212,175,55,0.15);margin-top:2px;padding:18px 0 26px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;align-items:baseline;}
+.sf-legal{color:#64748b;font-size:0.9em;}
+.sf-legal a{color:#94a3b8;text-decoration:none;}
+.sf-legal a:hover{color:var(--gold);}
+@media (max-width: 900px){.sf-grid{grid-template-columns:1fr 1fr;}}
+@media (max-width: 600px){.sf-grid{grid-template-columns:1fr;}.sf-bottom{flex-direction:column;text-align:center;}}
+
+</style>
 <footer class="saurus-footer">
-    <div class="footer-line full-name">
-        <strong style="color:#d4af37;">SAURUS</strong> — Staphylococcus aureus Unified Resource for Universal Surveillance
+  <div class="sf-wrap">
+    <div class="sf-grid">
+      <div class="sf-col">
+        <div class="sf-logo">SAURUS</div>
+        <div class="sf-fullname">Staphylococcus aureus Unified Resource for Universal Surveillance</div>
+        <p class="sf-mission">Over 134,000 publicly sequenced <em>S. aureus</em> genomes — every major typing scheme and a curated gene-annotation layer, queryable from your browser or terminal.</p>
+        <p class="sf-affil">Brown Beckley · University of Ghana Medical School<br>Department of Medical Biochemistry, Accra, Ghana</p>
+        <a class="sf-star" href="https://github.com/bbeckley-hub/saurus">⭐ Star the SAURUS repo</a>
+      </div>
+      <div class="sf-col">
+        <div class="sf-head">Tools &amp; Pipelines</div>
+        <ul>
+          <li><a href="https://saurus-db.org/">SAURUS web resource</a></li>
+          <li><a href="https://github.com/bbeckley-hub/saurus-cli">saurus-cli</a> — the command-line interface</li>
+          <li><a href="https://github.com/bbeckley-hub/staphscope-typing-tool">StaphScope</a> — HPC typing pipeline</li>
+          <li><a href="https://github.com/bbeckley-hub/argus-cli">ARGUS-CLI</a> — ESKAPEE-wide accessions</li>
+          <li><a href="https://github.com/bbeckley-hub/EcoliTyper">EcoliTyper</a> · <a href="https://github.com/bbeckley-hub/acinetoscope">AcinetoScope</a></li>
+        </ul>
+      </div>
+      <div class="sf-col">
+        <div class="sf-head">Data Sources &amp; Schema</div>
+        <ul>
+          <li><a href="https://github.com/bbeckley-hub/argus-data">argus-data</a> — data bundle v1.1.0</li>
+          <li><a href="https://github.com/bbeckley-hub/argus-code">argus-code</a> — pipeline &amp; site generators</li>
+          <li><a href="https://pubmlst.org/organisms/staphylococcus-aureus">PubMLST</a> — MLST &amp; clonal complexes</li>
+          <li><a href="https://spa.ridom.de/">SpaServer (Ridom)</a> — spa types</li>
+          <li><a href="https://cge.food.dtu.dk/services/SCCmecFinder/">CGE SCCmecFinder</a> · <a href="https://github.com/rpetit3/sccmec">RPet</a> — SCCmec</li>
+          <li><a href="https://github.com/VishnuRaghuram94/AgrVATE">AgrVATE</a> — agr typing</li>
+          <li>Gene annotations: Shelenkov et al. (2025)</li>
+        </ul>
+      </div>
+      <div class="sf-col">
+        <div class="sf-head">Cite &amp; Contact</div>
+        <ul>
+          <li><a href="https://doi.org/10.5281/zenodo.24599839">saurus-cli on Zenodo</a></li>
+          <li><a href="https://doi.org/10.5281/zenodo.24568725">Data bundle v1.1.0 on Zenodo</a></li>
+          <li><a href="mailto:brownbeckley94@gmail.com">brownbeckley94@gmail.com</a></li>
+          <li><a href="https://github.com/bbeckley-hub/saurus/issues">Report an issue</a></li>
+          <li><a href="manual.html">CLI manual</a> · <a href="about.html">About</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="footer-line">
-        CLI v0.3.0 · University of Ghana Medical School, Accra, Ghana · MIT License
+    <div class="sf-band"><strong>Acknowledgements</strong> — The authors wish to acknowledge the University of Ghana for providing the computing resource for this work. Typing was performed on the <a href="https://www.waccbip.org/research/scientific-technology-systems/high-performance-computing">WACCBIP High-Performance Computing facility (cluster Zuputo)</a>. Genome assemblies and metadata were retrieved from NCBI (GenBank/RefSeq).</div>
+    <div class="sf-band"><strong>Funding</strong> — SAURUS is an independent, unfunded project, developed and maintained by a single author.</div>
+    <div class="sf-bottom">
+      <span class="sf-legal">© 2026 Brown Beckley · <a href="https://github.com/bbeckley-hub/saurus/blob/main/LICENSE">MIT License</a></span>
+      <span class="sf-legal">Data bundle v1.1.0 · Updated Updated 2026-11-28</span>
+      <span class="sf-legal">Web figures may differ slightly from the shipped data bundle.</span>
     </div>
-    <div class="footer-line">
-        <a href="https://github.com/bbeckley-hub/saurus-cli">CLI Repo</a> ·
-        <a href="https://github.com/bbeckley-hub/saurus">Web Repo</a> ·
-        <a href="mailto:brownbeckley94@gmail.com">Contact</a> ·
-        Updated 2026-11-24
-    </div>
+  </div>
 </footer>
 
 <button class="to-top" id="to-top" aria-label="Back to top" title="Back to top">↑</button>
